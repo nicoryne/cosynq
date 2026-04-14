@@ -105,6 +105,10 @@ export function Starfield() {
           <div className="absolute top-[35%] left-[80%] -rotate-[40deg] animate-shooting-star" style={{ animationDuration: "5.5s" }}>
             <div className="w-24 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-300/50 to-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.6)]" />
           </div>
+
+          {/* Subtle atmosphere lighting */}
+          <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-primary/5 to-transparent blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-full h-[30vh] bg-gradient-to-t from-secondary/5 to-transparent blur-3xl pointer-events-none" />
         </>
       ) : (
         <>
@@ -115,6 +119,10 @@ export function Starfield() {
           <div className="absolute -top-32 -left-32 w-[800px] h-[800px] bg-purple-200/20 rounded-full blur-[120px]" />
           <div className="absolute top-[10%] -right-20 w-[600px] h-[600px] bg-pink-200/20 rounded-full blur-[100px]" />
           <div className="absolute bottom-0 left-[20%] w-[700px] h-[500px] bg-cyan-100/20 rounded-full blur-[110px]" />
+
+          {/* Subtle atmosphere lighting */}
+          <div className="absolute top-0 right-0 w-full h-[40vh] bg-gradient-to-b from-secondary/10 to-transparent blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-full h-[30vh] bg-gradient-to-t from-primary/10 to-transparent blur-3xl pointer-events-none" />
 
           {/* Drifting Clouds */}
           {clouds.map((cloud) => (

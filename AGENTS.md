@@ -9,12 +9,22 @@ This version has breaking changes — APIs, conventions, and file structure may 
 cosynq
 
 ## Description
-`cosynq` is a celestial-themed web platform designed to be the ultimate sanctuary and organizational command center for the cosplay community. Built to eliminate the chaos of scattered group chats and messy spreadsheets, it consolidates convention scheduling, community forums, cosplay group (CG) recruitment, and complex project budgeting into one sleek, ethereal space. Leveraging Next.js, Supabase, and React Query, `cosynq` delivers a premium, fast, and highly organized user experience wrapped in a dark-mode, space-minimalist aesthetic. 
+`cosynq` is a celestial-themed web platform designed to be the ultimate sanctuary and organizational command center for the cosplay community. Built to eliminate the chaos of scattered group chats and messy spreadsheets, it consolidates **precision convention scheduling**, **community-driven forums**, **Cosplay Group (CG) recruitment**, and **complex project-based budgeting** into one sleek, ethereal space. Leveraging Next.js, Supabase, and React Query, `cosynq` delivers a premium, fast, and highly organized user experience wrapped in a dark-mode, space-minimalist aesthetic. 
 
 ## Target Audience
 Chronically online cosplayers, prop makers, wig stylists, photographers, and convention organizers. While deeply rooted in the vibrant Cebu City and Philippine cosplay scene, `cosynq` is built for a global orbit of creatives who need a dedicated, aesthetic, and functional hub for their craft.
 
 ---
+
+## Visual Identity & Aesthetics (Celestial Nebula Core v2)
+
+The `cosynq` aesthetic is a fusion of space-minimalism and high-fidelity "glassmorphism." All UI elements should adhere to these principles:
+
+1. **Space Minimalism**: Dark, deep backgrounds (`#0a0a12`) contrasted with vibrant lavender and cyan accents. Use significant whitespace to create a sense of vastness.
+2. **Glassmorphism**: Use translucent surfaces with high blur (`backdrop-blur-xl`) and subtle white borders (`border-white/10`) to simulate frosted glass floating in space.
+3. **Ethereal Motion**: Animations should be slow, organic, and gentle (e.g., slow drifting clouds, twinkling stars, soft pulsatile glows). Avoid jarring transitions.
+4. **Organic Shapes**: Use large border-radii (`var(--radius)`) and organic "wave" or "landscape" clipped containers to break the rigidity of standard grid layouts.
+
 
 ## Architecture
 
