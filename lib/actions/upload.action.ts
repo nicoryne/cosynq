@@ -1,0 +1,93 @@
+"use server";
+
+import { v2 as cloudinary } from "cloudinary";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+
+/**
+ * Ensures "Do Not Trust the Client" paradigm for cloud integration.
+ * Generates a cryptographic signature that the client uses to upload directly
+ * to Cloudinary. This function checks authorization before granting the signature.
+ */
+export async function getCloudinarySignature() {
+  try {
+    // 1. Strict Role-Based / Authenticated Access check
+    // We only want logged-in users to be able to upload files.
+    // If you plan to allow public uploads, you can remove this block,
+    // but giving out signatures publicly leaves your bucket vulnerable.
+    const cookieStore = await cookies();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              );
+            } catch {
+              // The `setAll` method was called from a Server Component.
+              // This can be ignored if you have middleware refreshing
+              // user sessions.
+            }
+          },
+        },
+      }
+    );
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // If there is no user, reject immediately
+    if (!user) {
+      throw new Error("Unauthorized to upload files.");
+    }
+
+    // 2. Configure Cloudinary
+    // We do NOT use process.env to set global cloudinary config, 
+    // we just use the utils directly with the secret to keep it stateless.
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+    if (!apiSecret) {
+      throw new Error("Cloudinary API Secret is missing on the server.");
+    }
+
+    // 3. Generate Timestamp and Signature
+    const timestamp = Math.round(new Date().getTime() / 1000);
+
+    // The params to sign MUST exactly match the params the client sends
+    // minus 'file', 'cloud_name', 'resource_type', and 'api_key'.
+    // If the client uses an upload preset (which we do), we must include
+    // it in the signature params.
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+    if (!uploadPreset) {
+      throw new Error("Cloudinary Upload Preset is missing.");
+    }
+
+    const paramsToSign = {
+      timestamp: timestamp,
+      upload_preset: uploadPreset,
+    };
+
+    const signature = cloudinary.utils.api_sign_request(paramsToSign, apiSecret);
+
+    return {
+      success: true,
+      signature,
+      timestamp,
+      uploadPreset,
+      apiKey: process.env.CLOUDINARY_API_KEY, // Pass it securely only to authorized users
+    };
+  } catch (error: any) {
+    console.error("Error generating Cloudinary signature:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to generate upload signature.",
+    };
+  }
+}

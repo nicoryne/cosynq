@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌌 cosynq
 
-## Getting Started
+> **align your orbit. sync your universe.**
+> 
+> 🔗 **Live Orbit:** [cosynq.ryne.dev](https://cosynq.ryne.dev)
 
-First, run the development server:
+Welcome to **cosynq**, the celestial command center designed exclusively for the cosplay community. Built to eliminate the chaos of scattered group chats, messy spreadsheets, and con-crunch panic, `cosynq` provides a sleek, highly-organized, dark-mode sanctuary for cosplayers, prop makers, and photographers to manage their craft.
 
+Designed and developed by **[RYNE.DEV](https://ryne.dev)**.
+
+---
+
+## ✨ Features
+
+`cosynq` consolidates everything a creator needs into one unified, ethereal dashboard:
+
+* **👩‍🚀 Astral Profiles:** A highly customizable user profile where you can showcase your portfolio, display your current aesthetic, and manage your public presence.
+* **🪐 Cosplan Constellations:** Your dedicated workspace for managing "cosplans" (cosplay plans). Track your progress, break down material budgets (EVA foam, fabrics, wigs), and organize reference images in one clean view.
+* **🗓️ The Celestial Calendar:** A fully integrated calendar view for managing local and international conventions, tracking photoshoot dates, and setting personal crafting deadlines.
+* **✨ Cosplay Groups (CGs):** The ultimate recruitment and management hub for group cosplays. Cast characters, coordinate lineups, and keep your entire squad perfectly synced for the next big con.
+* **🚀 Discussion Forums:** A community space to share wig-styling tutorials, drop links to the best local fabric suppliers, or just vent about your sewing machine breaking at 3 AM. 
+
+---
+
+## 🛠️ Tech Stack
+
+`cosynq` is engineered for hyper-speed and scalability, built on a modern, robust stack:
+
+* **Framework:** [Next.js](https://nextjs.org/) (App Router)
+* **Database & Auth:** [Supabase](https://supabase.com/)
+* **State & Data Fetching:** [TanStack React Query](https://tanstack.com/query/latest)
+* **Validation:** [Zod](https://zod.dev/)
+* **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
+* **Theming:** `next-themes` (Strictly dark-mode / midnight aesthetic)
+* **Media Storage:** [Cloudinary](https://cloudinary.com/)
+
+---
+
+## 🔒 Security & Architecture Standards
+
+This project strictly adheres to a **6-Layer Architecture** (View, Component, Hook, Action, Service, and Data Access). To ensure the absolute safety of our community's data, the platform implements:
+
+* **"Do Not Trust The Client":** Strict data sanitization. All API responses use Data Transfer Objects (DTOs) to ensure only essential data is exposed to the client.
+* **Strict Validation:** Every single input payload is validated via Zod schemas before hitting the Service layer.
+* **Row Level Security (RLS):** All Supabase tables are locked down with precise RLS policies. No public unauthorized mutations are allowed.
+* **Optimized Rendering:** Implementation of cursor-based infinite scroll and pagination for all dashboard feeds and forum threads to maintain lightning-fast load times.
+
+### Role-Based Access Control (RBAC)
+
+cosynq implements a zero-lookup, cryptographically secure RBAC system using Supabase's custom JWT access token hooks. User roles are stamped directly into authentication tokens, eliminating database JOINs while maintaining absolute security.
+
+#### Available Roles
+
+| Role | Celestial Name | Permissions |
+|------|----------------|-------------|
+| `user` | **Dreamer** | Full access to personal content (profiles, cosplans, budgets) |
+| `moderator` | **Oracle** | Community moderation (hide/lock posts, manage recruitment listings) |
+| `admin` | **Weaver** | Full system access (user management, role assignment, configuration) |
+
+#### Security Guarantees
+
+* **Zero Client Trust:** Roles are never sent by the client; they're cryptographically stamped into JWTs at authentication time
+* **Tamper-Proof:** JWT signatures prevent role escalation attacks
+* **Zero-Lookup Performance:** Role checks execute without database queries (sub-200ms response times)
+* **Audit Trail:** All role changes are automatically logged with timestamps and actor information
+* **Last Admin Protection:** System prevents removing or demoting the last admin user
+
+For detailed RBAC implementation, see:
+* [RBAC Architecture Guide](./supabase/roles.md) - Complete implementation details
+* [Security Policy](./SECURITY.md) - Security model and guarantees
+
+---
+
+## 🚀 Getting Started (Local Orbit)
+
+Want to run `cosynq` locally? Follow these steps:
+
+**1. Clone the repository:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [https://github.com/nicoryne/cosynq.git](https://github.com/nicoryne/cosynq.git)
+cd cosynq
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. Install dependencies:**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**3. Set up environment variables:**
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**4. Sync Database Types**
+```bash
+npx supabase gen types typescript --project-id euhfhbpcqsfkfhmyvrzw > database.types.ts
+```
 
-## Learn More
+**5. Run the development server:**
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+💌 Developer
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with 🩵 by [RYNE.DEV](https://ryne.dev).

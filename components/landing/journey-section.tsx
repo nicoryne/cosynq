@@ -1,0 +1,175 @@
+// =====================================================================
+// Journey Section Component
+// =====================================================================
+// Displays the user journey timeline with three phases: Dream, Weave, Sync
+// Features vertical timeline with gradient connecting line and glassmorphic nodes
+// Requirements: 7.1-7.6
+
+"use client";
+
+import { Badge } from "@/components/ui/badge";
+import { useIntersectionObserver } from "@/lib/hooks/use-intersection-observer";
+import { cn } from "@/lib/utils";
+
+// =====================================================================
+// Data
+// =====================================================================
+
+const phases = [
+  {
+    emoji: "☁️",
+    title: "Dream",
+    description: "Set up your profile, build your mood board, add character references. Let the vision crystallize.",
+    details: ["Create your cosplayer profile", "Pin reference images & inspo", "Choose your next character"],
+  },
+  {
+    emoji: "🪡",
+    title: "Weave",
+    description: "Track your budget, manage materials, and check off your prop-making to-do list. Every stitch counts.",
+    details: ["Budget tracker with material costs", "Step-by-step build checklist", "Progress photos & notes"],
+  },
+  {
+    emoji: "🪐",
+    title: "Sync",
+    description: "Recruit your group, align your convention schedules, and dominate the con floor together.",
+    details: ["Find & recruit group members", "Sync convention calendars", "Coordinate meetup times"],
+  },
+];
+
+// =====================================================================
+// Component
+// =====================================================================
+
+export function JourneySection() {
+  const { ref: headerRef, isIntersecting: headerVisible } = useIntersectionObserver({ threshold: 0.1 });
+  const { ref: timelineRef, isIntersecting: timelineVisible } = useIntersectionObserver({ threshold: 0.1 });
+
+  return (
+    <section
+      id="journey"
+      className="relative py-24 px-6"
+    >
+      <div className="max-w-3xl mx-auto">
+        {/* Section Header */}
+        <div
+          ref={headerRef as React.RefObject<HTMLDivElement>}
+          className={cn(
+            "text-center mb-20 transition-all duration-700",
+            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+        >
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+            From dream to con
+          </h2>
+          <p className="mt-4 text-muted-foreground max-w-md mx-auto">
+            Your journey from first inspiration to dominating the convention floor.
+          </p>
+        </div>
+
+        {/* Timeline */}
+        <div ref={timelineRef as React.RefObject<HTMLDivElement>} className="relative">
+          {/* Vertical connecting line with gradient (Requirements 7.2) */}
+          <div
+            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px md:-translate-x-px bg-gradient-to-b from-primary via-secondary to-accent"
+          />
+
+          {phases.map((phase, index) => (
+            <div
+              key={phase.title}
+              className={cn(
+                "relative mb-16 last:mb-0 transition-all duration-700",
+                timelineVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              )}
+              style={{ transitionDelay: timelineVisible ? `${300 + index * 200}ms` : "0ms" }}
+            >
+              {/* Grid layout for alternating content (Requirements 7.4) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start">
+                {/* Left content (odd indices on desktop) */}
+                <div
+                  className={cn(
+                    "hidden md:block",
+                    index % 2 === 0 ? "md:text-right md:pr-8" : "md:order-2 md:pl-8"
+                  )}
+                >
+                  <Badge
+                    variant="outline"
+                    className="mb-3 px-3 py-1 bg-primary/10 border-primary/20 text-primary uppercase font-black tracking-widest text-[10px]"
+                  >
+                    Phase 0{index + 1}
+                  </Badge>
+                  <h3 className="font-heading text-3xl font-black italic tracking-tighter mb-4">
+                    {phase.title}
+                  </h3>
+                  <p className="text-sm font-medium text-muted-foreground leading-relaxed mb-6">
+                    {phase.description}
+                  </p>
+                  <div
+                    className={cn(
+                      "space-y-3 flex flex-col",
+                      index % 2 === 0 ? "md:items-end" : "md:items-start"
+                    )}
+                  >
+                    {phase.details.map((detail) => (
+                      <div
+                        key={detail}
+                        className={cn(
+                          "inline-flex items-center gap-3 px-4 py-2 rounded-xl glassmorphism text-[10px] font-black uppercase tracking-widest text-muted-foreground/80",
+                          index % 2 === 0 ? "md:flex-row-reverse" : ""
+                        )}
+                      >
+                        <span className="size-1.5 rounded-full bg-primary shrink-0 shadow-glow-primary" />
+                        <span>{detail}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Timeline Node (Requirements 7.3) */}
+                <div
+                  className={cn(
+                    "absolute left-6 md:left-1/2 md:-translate-x-1/2 z-10",
+                    "md:relative md:left-0 md:translate-x-0",
+                    index % 2 === 0 ? "md:order-2" : "md:order-1"
+                  )}
+                >
+                  <div className="flex justify-center">
+                    <div className="size-16 rounded-full flex items-center justify-center text-2xl glassmorphism shadow-glow-primary">
+                      {phase.emoji}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile content */}
+                <div className="md:hidden ml-16">
+                  <Badge
+                    variant="outline"
+                    className="mb-3 px-3 py-1 bg-primary/10 border-primary/20 text-primary uppercase font-black tracking-widest text-[10px]"
+                  >
+                    Phase 0{index + 1}
+                  </Badge>
+                  <h3 className="font-heading text-3xl font-black italic tracking-tighter mb-4">
+                    {phase.title}
+                  </h3>
+                  <p className="text-sm font-medium text-muted-foreground leading-relaxed mb-6">
+                    {phase.description}
+                  </p>
+                  <div className="space-y-3 flex flex-col">
+                    {phase.details.map((detail) => (
+                      <div
+                        key={detail}
+                        className="inline-flex items-center gap-3 px-4 py-2 rounded-xl glassmorphism text-[10px] font-black uppercase tracking-widest text-muted-foreground/80"
+                      >
+                        <span className="size-1.5 rounded-full bg-primary shrink-0 shadow-glow-primary" />
+                        <span>{detail}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

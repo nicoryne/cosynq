@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Orbit - cosynq</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      /* Midnight Void background */
+      background-color: #0B0C10; 
+      color: #F8FAFC;
+    }
+    .wrapper {
+      width: 100%;
+      table-layout: fixed;
+      background-color: #0B0C10;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      /* Frosted Nebula container */
+      background-color: #151821; 
+      border-radius: 16px;
+      border: 1px solid #1E293B; /* Orbit Silver border */
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+    .header {
+      /* Subtle cosmic gradient using our Starlight Cyan and Lavender Dust */
+      background: linear-gradient(135deg, rgba(124, 212, 250, 0.15) 0%, rgba(212, 179, 255, 0.15) 100%);
+      border-bottom: 1px solid #1E293B;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #F8FAFC;
+    }
+    .header p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      color: #7CD4FA; /* Starlight Cyan */
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .content h2 {
+      margin: 0 0 16px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+    .content p {
+      margin: 0 0 24px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #CBD5E1; /* Soft slate gray for readability */
+    }
+    .button-container {
+      text-align: center;
+      margin: 32px 0;
+    }
+    .button {
+      display: inline-block;
+      padding: 16px 48px;
+      /* Glowing gradient button */
+      background: linear-gradient(135deg, #7CD4FA 0%, #D4B3FF 100%);
+      color: #0B0C10 !important; /* Dark text for contrast against pastel button */
+      text-decoration: none;
+      border-radius: 50px; /* Pill shape to match our UI */
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      box-shadow: 0 4px 16px rgba(124, 212, 250, 0.3);
+      transition: transform 0.2s;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124, 212, 250, 0.5);
+    }
+    .footer {
+      padding: 24px 30px;
+      background-color: #0B0C10;
+      text-align: center;
+      font-size: 13px;
+      color: #64748B;
+    }
+    .footer p {
+      margin: 8px 0;
+    }
+    .footer a {
+      color: #D4B3FF; /* Lavender Dust links */
+      text-decoration: none;
+    }
+    .divider {
+      height: 1px;
+      background-color: #1E293B;
+      margin: 32px 0;
+    }
+    .expiry-notice {
+      padding: 16px;
+      /* Soft Lavender warning instead of harsh yellow */
+      background-color: rgba(212, 179, 255, 0.05); 
+      border-left: 3px solid #D4B3FF;
+      border-radius: 4px;
+      margin: 24px 0;
+    }
+    .expiry-notice p {
+      margin: 0;
+      font-size: 14px;
+      color: #D4B3FF;
+    }
+    .fallback-link {
+      font-size: 13px;
+      word-break: break-all;
+      color: #7CD4FA;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="header">
+        <h1>✨ cosynq</h1>
+        <p>align your orbit.</p>
+      </div>
+      
+      <div class="content">
+        <h2>Welcome to the Cosmos! 🌟 🌌</h2>
+        <p>
+          Thank you for joining <strong>cosynq</strong>, the ultimate sanctuary for the cosplay community. We're so excited to have you orbiting with us!
+        </p>
+        <p>
+          Before you can start tracking your cosplans and joining cosplay groups, we need to sync your universe. Please verify your email address by clicking the button below:
+        </p>
+        
+        <div class="button-container">
+          <a href="{{ .ConfirmationURL }}" class="button">Verify Email Address</a>
+        </div>
+        
+        <div class="expiry-notice">
+          <p>⏰ For your security, this verification link expires in 24 hours.</p>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <p style="font-size: 14px; color: #94A3B8;">
+          If the button doesn't work, copy and paste this link securely into your browser:
+        </p>
+        <p class="fallback-link">
+          {{ .ConfirmationURL }}
+        </p>
+        
+        <div class="divider"></div>
+        
+        <p style="font-size: 13px; color: #64748B; text-align: center;">
+          If you didn't create an account with cosynq, you can safely ignore this email. Your starry sky remains untouched.
+        </p>
+      </div>
+      
+      <div class="footer">
+        <p>© 2026 cosynq. All rights reserved.</p>
+        <p>
+          <a href="{{ .SiteURL }}">Visit Platform</a> &nbsp;•&nbsp; 
+          <a href="{{ .SiteURL }}/privacy">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
