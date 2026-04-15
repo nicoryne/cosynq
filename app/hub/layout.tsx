@@ -1,13 +1,13 @@
-import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { HubSidebar } from "@/components/hub/hub-sidebar";
+import { HubHeader } from "@/components/hub/hub-header";
 import { Starfield } from "@/components/landing/starfield";
 import { cn } from "@/lib/utils";
 
 /**
- * Dashboard Layout
+ * Hub Layout
  * Provides Sidebar + Header architecture for all authenticated sub-routes
  */
-export default function DashboardLayout({
+export default function HubLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -23,11 +23,11 @@ export default function DashboardLayout({
       </div>
 
       {/* Sidebar - Hidden on mobile, shown on md+ */}
-      <DashboardSidebar className="hidden md:flex shrink-0 shrink-0" />
+      <HubSidebar className="hidden md:flex shrink-0 shrink-0" />
 
       {/* Main viewport */}
       <div className="flex-1 flex flex-col h-screen relative z-10 overflow-hidden">
-        <DashboardHeader />
+        <HubHeader />
         
         {/* Scrollable Canvas */}
         <main id="main-content" className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8 lg:p-10">

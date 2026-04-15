@@ -82,13 +82,13 @@ export function UserNav({ className }: UserNavProps) {
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-white/10" />
           <DropdownMenuItem asChild className="cursor-pointer focus:bg-white/5">
-            <Link href={`/dashboard/u/${profile.username}`}>
+            <Link href={`/hub/u/${profile.username}`}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer focus:bg-white/5">
-            <Link href="/dashboard/settings">
+            <Link href="/hub/settings">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </Link>

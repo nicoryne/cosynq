@@ -108,7 +108,7 @@ export async function assignRoleAction(
     const roleService = new RoleService(supabase);
     const result = await roleService.assignRole(userId, role);
 
-    // Revalidate admin dashboard paths
+    // Revalidate admin hub paths
     revalidatePath('/admin/roles');
     revalidatePath('/admin/users');
 
@@ -154,7 +154,7 @@ export async function updateRoleAction(
     const roleService = new RoleService(supabase);
     const result = await roleService.updateRole(userId, newRole);
 
-    // Revalidate admin dashboard paths
+    // Revalidate admin hub paths
     revalidatePath('/admin/roles');
     revalidatePath('/admin/users');
 
@@ -200,7 +200,7 @@ export async function removeRoleAction(
     const roleService = new RoleService(supabase);
     await roleService.removeRole(userId);
 
-    // Revalidate admin dashboard paths
+    // Revalidate admin hub paths
     revalidatePath('/admin/roles');
     revalidatePath('/admin/users');
 

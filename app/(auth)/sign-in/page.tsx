@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { SignInForm } from '@/components/auth/sign-in-form';
 import { Starfield } from '@/components/landing/starfield';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -29,8 +30,14 @@ export default function SignInPage() {
       </div>
 
       <div className="relative z-10 w-full max-w-lg">
-        {/* Sign-in form in glassmorphic card */}
-        <SignInForm className="w-full" />
+        {/* Sign-in form in glassmorphic card wrapped in Suspense for useSearchParams */}
+        <Suspense fallback={
+          <div className="w-full aspect-square flex items-center justify-center rounded-[2.5rem] glassmorphism">
+            <Loader2 className="size-8 text-primary animate-spin" />
+          </div>
+        }>
+          <SignInForm className="w-full" />
+        </Suspense>
 
         {/* Discrete Return Link */}
         <div className="mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">

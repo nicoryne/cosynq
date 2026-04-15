@@ -27,14 +27,14 @@ export const SOCIAL_LINKS = [
   { label: "GitHub", href: "https://github.com/nicoryne/cosynq", icon: "github" },
 ];
 
-export interface DashboardNavLink extends NavLink {
+export interface HubNavLink extends NavLink {
   icon: string; // Lucide icon name or type
 }
 
-export const DASHBOARD_NAV_LINKS: DashboardNavLink[] = [
-  { label: "Overview", href: "/dashboard", icon: "LayoutDashboard" },
-  { label: "Cosplans", href: "/dashboard/cosplans", icon: "Zap" },
-  { label: "Groups", href: "/dashboard/groups", icon: "Users" },
-  { label: "Events", href: "/dashboard/events", icon: "Calendar" },
-  { label: "Settings", href: "/dashboard/settings", icon: "Settings" },
+export const HUB_NAV_LINKS: HubNavLink[] = [
+  { label: "Hub", href: "/hub", icon: "LayoutDashboard" },
+  { label: "Cosplans", href: "/hub/cosplans", icon: "Zap" },
+  { label: "Groups", href: "/hub/groups", icon: "Users" },
+  { label: "Events", href: "/hub/events", icon: "Calendar" },
+  { label: "Settings", href: "/hub/settings", icon: "Settings" },
 ];

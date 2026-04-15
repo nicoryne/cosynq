@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 /**
  * Settings Page
  * Requirements: 13.1-13.6 - Settings page redesign with organized sections
- * UI/UX Overhaul: Phase 5 - Dashboard Pages Redesign
+ * UI/UX Overhaul: Phase 5 - Hub Pages Redesign
  */
 export default async function SettingsPage() {
   const cookieStore = await cookies();

@@ -5,7 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: ['/hub', '/api', '/auth'],
     },
-    sitemap: 'https://cosynq.com/sitemap.xml',
+    sitemap: 'https://cosynq.ryne.dev/sitemap.xml',
   };
 }

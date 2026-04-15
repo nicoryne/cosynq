@@ -2,13 +2,13 @@ import { MetadataRoute } from 'next'
  
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'cosynq | Your Cosplay Sanctuary & Planner',
+    name: 'cosynq | Simplify your craft',
     short_name: 'cosynq',
-    description: 'Weave your dreams and sync your universe. cosynq is the aesthetic hub to manage your cosplans, connect with creatives, and organize your convention schedules.',
-    start_url: '/',
+    description: 'Simplify your craft. Sync your universe. cosynq is the aesthetic celestial sanctuary designed to organize your cosmic cosplay journey, projects, and community orbit.',
+    start_url: '/hub',
     display: 'standalone',
     background_color: '#0B0C10', // Our dark mode Midnight Void
-    theme_color: '#7CD4FA', // Our primary Starlight Cyan
+    theme_color: '#B794F4', // Updated to celestial lavender for theme prominence
     icons: [
       {
         src: '/icon-192x192.png',

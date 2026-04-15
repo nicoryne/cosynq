@@ -16,12 +16,12 @@ export const ROUTES = {
   CONFIRM: '/auth/confirm',
   
   // Protected routes
-  DASHBOARD: '/dashboard',
-  COSPLANS: '/dashboard/cosplans',
-  GROUPS: '/dashboard/groups',
-  EVENTS: '/dashboard/events',
-  PROFILE: '/dashboard/u', // Base for /dashboard/u/[username]
-  SETTINGS: '/dashboard/settings',
+  HUB: '/hub',
+  COSPLANS: '/hub/cosplans',
+  GROUPS: '/hub/groups',
+  EVENTS: '/hub/events',
+  PROFILE: '/hub/u', // Base for /hub/u/[username]
+  SETTINGS: '/hub/settings',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

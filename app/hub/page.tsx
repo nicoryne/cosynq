@@ -17,7 +17,7 @@ import {
   Clock
 } from "lucide-react"
 import Link from "next/link"
-export default async function DashboardPage() {
+export default async function HubPage() {
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
   const authService = new AuthService(supabase)

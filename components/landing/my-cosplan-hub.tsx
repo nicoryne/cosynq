@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { toLocalTimeWithOptions } from "@/lib/utils/time.utils"
 
-export function MyCosplanDashboard() {
+export function MyCosplanHub() {
   const scheduleItems = [
     { time: "08:00", label: "Otaku Fest Props", duration: "2h", color: "bg-primary" },
     { time: "10:30", label: "Photoshoot: Archons", duration: "1.5h", color: "bg-secondary" },

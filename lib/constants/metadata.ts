@@ -5,10 +5,10 @@ export const siteMetadata: Metadata = {
   metadataBase: new URL("https://cosynq.ryne.dev"),
   
   title: {
-    default: "cosynq | Your Cosplay Sanctuary & Planner",
+    default: "cosynq | Simplify your craft",
     template: "%s | cosynq"
   },
-  description: "Weave your dreams and sync your universe. cosynq is the aesthetic hub to manage your cosplans, connect with creatives, and organize your convention schedules.",
+  description: "Simplify your craft. Sync your universe. cosynq is the aesthetic celestial sanctuary designed to organize your cosmic cosplay journey, projects, and community orbit.",
   applicationName: "cosynq",
   category: "Lifestyle & Community",
   keywords: [
@@ -41,15 +41,15 @@ export const siteMetadata: Metadata = {
     locale: "en_PH", // Set to Philippines locale since that's your primary base!
     alternateLocale: "en_US",
     url: "https://cosynq.ryne.dev",
-    title: "cosynq | Your Cosplay Sanctuary & Planner",
-    description: "Weave your dreams and sync your universe. cosynq is the aesthetic hub to manage your cosplans, connect with creatives, and organize your convention schedules.",
+    title: "cosynq | Simplify your craft",
+    description: "Simplify your craft. Sync your universe. cosynq is the aesthetic celestial sanctuary designed to organize your cosmic cosplay journey, projects, and community orbit.",
     siteName: "cosynq",
     images: [
       {
         url: "/og-image.png", // Make sure to design a cute 1200x630px image for this!
         width: 1200,
         height: 630,
-        alt: "cosynq dashboard preview showing celestial styling",
+        alt: "cosynq hub preview showing celestial styling",
       },
     ],
   },
@@ -57,8 +57,8 @@ export const siteMetadata: Metadata = {
   // Twitter specific card styling
   twitter: {
     card: "summary_large_image",
-    title: "cosynq | Your Cosplay Sanctuary & Planner",
-    description: "Weave your dreams and sync your universe. cosynq is the aesthetic hub to manage your cosplans, connect with creatives, and organize your convention schedules.",
+    title: "cosynq | Simplify your craft",
+    description: "Simplify your craft. Sync your universe. cosynq is the aesthetic celestial sanctuary designed to organize your cosmic cosplay journey, projects, and community orbit.",
     creator: "@your_twitter_handle", // Put dev or project twitter here
     images: ["/og-image.png"],
   },

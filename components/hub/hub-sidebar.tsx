@@ -13,11 +13,11 @@ import {
   Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DASHBOARD_NAV_LINKS } from '@/lib/constants/navigation';
+import { HubNavLink, HUB_NAV_LINKS } from '@/lib/constants/navigation';
 import { Button } from '@/components/ui/button';
 import { useSignOut } from '@/lib/hooks/use-auth';
 
-interface DashboardSidebarProps {
+interface HubSidebarProps {
   className?: string;
 }
 
@@ -29,7 +29,7 @@ const ICON_MAP: Record<string, any> = {
   Settings,
 };
 
-export function DashboardSidebar({ className }: DashboardSidebarProps) {
+export function HubSidebar({ className }: HubSidebarProps) {
   const pathname = usePathname();
   const { mutate: signOut } = useSignOut();
 
@@ -43,7 +43,7 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
 
       {/* Brand Section */}
       <div className="p-8 pb-12">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
+        <Link href="/hub" className="flex items-center gap-3 group">
           <div className="size-10 rounded-2xl bg-primary/20 flex items-center justify-center shadow-glow-primary group-hover:scale-110 transition-transform">
              <Sparkles className="size-5 text-primary" />
           </div>
@@ -60,7 +60,7 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
           <p className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 mb-4 italic">
             Orbital Directives
           </p>
-          {DASHBOARD_NAV_LINKS.slice(0, 4).map((link) => {
+          {HUB_NAV_LINKS.slice(0, 4).map((link) => {
             const Icon = ICON_MAP[link.icon] || LayoutDashboard;
             const isActive = pathname === link.href;
 
@@ -97,7 +97,7 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
           <p className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 mb-4 italic">
             System Config
           </p>
-          {DASHBOARD_NAV_LINKS.slice(4).map((link) => {
+          {HUB_NAV_LINKS.slice(4).map((link) => {
             const Icon = ICON_MAP[link.icon] || LayoutDashboard;
             const isActive = pathname === link.href;
 

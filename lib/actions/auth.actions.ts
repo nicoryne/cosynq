@@ -436,8 +436,8 @@ export async function signInAction(
       });
     }
 
-    // Step 6: Revalidate dashboard path after successful sign-in
-    revalidatePath('/dashboard');
+    // Step 6: Revalidate hub path after successful sign-in
+    revalidatePath('/hub');
 
     // Step 7: Return success with user data
     return {
@@ -489,7 +489,7 @@ export async function signOutAction(): Promise<ActionResponse> {
 
     // Step 4: Revalidate paths to clear cached data
     revalidatePath('/');
-    revalidatePath('/dashboard');
+    revalidatePath('/hub');
 
     // Step 5: Return success
     return {
@@ -635,7 +635,7 @@ export async function updateProfileAction(
 
     // 3. Revalidate paths to clear cache
     revalidatePath(`/u/${updatedProfile.username}`);
-    revalidatePath('/dashboard');
+    revalidatePath('/hub');
     revalidatePath('/settings');
 
     return {

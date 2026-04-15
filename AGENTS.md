@@ -99,7 +99,7 @@ To maintain a secure sanctuary for our users, `cosynq` strictly adheres to stand
 To ensure the platform runs as smoothly as jumping through hyperspace, all features must adhere to the following optimization guidelines:
 
 1. **Chunked Data Retrieval (Pagination & Infinite Scroll):**
-   - Any dashboard, directory, or list data overview (e.g., Cosplay Group recruitments, user directories, forum posts) must implement either structured pagination or infinite scroll based on the UX context to ensure the database only serves small, manageable chunks of data.
+   - Any hub listing, directory, or list data overview (e.g., Cosplay Group recruitments, user directories, forum posts) must implement either structured pagination or infinite scroll based on the UX context to ensure the database only serves small, manageable chunks of data.
 2. **Smart Time Management:**
    - **Mandatory Time Utility Usage:** All time-related operations MUST use the functions in `lib/utils/time.utils.ts`.
    - **Upload/Storage Flow:** 

@@ -7,11 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-interface DashboardHeaderProps {
+interface HubHeaderProps {
   className?: string;
 }
 
-export function DashboardHeader({ className }: DashboardHeaderProps) {
+export function HubHeader({ className }: HubHeaderProps) {
   return (
     <header className={cn(
       "h-20 w-full flex items-center justify-between px-8 z-40 relative sticky top-0",

@@ -100,7 +100,7 @@ export function useSignUp() {
  *
  * const handleSubmit = (data: SignInFormData) => {
  *   mutate(data, {
- *     onSuccess: () => router.push('/dashboard'),
+ *     onSuccess: () => router.push('/hub'),
  *     onError: (error) => toast.error(error.message),
  *   });
  * };
@@ -131,8 +131,8 @@ export function useSignIn() {
       // Invalidate current user query to refetch user data
       queryClient.invalidateQueries({ queryKey: ['current-user'] });
 
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Redirect to hub
+      router.push('/hub');
     },
   });
 }

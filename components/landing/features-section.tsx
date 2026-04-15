@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { useIntersectionObserver } from "@/lib/hooks/use-intersection-observer"
 import { cn } from "@/lib/utils"
 import { SignalSyncCard } from "./signal-sync-card"
-import { MyCosplanDashboard } from "./my-cosplan-dashboard"
+import { MyCosplanHub } from "./my-cosplan-hub"
 
 export function FeaturesSection() {
   const { resolvedTheme } = useTheme()
@@ -75,7 +75,7 @@ export function FeaturesSection() {
             <SignalSyncCard />
           </Card>
 
-          {/* Merged My Cosplan Dashboard - Planning & Budgeting */}
+          {/* Merged My Cosplan Hub - Planning & Budgeting */}
           <Card
             className={cn(
               cardBase,
@@ -87,7 +87,7 @@ export function FeaturesSection() {
               transitionDelay: gridVisible ? "200ms" : "0ms",
             }}
           >
-            <MyCosplanDashboard />
+            <MyCosplanHub />
           </Card>
         </div>
       </div>
