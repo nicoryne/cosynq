@@ -208,17 +208,21 @@ export class AuthService {
    */
   async signIn(
     emailOrUsername: string,
-    password: string
+    password: string,
+    adminClient?: SupabaseClient<Database>
   ): Promise<AuthOperationResult> {
     try {
       // Step 1: Determine if input is email or username
       let email = emailOrUsername;
       const isEmail = emailOrUsername.includes('@');
 
-      // Step 2: If username provided, resolve to email via user_profiles
+      // Step 2: If username provided, resolve to email
       if (!isEmail) {
-        // Query user_profiles to get the user ID
-        const { data: profileData, error: profileError } = await this.supabase
+        // Use admin client if provided, otherwise fall back to standard client
+        const resolutionClient = adminClient || this.supabase;
+
+        // 1. Resolve username to user ID via user_profiles
+        const { data: profileData, error: profileError } = await resolutionClient
           .from('user_profiles')
           .select('id')
           .eq('username', emailOrUsername)
@@ -231,15 +235,10 @@ export class AuthService {
           };
         }
 
-        // We need to get the email from auth.users
-        // Since we can't directly query auth.users, we'll attempt sign-in with the user ID
-        // However, Supabase Auth requires email for signInWithPassword
-        // So we need to use a different approach: store email in user_profiles or use a different method
-        
-        // For now, we'll use the admin API to get the user's email
-        // In production, consider storing email in user_profiles for easier lookup
+        // 2. Resolve user ID to email via auth admin API
+        // Note: This requires the client to have administrative privileges
         const { data: userData, error: userError } =
-          await this.supabase.auth.admin.getUserById(profileData.id);
+          await resolutionClient.auth.admin.getUserById(profileData.id);
 
         if (userError || !userData.user?.email) {
           return {

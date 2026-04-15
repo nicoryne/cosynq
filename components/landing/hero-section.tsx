@@ -23,26 +23,31 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden pt-20"
+      className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-x-clip pt-20 pb-32"
     >
       {/* Subtle Starfield Background */}
       <Starfield />
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-7xl mx-auto pt-10">
         {/* Giant Branding Focal Point - Background Layer */}
-        <div className="relative mb-0 flex flex-col items-center select-none pointer-events-none w-full px-4">
-          <h1 className="font-heading text-[clamp(4rem,18vw,26rem)] font-black tracking-tighter leading-none whitespace-nowrap">
-            <span className="block bg-gradient-to-b from-foreground to-transparent bg-clip-text text-transparent opacity-80 transform -translate-y-4 sm:-translate-y-12">
+        <div className="relative mb-0 flex flex-col items-center select-none pointer-events-none w-full px-4 overflow-x-clip">
+          <h1 className="font-heading text-[clamp(4rem,18vw,26rem)] font-black tracking-tighter leading-[0.85] pb-4 whitespace-nowrap">
+            <span className={cn(
+              "block bg-gradient-to-b from-foreground via-foreground to-transparent bg-clip-text text-transparent transform -translate-y-4 sm:-translate-y-12 transition-opacity duration-500",
+              isDark ? "opacity-90" : "opacity-50"
+            )}>
               cosynq
             </span>
           </h1>
         </div>
 
         {/* Main Content Layer */}
-        <div className="relative z-20 mt-8 flex flex-col items-center w-full px-6">
+        <div className="relative z-20 flex flex-col items-center w-full px-6">
           {/* Catchphrase / Slogan */}
-          <h2 className="font-heading text-[clamp(1rem,6vw,4.5rem)] font-bold tracking-tight text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] whitespace-nowrap">
-            {isDark ? "navigate the nebula." : "dream in pastel."}
+          <h2 className={cn(
+            "font-heading text-[clamp(1rem,6vw,4.5rem)] font-black tracking-tighter transition-colors duration-500 text-foreground"
+          )}>
+            Simplify the craft.
           </h2>
         </div>
 
@@ -56,19 +61,20 @@ export function HeroSection() {
         <div className="mt-12 flex flex-col sm:flex-row items-center gap-6">
           <Button
             asChild
-            size="lg"
-            className="w-full sm:w-auto px-12 h-16 text-lg font-bold rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg active:scale-95"
+            size="xl"
+            variant="default"
+            className="w-full sm:w-auto px-12"
           >
             <Link href={ROUTES.SIGN_UP}>
-              Join the Orbit
+              Get Started
               <Sparkles className="ml-2 size-5" />
             </Link>
           </Button>
           <Button
             asChild
-            size="lg"
+            size="xl"
             variant="outline"
-            className="w-full sm:w-auto px-12 h-16 text-lg font-bold rounded-full border-2 border-primary/20 bg-background/50 hover:bg-primary/5 transition-all active:scale-95"
+            className="w-full sm:w-auto px-12"
           >
             <Link href="#features">
               Explore Features
@@ -78,7 +84,7 @@ export function HeroSection() {
       </div>
 
       {/* Minimalist Scroll Indicator */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-muted-foreground/40 animate-bounce-gentle transition-opacity hover:opacity-100" aria-hidden="true">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-muted-foreground/40 animate-bounce-gentle transition-opacity hover:opacity-100" aria-hidden="true">
         <span className="text-xs uppercase tracking-[0.3em] font-black">Scroll</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-primary/40 to-transparent" />
       </div>

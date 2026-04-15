@@ -119,27 +119,19 @@ export const signInSchema = z.object({
 // =====================================================================
 
 /**
- * Validates Step 1: Email input
+ * Validates Step 1: Email and Username
  * Requirements: 8.1 - Multi-step validation
  */
 export const step1Schema = z.object({
   email: emailSchema,
-});
-
-/**
- * Validates Step 2: Username input
- * Requirements: 8.1 - Multi-step validation
- */
-export const step2Schema = z.object({
   username: usernameSchema,
-  displayName: displayNameSchema,
 });
 
 /**
- * Validates Step 3: Password and confirmation
+ * Validates Step 2: Password and confirmation
  * Requirements: 8.1 - Multi-step validation, 13.2 - Password confirmation
  */
-export const step3Schema = z
+export const step2Schema = z
   .object({
     password: passwordSchema,
     confirmPassword: z.string().min(1, 'Please confirm your password'),
@@ -150,11 +142,19 @@ export const step3Schema = z
   });
 
 /**
- * Validates Step 4: Optional profile data
+ * Validates Step 3: Profile Data (Editable)
+ * Requirements: 8.1 - Multi-step validation, 3.6 - Profile data validation
+ */
+export const step3Schema = z.object({
+  displayName: displayNameSchema,
+  bio: bioSchema,
+});
+
+/**
+ * Validates Step 4: Visual (Profile Picture)
  * Requirements: 8.1 - Multi-step validation, 3.6 - Profile data validation
  */
 export const step4Schema = z.object({
-  bio: bioSchema,
   avatarUrl: z.string().url().optional(),
   avatarPublicId: z.string().optional(),
 });

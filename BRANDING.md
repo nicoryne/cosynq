@@ -7,9 +7,12 @@
 
 ---
 
-## 📱 Layout Strategy: Bold & Immersive
+## 📱 Layout Strategy: "Bento Core" Precision
 
-We utilize **Large-Scale UI** to ensure the platform feels tactile and premium. Buttons and inputs are "chunky" and satisfying to interact with, especially on high-resolution mobile devices. We favor central, focused layouts (Glassmorphic Cards) for complex tasks like Sign-Up.
+We utilize a **Bento Core** layout strategy to organize complex information into digestible, beautiful modules.
+- **Grids & Compartments**: Use CSS Grid to create "Bento boxes" where each feature or metric has its own distinct, softly rounded container.
+- **Pill UI Components**: Use elongated pill shapes (`rounded-full`) for timelines, status indicators, and badges rather than sharp rectangles.
+- **Large-Scale UI**: Ensure the platform feels tactile. Buttons and inputs are "chunky" and satisfying to interact with. Favors central, focused layouts (Glassmorphic Cards) for complex tasks.
 
 ---
 
@@ -28,9 +31,9 @@ We utilize **Large-Scale UI** to ensure the platform feels tactile and premium. 
 *Backgrounds feel like a soft, iridescent sunrise.*
 
 * **Background:** Cloudy Lavender `#F9F7FD`
-* **Primary:** Pastel Lavender `#E8D5FF`
-* **Secondary:** Pastel Pink `#FCE6F0`
-* **Accent:** Pastel Sky Cyan `#E0F7FA`
+* **Primary:** Saturated Lavender (via HSL)
+* **Secondary:** Saturated Pink (via HSL)
+* **Accent:** Saturated Cyan (via HSL)
 * **Visuals:** Use horizontal pastel gradients and "puff" transitions.
 
 ### 🌙 Dark Mode: The Nebula Void
@@ -53,13 +56,27 @@ We utilize **Large-Scale UI** to ensure the platform feels tactile and premium. 
 
 ---
 
+## 🛠️ Immutable Rules for Developers
+
+To maintain the sanctuary's integrity and visual excellence, all code MUST follow these rules:
+
+1.  **NO ITALICS**: We have moved to a clean, architectural aesthetic. Never use `italic` or `font-italic` classes. Prefer `bold` (leading-tight) and `uppercase` with tracking for emphasis.
+2.  **SMART TIME ONLY**: All time-related operations (storage, formatting, display) MUST use the helpers in `lib/utils/time.utils.ts`. 
+    - Store as ISO (UTC) via `toISOFormat()`.
+    - Display localized via `toLocalTime()` or `toLocalTimeWithOptions()`.
+3.  **NO HARDCODED COLORS**: Never use hex codes, RGB, or Tailwind color utilities (like `text-white` or `bg-slate-500`) directly in components.
+    - Always use theme variables: `hsl(var(--primary))`, `text-foreground`, `bg-background`, etc.
+    - This ensures perfect parity between "Angel Core" (Light) and "Space Core" (Dark) themes.
+
+---
+
 ## 💻 Developer implementation
 
 ```css
 /* Update your globals.css with the v2 HSL values */
 :root {
   --background: 280 40% 98%;
-  --primary: 280 70% 85%;
+  --primary: 280 75% 65%; /* Saturated for Light Mode visibility */
   --radius: 1.5rem;
 }
 .dark {

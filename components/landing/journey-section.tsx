@@ -18,21 +18,21 @@ import { cn } from "@/lib/utils";
 const phases = [
   {
     emoji: "☁️",
-    title: "Dream",
-    description: "Set up your profile, build your mood board, add character references. Let the vision crystallize.",
-    details: ["Create your cosplayer profile", "Pin reference images & inspo", "Choose your next character"],
+    title: "Plan",
+    description: "Build your board, add character references, and organize your vision. Let the project crystallize.",
+    details: ["Reference & inspiration boards", "Character selection", "Initial project outlining"],
   },
   {
     emoji: "🪡",
-    title: "Weave",
-    description: "Track your budget, manage materials, and check off your prop-making to-do list. Every stitch counts.",
-    details: ["Budget tracker with material costs", "Step-by-step build checklist", "Progress photos & notes"],
+    title: "Build",
+    description: "Track your budget, manage materials, and check off your build list. Every stitch counts.",
+    details: ["Expense & material tracking", "Step-by-step build checklist", "Progress logs & photos"],
   },
   {
     emoji: "🪐",
-    title: "Sync",
+    title: "Connect",
     description: "Recruit your group, align your convention schedules, and dominate the con floor together.",
-    details: ["Find & recruit group members", "Sync convention calendars", "Coordinate meetup times"],
+    details: ["Group recruitment & chat", "Convention calendar sync", "Meetup coordination"],
   },
 ];
 
@@ -58,11 +58,11 @@ export function JourneySection() {
             headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-            From dream to con
+          <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6">
+            The Process
           </h2>
-          <p className="mt-4 text-muted-foreground max-w-md mx-auto">
-            Your journey from first inspiration to dominating the convention floor.
+          <p className="text-muted-foreground max-w-xl mx-auto font-medium text-lg leading-relaxed">
+            From first vision to the convention floor, your professional craft is managed in one sanctuary.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export function JourneySection() {
                   >
                     Phase 0{index + 1}
                   </Badge>
-                  <h3 className="font-heading text-3xl font-black italic tracking-tighter mb-4">
+                  <h3 className="font-heading text-3xl font-black tracking-tighter mb-4">
                     {phase.title}
                   </h3>
                   <p className="text-sm font-medium text-muted-foreground leading-relaxed mb-6">
@@ -147,7 +147,7 @@ export function JourneySection() {
                   >
                     Phase 0{index + 1}
                   </Badge>
-                  <h3 className="font-heading text-3xl font-black italic tracking-tighter mb-4">
+                  <h3 className="font-heading text-3xl font-black tracking-tighter mb-4">
                     {phase.title}
                   </h3>
                   <p className="text-sm font-medium text-muted-foreground leading-relaxed mb-6">

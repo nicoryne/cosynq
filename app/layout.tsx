@@ -21,7 +21,7 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", quicksand.variable, dmsans.variable)}
       suppressHydrationWarning
     >
-      <body className={cn("min-h-full flex flex-col bg-background text-foreground", dmsans.className)}>
+      <body className={cn("min-h-full flex flex-col bg-background text-foreground overflow-x-clip", dmsans.className)}>
         {/* Skip to main content link for keyboard navigation - Requirement 18.6 */}
         <a
           href="#main-content"

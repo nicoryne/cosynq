@@ -24,10 +24,10 @@ const faqs = [
   },
   {
     question: "How does group recruitment work?",
-    answer: "Cupid's Casting lets you create recruitment posts for your cosplay group, specify open roles, set your convention targets, and filter by location. Other cosplayers can browse and apply to join your squad—no more spamming Facebook groups.",
+    answer: "Signal Sync lets you create recruitment posts for your cosplay group, specify open roles, set your convention targets, and filter by location. Other cosplayers can browse and apply to join your squad—no more spamming Facebook groups.",
   },
   {
-    question: "What conventions does The Halo Hub support?",
+    question: "What conventions does My Cosplan support?",
     answer: "We're starting with major Philippine conventions (Otaku Fest, ARCHcon, Cosplay Mania, etc.) and expanding globally. You can also manually add any convention to your personal calendar.",
   },
   {
@@ -51,11 +51,11 @@ export function FAQSection() {
           "text-center mb-16 transition-all duration-700",
           isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
-            Questions from the <span className="italic">cosmos</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-md mx-auto">
-            Everything you need to know about your new cosplay sanctuary.
+          <h3 className="font-heading text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6">
+            FAQ
+          </h3>
+          <p className="text-muted-foreground max-w-xl mx-auto font-medium text-lg leading-relaxed">
+            Everything you need to know about organizing your craft on the platform.
           </p>
         </div>
 

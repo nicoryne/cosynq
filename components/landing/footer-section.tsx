@@ -9,8 +9,8 @@ export function FooterSection() {
     <footer className="relative py-24 px-6">
       <div className="max-w-2xl mx-auto text-center">
         {/* Final Headline */}
-        <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-          Ready to stitch your halo?
+        <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6">
+          Join the Dreamers
         </h2>
 
         {/* Large CTA Button */}
@@ -18,10 +18,10 @@ export function FooterSection() {
           <Button
             asChild
             size="xl"
-            variant="celestial"
+            variant="default"
           >
             <Link href={ROUTES.SIGN_UP}>
-              Dream Now
+              Get Started
             </Link>
           </Button>
         </div>
@@ -36,7 +36,7 @@ export function FooterSection() {
             <span>© 2026 cosynq</span>
             <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
             <span>
-              crafted with 🩵 by{" "}
+              crafted by{" "}
               <a
                 href="https://ryne.dev"
                 target="_blank"

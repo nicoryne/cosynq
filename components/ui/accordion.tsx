@@ -42,15 +42,15 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group/accordion-trigger flex flex-1 items-center justify-between py-4 text-left text-lg font-black italic tracking-tighter transition-all duration-300 outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          "group/accordion-trigger flex flex-1 items-center justify-between py-4 text-left text-lg font-black tracking-tighter transition-all duration-300 outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           className
         )}
         {...props}
       >
         {children}
-        <ChevronDownIcon 
-          data-slot="accordion-trigger-icon" 
-          className="size-6 shrink-0 text-muted-foreground/50 transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180 group-aria-expanded/accordion-trigger:text-primary" 
+        <ChevronDownIcon
+          data-slot="accordion-trigger-icon"
+          className="size-6 shrink-0 text-muted-foreground/50 transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180 group-aria-expanded/accordion-trigger:text-primary"
         />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>

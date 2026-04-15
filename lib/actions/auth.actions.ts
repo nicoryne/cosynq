@@ -9,6 +9,7 @@
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { AvailabilityService } from '@/lib/services/availability.service';
 import { AuthService } from '@/lib/services/auth.service';
 import {
@@ -395,10 +396,12 @@ export async function signInAction(
     // Step 2: Call AuthService.signIn() with validated credentials
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);
+    const adminClient = createAdminClient();
     const authService = new AuthService(supabase);
     const result = await authService.signIn(
       validation.data.emailOrUsername,
-      validation.data.password
+      validation.data.password,
+      adminClient
     );
 
     // Step 3: Handle errors (including unverified email)

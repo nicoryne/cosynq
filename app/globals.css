@@ -56,14 +56,14 @@
   --card-foreground: 240 20% 30%; 
   --popover: 0 0% 100%;
   --popover-foreground: 240 20% 30%;
-  --primary: 280 70% 85%; /* Pastel Lavender #E8D5FF */
-  --primary-foreground: 240 40% 20%; 
-  --secondary: 340 70% 90%; /* Pastel Pink Marshmallow #FCE6F0 */
-  --secondary-foreground: 340 40% 30%;
-  --muted: 240 10% 95%; /* Clean Cloud Gray */
-  --muted-foreground: 240 10% 50%;
-  --accent: 190 70% 90%; /* Pastel Sky Cyan #E0F7FA */
-  --accent-foreground: 190 40% 30%;
+  --primary: 280 75% 65%; /* Saturated Lavender */
+  --primary-foreground: 240 40% 15%; 
+  --secondary: 340 75% 75%; /* Saturated Pink */
+  --secondary-foreground: 340 45% 25%;
+  --muted: 240 10% 94%; 
+  --muted-foreground: 240 15% 45%;
+  --accent: 190 80% 60%; /* Saturated Cyan for better visibility */
+  --accent-foreground: 190 50% 25%;
   --destructive: 0 84% 65%;
   --destructive-foreground: 0 0% 100%;
   --border: 240 20% 92%; /* Subtle Indigo Line */
@@ -209,13 +209,23 @@
   will-change: transform;
 }
 
-/* Infinite horizontal scroll marquee */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 40s linear infinite;
   will-change: transform;
 }
 

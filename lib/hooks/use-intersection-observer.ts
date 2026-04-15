@@ -93,7 +93,7 @@ interface UseIntersectionObserverReturn {
 export function useIntersectionObserver(
   options: UseIntersectionObserverOptions = {}
 ): UseIntersectionObserverReturn {
-  const { threshold = 0.1, rootMargin = '0px', triggerOnce = false } = options;
+  const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
 
   const ref = useRef<HTMLElement>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -104,22 +104,31 @@ export function useIntersectionObserver(
     if (!element) return;
 
     // Skip if already intersected and triggerOnce is enabled
-    if (triggerOnce && hasIntersected) return;
+    if (triggerOnce && hasIntersected) {
+      setIsIntersecting(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         const isElementIntersecting = entry.isIntersecting;
 
-        setIsIntersecting(isElementIntersecting);
-
-        // Track if element has ever intersected
-        if (isElementIntersecting && !hasIntersected) {
-          setHasIntersected(true);
+        if (isElementIntersecting) {
+          setIsIntersecting(true);
+          if (!hasIntersected) {
+            setHasIntersected(true);
+          }
+          
+          // If we only trigger once, we can stop observing after the first intersection
+          if (triggerOnce) {
+            observer.unobserve(element);
+          }
+        } else if (!triggerOnce) {
+          setIsIntersecting(false);
         }
 
-        // Pause animations when element leaves viewport for performance
-        if (!isElementIntersecting && element) {
-          // Get all animated children
+        // Performance: Pause animations when purely off-screen (only if not triggered once)
+        if (!isElementIntersecting && element && !triggerOnce) {
           const animatedElements = element.querySelectorAll('[class*="animate-"]');
           animatedElements.forEach((child) => {
             if (child instanceof HTMLElement) {
@@ -127,7 +136,6 @@ export function useIntersectionObserver(
             }
           });
         } else if (isElementIntersecting && element) {
-          // Resume animations when element enters viewport
           const animatedElements = element.querySelectorAll('[class*="animate-"]');
           animatedElements.forEach((child) => {
             if (child instanceof HTMLElement) {

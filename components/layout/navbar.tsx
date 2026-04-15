@@ -109,7 +109,7 @@ export function Navbar() {
               className="w-[calc(100%-3rem)] mx-auto mt-6 rounded-[3rem] glassmorphism border-white/10 p-8 pt-12 animate-in slide-in-from-top-12 duration-500"
             >
               <SheetHeader className="mb-8">
-                <SheetTitle className="text-4xl font-black italic text-primary shadow-glow-primary shadow-none">ORBITAL NAVIGATION</SheetTitle>
+                <SheetTitle className="text-4xl font-black text-primary shadow-glow-primary shadow-none">ORBITAL NAVIGATION</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-4">
                 {navLinks.map((link) => (

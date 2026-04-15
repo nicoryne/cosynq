@@ -11,11 +11,10 @@ export interface SignUpFormData {
 }
 
 export interface SignUpStepData {
-  step1: { email: string };
-  step2: { username: string; displayName?: string };
-  step3: { password: string; confirmPassword: string };
+  step1: { email: string; username: string };
+  step2: { password: string; confirmPassword: string };
+  step3: { displayName?: string; bio?: string };
   step4: {
-    bio?: string;
     avatarUrl?: string;
     avatarPublicId?: string;
   };

@@ -74,52 +74,46 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
   };
 
   return (
-    <Card className={cn('w-full border-none glassmorphism shadow-2xl relative overflow-hidden group', className)}>
-      {/* Internal Decorative Glow Elements - Requirement 10.6, hidden from screen readers */}
-      {/* Gradient line at top */}
-      <div className="absolute top-0 left-0 w-full h-[2.5px] bg-gradient-to-r from-transparent via-primary/50 to-transparent z-20" aria-hidden="true" />
-      
-      {/* Corner orbs */}
-      <div className="absolute top-4 right-4 w-20 h-20 bg-primary/5 rounded-full blur-2xl pointer-events-none" aria-hidden="true" />
-      <div className="absolute bottom-4 left-4 w-20 h-20 bg-secondary/5 rounded-full blur-2xl pointer-events-none" aria-hidden="true" />
-      
-      <CardHeader className="p-10 pb-0 text-center space-y-2">
-        <CardTitle className="text-4xl font-black italic tracking-tighter">SECURE <span className="text-primary shadow-glow-primary shadow-none">ORBIT</span></CardTitle>
-        <CardDescription className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">Initialize Identity Sync</CardDescription>
+    <Card className={cn('w-full border-none glassmorphism shadow-glow-primary/10 relative overflow-hidden', className)}>
+      <CardHeader className="p-10 pb-4 text-center">
+        <CardTitle className="text-3xl font-black tracking-tight">Sign In</CardTitle>
+        <CardDescription className="text-sm font-medium text-muted-foreground/80 mt-2">
+          Let's get you in!
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="p-10">
+      <CardContent>
         <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
           {/* Email or Username Input */}
-          <div className="space-y-3">
-            <Label htmlFor="emailOrUsername" className="ml-1">
-              Galactic ID
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="emailOrUsername" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              Email or Username
             </Label>
             <Input
               id="emailOrUsername"
               type="text"
               value={formData.emailOrUsername}
               onChange={(e) => handleChange('emailOrUsername', e.target.value)}
-              placeholder="Email or @username"
+              placeholder="Enter your email or @username"
               autoComplete="username"
               required
-              className="h-16 text-lg rounded-2xl"
+              className="h-14 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
               aria-invalid={!!error}
               aria-describedby={error ? 'signin-error' : undefined}
             />
           </div>
 
           {/* Password Input */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between ml-1">
-              <Label htmlFor="password">
-                Pass-Key
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between ml-2">
+              <Label htmlFor="password" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                Password
               </Label>
               <Link
                 href="/forgot-password"
-                className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline hover:text-primary/80 transition-colors italic"
+                className="text-xs font-bold text-primary hover:underline hover:text-primary/80 transition-colors"
               >
-                Forgot identity?
+                Forgot Password?
               </Link>
             </div>
             <div className="relative">
@@ -131,14 +125,14 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
-                className="h-16 pr-14 text-lg rounded-2xl"
+                className="h-14 pr-14 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
                 aria-invalid={!!error}
                 aria-describedby={error ? 'signin-error' : undefined}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors p-2"
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors p-2"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
@@ -148,28 +142,29 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
 
           {/* Error Message */}
           {error && (
-            <div 
+            <div
               id="signin-error"
-              className="flex items-start gap-2 rounded-2xl bg-destructive/10 p-4 text-sm text-destructive border border-destructive/20 glassmorphism"
+              className="flex items-start gap-4 rounded-[2rem] bg-destructive/10 p-5 text-sm text-destructive border border-destructive/20 glassmorphism animate-in fade-in zoom-in-95 duration-300"
               role="alert"
             >
-              <AlertCircle className="size-4 shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <p className="font-bold">{error.message}</p>
+              <AlertCircle className="size-5 shrink-0 mt-0.5" />
+              <div className="flex-1 space-y-2">
+                <p className="font-black uppercase tracking-widest text-[10px]">Transmission Error</p>
+                <p className="font-medium text-destructive/90">{error.message}</p>
                 {showResendLink && userEmail && (
-                  <div className="mt-2 text-xs">
+                  <div className="mt-3">
                     {resendSuccess ? (
-                      <p className="text-green-600 dark:text-green-400 font-bold">
-                        Verification email sent successfully!
+                      <p className="text-green-500 font-bold">
+                        Verification coordinates sent!
                       </p>
                     ) : (
                       <button
                         type="button"
                         onClick={handleResendVerification}
                         disabled={isResending}
-                        className="text-primary font-black uppercase tracking-widest hover:underline disabled:opacity-50"
+                        className="text-primary font-black uppercase tracking-[0.2em] text-[10px] hover:underline disabled:opacity-50"
                       >
-                        {isResending ? 'Sending...' : 'Resend verification email'}
+                        {isResending ? 'Resending...' : 'Resend Verification'}
                       </button>
                     )}
                   </div>
@@ -182,18 +177,18 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full h-16 text-lg font-black uppercase tracking-[0.2em] italic rounded-[2rem]"
-            size="lg"
+            className="w-full h-16 text-lg font-black uppercase tracking-[0.2em]"
+            size="xl"
             variant="celestial"
           >
             {isPending ? (
               <>
                 <Loader2 className="mr-2 size-5 animate-spin" />
-                Verifying...
+                Initializing...
               </>
             ) : (
               <>
-                Initialize Session
+                Sign In
                 <Sparkles className="ml-2 size-5" />
               </>
             )}
@@ -201,12 +196,12 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
         </form>
       </CardContent>
 
-      <CardFooter className="p-10 pt-0 flex flex-col gap-4">
+      <CardFooter className="p-10 pt-0 flex flex-col gap-6">
         <div className="w-full h-px bg-white/5" />
         <div className="text-center text-sm font-medium relative z-10 w-full">
-          <span className="text-muted-foreground">New to this orbit?</span>{' '}
-          <Link href="/sign-up" className="text-primary font-black uppercase tracking-widest hover:underline transition-all">
-            Join the Sanctuary
+          <span className="text-muted-foreground">Don't have an account?</span>{' '}
+          <Link href="/sign-up" className="text-primary font-black hover:underline transition-all">
+            Join the Dreamers
           </Link>
         </div>
       </CardFooter>

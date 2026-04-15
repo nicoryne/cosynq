@@ -26,12 +26,9 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     if (theme === 'light') {
       newTheme = 'dark';
       themeLabel = 'Dark mode';
-    } else if (theme === 'dark') {
-      newTheme = 'system';
-      themeLabel = 'System theme';
     } else {
       newTheme = 'light';
-      themeLabel = 'Light mode';
+      themeLabel = 'Light theme';
     }
 
     setTheme(newTheme);

@@ -114,3 +114,45 @@ export function formatWithToday(isoString: string): string {
   }
   return getRelativeTime(isoString);
 }
+
+/**
+ * Checks if a date is tomorrow
+ */
+export function isTomorrow(isoString: string): boolean {
+  const date = fromISOFormat(isoString);
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return (
+    date.getDate() === tomorrow.getDate() &&
+    date.getMonth() === tomorrow.getMonth() &&
+    date.getFullYear() === tomorrow.getFullYear()
+  );
+}
+
+/**
+ * Formats a date with "Today", "Tomorrow" or a date plus a 12-hour time
+ * Example: "Today 9:00 AM", "Tomorrow 2:00 PM", "Dec 24 10:00 AM"
+ */
+export function formatSmartDateTime(isoString: string): string {
+  const date = fromISOFormat(isoString);
+  const timeStr = date.toLocaleString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  if (isToday(isoString)) {
+    return `Today ${timeStr}`;
+  }
+
+  if (isTomorrow(isoString)) {
+    return `Tomorrow ${timeStr}`;
+  }
+
+  const dateStr = date.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
+
+  return `${dateStr} ${timeStr}`;
+}

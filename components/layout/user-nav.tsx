@@ -61,7 +61,7 @@ export function UserNav({ className }: UserNavProps) {
                className
             )}>
               <AvatarImage src={avatarUrl || ""} />
-              <AvatarFallback className="font-black italic bg-gradient-to-br from-primary/20 to-secondary/20">
+              <AvatarFallback className="font-black bg-gradient-to-br from-primary/20 to-secondary/20">
                 {displayName.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
