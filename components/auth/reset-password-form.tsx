@@ -51,7 +51,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
         <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
           {/* New Password */}
           <div className="flex flex-col gap-3">
-            <Label htmlFor="password" ***={cn("ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground")}>
+            <Label htmlFor="password" className={cn("ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground")}>
               New Password
             </Label>
             <div className="relative">
@@ -84,7 +84,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
 
           {/* Confirm Password */}
           <div className="flex flex-col gap-3">
-            <Label htmlFor="confirmPassword" ***={cn("ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground")}>
+            <Label htmlFor="confirmPassword" className={cn("ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground")}>
               Confirm New Password
             </Label>
             <Input
