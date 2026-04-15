@@ -399,7 +399,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
         <div className="space-y-4 md:space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="flex size-10 md:size-12 items-center justify-center rounded-xl md:rounded-2xl bg-primary/20 text-primary border border-primary/20 font-black text-lg md:text-xl shadow-glow-primary">
+              <div className="flex size-10 md:size-12 items-center justify-center rounded-xl md:rounded-2xl bg-primary/20 text-primary border border-primary/20 font-black text-base md:text-xl shadow-glow-primary">
                 0{state.currentStep}
               </div>
               <div className="space-y-0.5 md:space-y-1">
@@ -410,7 +410,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
               </div>
             </div>
             <div className="text-right">
-              <span className="text-2xl md:text-3xl font-black tracking-tighter text-primary">
+              <span className="text-xl md:text-3xl font-black tracking-tighter text-primary">
                 {Math.round((state.currentStep / 4) * 100)}%
               </span>
               <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block leading-none">Progress</span>
@@ -493,7 +493,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
                   handleNext();
                 }}
                 disabled={!canProceed() || isSubmitting}
-                className="w-full md:flex-1 h-14 md:h-16 rounded-full order-1 md:order-2"
+                className="w-full md:flex-1 h-12 md:h-16 rounded-full order-1 md:order-2"
                 variant="default"
               >
                 Continue
@@ -503,7 +503,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full md:flex-1 h-14 md:h-16 rounded-full relative overflow-hidden group shadow-glow-primary order-1 md:order-2"
+                className="w-full md:flex-1 h-12 md:h-16 rounded-full relative overflow-hidden group shadow-glow-primary order-1 md:order-2"
                 variant="default"
               >
                 <div 
@@ -536,7 +536,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
                 variant="outline"
                 onClick={handleBack}
                 disabled={isSubmitting}
-                className="w-full md:flex-1 h-14 md:h-16 rounded-full border-foreground/10 order-2 md:order-1"
+                className="w-full md:flex-1 h-12 md:h-16 rounded-full border-foreground/10 order-2 md:order-1"
               >
                 <ChevronLeft className="size-5 mr-1" />
                 Back

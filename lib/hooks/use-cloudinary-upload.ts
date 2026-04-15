@@ -82,7 +82,17 @@ export function useCloudinaryUpload(): UseCloudinaryUploadReturn {
               reject(new Error("Failed to parse Cloudinary response."));
             }
           } else {
-            reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.responseText}`));
+            let errorMessage = `Upload failed with status ${xhr.status}`;
+            try {
+              const errorResponse = JSON.parse(xhr.responseText);
+              if (errorResponse.error && errorResponse.error.message) {
+                errorMessage = `Cloudinary Error: ${errorResponse.error.message}`;
+              }
+            } catch (e) {
+              // Fallback if response is not JSON
+              errorMessage += `: ${xhr.responseText.substring(0, 100)}`;
+            }
+            reject(new Error(errorMessage));
           }
         });
 

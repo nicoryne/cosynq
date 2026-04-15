@@ -100,7 +100,7 @@ export function Navbar() {
             <SheetContent 
               side="right" 
               showCloseButton={false}
-              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden animate-in slide-in-from-right duration-700 ease-in-out"
+              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden"
             >
               {/* Decorative Atmosphere Orb */}
               <div className="absolute top-1/2 -right-20 size-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
@@ -135,7 +135,7 @@ export function Navbar() {
                       variant="ghost"
                       asChild
                       onClick={() => setIsOpen(false)}
-                      className="text-xl font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-all duration-300 flex justify-start"
+                      className="text-xl font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-colors duration-200 flex justify-start"
                     >
                       <a href={link.href}>
                         {link.label}

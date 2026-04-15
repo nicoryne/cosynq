@@ -35,7 +35,7 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem={true}
             storageKey="cosynq-theme"
-            disableTransitionOnChange={false}
+            disableTransitionOnChange={true}
           >
             <TooltipProvider>
               {children}

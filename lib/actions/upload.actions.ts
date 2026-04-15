@@ -62,11 +62,7 @@ export async function getCloudinarySignature() {
     // 3. Generate Timestamp and Signature
     const timestamp = Math.round(new Date().getTime() / 1000);
 
-    // The params to sign MUST exactly match the params the client sends
-    // minus 'file', 'cloud_name', 'resource_type', and 'api_key'.
-    // If the client uses an upload preset (which we do), we must include
-    // it in the signature params.
-    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET?.trim();
     if (!uploadPreset) {
       throw new Error("Cloudinary Upload Preset is missing.");
     }
@@ -78,12 +74,19 @@ export async function getCloudinarySignature() {
 
     const signature = cloudinary.utils.api_sign_request(paramsToSign, apiSecret);
 
+    // DEBUG: Log the parameters being signed (internal only)
+    console.log("--- Cloudinary Signature Debug ---");
+    console.log("Timestamp:", timestamp);
+    console.log("Upload Preset:", uploadPreset);
+    console.log("Signature Generated:", signature.substring(0, 5) + "...");
+    console.log("----------------------------------");
+
     return {
       success: true,
       signature,
       timestamp,
       uploadPreset,
-      apiKey: process.env.CLOUDINARY_API_KEY, // Pass it securely only to authorized users
+      apiKey: (process.env.CLOUDINARY_API_KEY || "").trim(),
     };
   } catch (error: any) {
     console.error("Error generating Cloudinary signature:", error);

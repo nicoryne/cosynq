@@ -99,7 +99,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
               placeholder="Enter your email or @username"
               autoComplete="username"
               required
-              className="h-14 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
+              className="rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
               aria-invalid={!!error}
               aria-describedby={error ? 'signin-error' : undefined}
             />
@@ -127,7 +127,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
-                className="h-14 pr-14 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
+                className="pr-14 rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
                 aria-invalid={!!error}
                 aria-describedby={error ? 'signin-error' : undefined}
               />
@@ -145,7 +145,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
           {/* Success Message for Password Reset */}
           {searchParams.get('reset') === 'success' && (
             <div
-              className="flex items-start gap-4 rounded-[2rem] bg-green-500/10 p-5 text-sm text-green-500 border border-green-500/20 glassmorphism animate-in fade-in zoom-in-95 duration-300"
+              className="flex items-start gap-3 md:gap-4 rounded-2xl md:rounded-[2rem] bg-green-500/10 p-4 md:p-5 text-sm text-green-500 border border-green-500/20 glassmorphism animate-in fade-in zoom-in-95 duration-300"
               role="alert"
             >
               <CheckCircle className="size-5 shrink-0 mt-0.5" />
@@ -160,7 +160,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
           {error && (
             <div
               id="signin-error"
-              className="flex items-start gap-4 rounded-[2rem] bg-destructive/10 p-5 text-sm text-destructive border border-destructive/20 glassmorphism animate-in fade-in zoom-in-95 duration-300"
+              className="flex items-start gap-3 md:gap-4 rounded-2xl md:rounded-[2rem] bg-destructive/10 p-4 md:p-5 text-sm text-destructive border border-destructive/20 glassmorphism animate-in fade-in zoom-in-95 duration-300"
               role="alert"
             >
               <AlertCircle className="size-5 shrink-0 mt-0.5" />
@@ -193,7 +193,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full h-16 text-lg font-black uppercase tracking-[0.2em]"
+            className="w-full h-14 md:h-16"
             size="xl"
             variant="celestial"
           >
