@@ -50,6 +50,7 @@ import { SignUpStepCredentials } from './sign-up-step-credentials';
 import { SignUpStepSecurity } from './sign-up-step-security';
 import { SignUpStepIdentity } from './sign-up-step-identity';
 import { SignUpStepVisual } from './sign-up-step-visual';
+import Link from 'next/link';
 
 // =====================================================================
 // Sign-Up Wizard Component
