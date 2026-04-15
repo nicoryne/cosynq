@@ -27,7 +27,7 @@ export function MyCosplanDashboard() {
           <CardDescription className="text-xs font-bold uppercase tracking-[0.25em] text-muted-foreground/60 leading-none">COMMAND YOUR ORBIT</CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="p-0 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <CardContent className="p-0 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
         {/* Left Column: Date and Material Progress */}
         <div className="lg:col-span-4 space-y-12">
           {/* Calendar Grid */}
@@ -39,9 +39,9 @@ export function MyCosplanDashboard() {
                 <div className="size-8 rounded-full bg-muted/20 border border-border/30 flex items-center justify-center text-xs hover:bg-muted/40 transition-all cursor-pointer">→</div>
               </div>
             </div>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
               {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                <div key={`${d}-${i}`} className="text-[9px] font-bold text-center text-muted-foreground/30 pb-2">{d}</div>
+                <div key={`${d}-${i}`} className="text-[8px] sm:text-[9px] font-bold text-center text-muted-foreground/30 pb-2">{d}</div>
               ))}
               {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
                 <div
@@ -96,15 +96,15 @@ export function MyCosplanDashboard() {
           {/* Schedule List with Vertical Line logic constrained to items */}
           <div className="relative">
             {/* Timeline Line - constrained to schedule items only */}
-            <div className="absolute top-0 bottom-0 left-[19px] w-[1px] bg-border/20 z-0" />
+            <div className="absolute top-0 bottom-0 left-[15px] sm:left-[19px] w-[1px] bg-border/20 z-0" />
 
             <div className="space-y-6 relative z-10">
               {scheduleItems.map((item, i) => (
-                <div key={i} className="flex gap-8 items-start group">
-                  <div className="relative size-10 rounded-full border-4 border-background bg-muted/20 flex items-center justify-center shrink-0 group-hover:bg-muted/40 transition-all">
+                <div key={i} className="flex gap-4 sm:gap-8 items-start group">
+                  <div className="relative size-8 sm:size-10 rounded-full border-4 border-background bg-muted/20 flex items-center justify-center shrink-0 group-hover:bg-muted/40 transition-all">
                     <div className={cn("size-2 rounded-full", item.color)} />
                   </div>
-                  <div className="flex-1 rounded-[2.2rem] bg-muted/5 border border-border/15 p-6 flex items-center justify-between group-hover:border-primary/20 transition-all group-hover:translate-x-1 group-hover:bg-muted/10">
+                  <div className="flex-1 rounded-[1.5rem] sm:rounded-[2.2rem] bg-muted/5 border border-border/15 p-4 sm:p-6 flex items-center justify-between group-hover:border-primary/20 transition-all group-hover:translate-x-1 group-hover:bg-muted/10">
                     <div className="space-y-1.5">
                       <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/60">
                         {toLocalTimeWithOptions(new Date().toISOString(), { hour: '2-digit', minute: '2-digit', hour12: false }).replace(/\d+:\d+/, item.time)} • {item.duration}
@@ -119,13 +119,13 @@ export function MyCosplanDashboard() {
           </div>
           
           {/* Integrated Budget Component - Decoupled from timeline line */}
-          <div className="mt-10 pt-10 border-t border-border/20">
-            <div className="rounded-[1.8rem] bg-accent/5 border border-accent/15 flex items-center justify-between p-6 overflow-hidden relative">
+          <div className="mt-8 sm:mt-10 pt-8 sm:pt-10 border-t border-border/20">
+            <div className="rounded-[1.5rem] sm:rounded-[1.8rem] bg-accent/5 border border-accent/15 flex items-center justify-between p-5 sm:p-6 overflow-hidden relative">
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/50">TOTAL BUDGET SPENT</span>
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/50">TOTAL BUDGET SPENT</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-lg font-bold text-accent tracking-tighter">₱12,450</span>
-                  <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">/ ₱25,000</span>
+                  <span className="text-base sm:text-lg font-bold text-accent tracking-tighter">₱12,450</span>
+                  <span className="text-[9px] sm:text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">/ ₱25,000</span>
                 </div>
               </div>
               <div className="flex gap-1.5 opacity-20">

@@ -18,6 +18,7 @@ export enum SecurityEventType {
   SUSPICIOUS_ACTIVITY = 'SUSPICIOUS_ACTIVITY',
   AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED',
   AUTHORIZATION_FAILED = 'AUTHORIZATION_FAILED',
+  PASSWORD_RESET = 'PASSWORD_RESET',
 }
 
 /**
@@ -326,6 +327,41 @@ export class SecurityLogger {
         userId,
         resource,
         action,
+        ...metadata,
+      }
+    );
+    this.writeLog(entry);
+  }
+
+  /**
+   * Logs a successful password reset event
+   * Requirements: 3.9, 12.8
+   */
+  static logPasswordReset(userId: string, email: string, metadata?: Record<string, unknown>): void {
+    const entry = this.createLogEntry(
+      SecurityEventType.PASSWORD_RESET,
+      SecurityEventSeverity.INFO,
+      `User reset password successfully: ${email}`,
+      {
+        userId,
+        email,
+        ...metadata,
+      }
+    );
+    this.writeLog(entry);
+  }
+
+  /**
+   * Logs a password reset request event
+   * Note: This is logged regardless of whether the email exists for security
+   */
+  static logPasswordResetRequested(email: string, metadata?: Record<string, unknown>): void {
+    const entry = this.createLogEntry(
+      SecurityEventType.PASSWORD_RESET,
+      SecurityEventSeverity.INFO,
+      `Password reset requested for: ${email}`,
+      {
+        email,
         ...metadata,
       }
     );

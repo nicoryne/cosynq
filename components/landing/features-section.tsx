@@ -64,7 +64,7 @@ export function FeaturesSection() {
           <Card
             className={cn(
               cardBase,
-              "md:col-span-2 p-14",
+              "md:col-span-2 p-6 md:p-14",
               "opacity-0 translate-y-8",
               gridVisible && "opacity-100 translate-y-0"
             )}
@@ -79,7 +79,7 @@ export function FeaturesSection() {
           <Card
             className={cn(
               cardBase,
-              "md:col-span-2 p-14",
+              "md:col-span-2 p-6 md:p-14",
               "opacity-0 translate-y-8",
               gridVisible && "opacity-100 translate-y-0"
             )}

@@ -12,17 +12,31 @@ import {
   signOutAction,
   resendVerificationAction,
   getCurrentUserAction,
+  resetPasswordAction,
+  forgotPasswordAction,
 } from '@/lib/actions/auth.actions';
 import type {
   SignUpFormData,
   SignInFormData,
   AuthUserDTO,
 } from '@/lib/types/auth.types';
+import type { ResetPasswordInput } from '@/lib/validations/auth.validation';
 import type { ActionResponse } from '@/lib/actions/auth.actions';
 
 // =====================================================================
 // Sign Up Hook
 // =====================================================================
+
+/**
+ * Custom error class for authentication operations
+ * Includes structured validation errors when available
+ */
+export class AuthError extends Error {
+  constructor(public message: string, public errors?: Record<string, string[]>) {
+    super(message);
+    this.name = 'AuthError';
+  }
+}
 
 /**
  * Hook: Sign up mutation
@@ -48,12 +62,12 @@ export function useSignUp() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation<ActionResponse<AuthUserDTO>, Error, SignUpFormData>({
+  return useMutation<ActionResponse<AuthUserDTO>, AuthError, SignUpFormData>({
     mutationFn: async (data: SignUpFormData) => {
       const response = await signUpAction(data);
 
       if (!response.success) {
-        throw new Error(response.message);
+        throw new AuthError(response.message, response.errors);
       }
 
       return response;
@@ -310,6 +324,47 @@ export function useResendVerification() {
     canResend,
     countdown,
   };
+}
+
+/**
+ * Hook: Reset password mutation
+ * Requires an active recovery session
+ */
+export function useResetPassword() {
+  const router = useRouter();
+
+  return useMutation<ActionResponse, Error, ResetPasswordInput>({
+    mutationFn: async (data: ResetPasswordInput) => {
+      const response = await resetPasswordAction(data);
+
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      return response;
+    },
+    onSuccess: () => {
+      // Redirect to sign-in page on success
+      router.push('/sign-in?reset=success');
+    },
+  });
+}
+
+/**
+ * Hook: Forgot password mutation
+ */
+export function useForgotPassword() {
+  return useMutation<ActionResponse, Error, string>({
+    mutationFn: async (email: string) => {
+      const response = await forgotPasswordAction(email);
+
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      return response;
+    },
+  });
 }
 
 // Import React for useState

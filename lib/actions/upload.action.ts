@@ -39,14 +39,16 @@ export async function getCloudinarySignature() {
       }
     );
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // const {
+    //   data: { user },
+    // } = await supabase.auth.getUser();
 
-    // If there is no user, reject immediately
-    if (!user) {
-      throw new Error("Unauthorized to upload files.");
-    }
+    // NOTE: We are allowing unauthenticated signature generation 
+    // to support profile picture uploads during the account creation wizard.
+    // Ensure your Cloudinary Upload Preset is restricted to only allow images.
+    // if (!user) {
+    //   throw new Error("Unauthorized to upload files.");
+    // }
 
     // 2. Configure Cloudinary
     // We do NOT use process.env to set global cloudinary config, 

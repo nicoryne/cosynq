@@ -8,4 +8,4 @@
 
 DROP FUNCTION IF EXISTS public.get_email_for_auth(text);
 
-COMMENT ON FUNCTION public.get_email_for_auth(text) IS NULL;
+-- Function removed

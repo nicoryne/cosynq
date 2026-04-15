@@ -159,6 +159,28 @@ export const step4Schema = z.object({
   avatarPublicId: z.string().optional(),
 });
 
+/**
+ * Validates reset password form
+ * Requirements: 13.2 - Password confirmation
+ */
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
+
+/**
+ * Validates forgot password form
+ * Requirements: 3.1 - Email validation
+ */
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+});
+
 // =====================================================================
 // Inferred TypeScript Types
 // =====================================================================
@@ -174,21 +196,31 @@ export type SignUpInput = z.infer<typeof signUpSchema>;
 export type SignInInput = z.infer<typeof signInSchema>;
 
 /**
- * TypeScript type inferred from step1Schema
+ * TypeScript type inferred from step1Input
  */
 export type Step1Input = z.infer<typeof step1Schema>;
 
 /**
- * TypeScript type inferred from step2Schema
+ * TypeScript type inferred from step2Input
  */
 export type Step2Input = z.infer<typeof step2Schema>;
 
 /**
- * TypeScript type inferred from step3Schema
+ * TypeScript type inferred from step3Input
  */
 export type Step3Input = z.infer<typeof step3Schema>;
 
 /**
- * TypeScript type inferred from step4Schema
+ * TypeScript type inferred from step4Input
  */
 export type Step4Input = z.infer<typeof step4Schema>;
+
+/**
+ * TypeScript type inferred from resetPasswordSchema
+ */
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
+/**
+ * TypeScript type inferred from forgotPasswordSchema
+ */
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;

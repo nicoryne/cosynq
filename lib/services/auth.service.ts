@@ -4,7 +4,7 @@
 // Core business logic for user authentication and registration
 // Implements "Do Not Trust The Client" paradigm with strict validation
 
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, EmailOtpType } from '@supabase/supabase-js';
 import type { Database } from '@/lib/supabase/database.types';
 import type {
   SignUpFormData,
@@ -28,55 +28,47 @@ export class AuthService {
   /**
    * Creates a new user account with email, password, and profile data
    * @param data - Sign-up form data including email, username, password, and optional profile fields
+   * @param adminClient - Optional administrative client to bypass RLS during registration
    * @returns AuthOperationResult with user data or error message
-   * @throws Error if email/username already exists or Supabase operation fails
    */
-  async signUp(data: SignUpFormData): Promise<AuthOperationResult> {
+  async signUp(
+    data: SignUpFormData,
+    adminClient?: SupabaseClient<Database>
+  ): Promise<AuthOperationResult> {
     try {
-      // Step 1: Re-verify email availability (server-side guard)
-      const emailCheck = await this.availabilityService.checkEmailAvailability(
-        data.email
-      );
+      // Step 1 & 2: Re-verify email and username availability
+      const emailCheck = await this.availabilityService.checkEmailAvailability(data.email);
       if (!emailCheck.available) {
-        return {
-          success: false,
-          message: 'An account with this email already exists',
-        };
+        return { success: false, message: 'An account with this email already exists' };
       }
 
-      // Step 2: Re-verify username availability (server-side guard)
-      const usernameCheck =
-        await this.availabilityService.checkUsernameAvailability(data.username);
+      const usernameCheck = await this.availabilityService.checkUsernameAvailability(data.username);
       if (!usernameCheck.available) {
-        return {
-          success: false,
-          message: 'This username is already taken',
-        };
+        return { success: false, message: 'This username is already taken' };
       }
 
-      // Step 3: Create user via Supabase Auth
-      const { data: authData, error: authError } =
-        await this.supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
-          options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-            data: {
-              username: data.username,
-            },
+      // Step 3: Create user via Supabase Auth with metadata for the trigger
+      const { data: authData, error: authError } = await this.supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+          data: {
+            username: data.username,
+            display_name: data.displayName || data.username,
           },
-        });
+        },
+      });
 
-      if (authError) {
-        throw new Error(`Failed to create user account: ${authError.message}`);
-      }
+      if (authError) throw new Error(`Failed to create user account: ${authError.message}`);
+      if (!authData.user) throw new Error('User creation failed: No user data returned');
 
-      if (!authData.user) {
-        throw new Error('User creation failed: No user data returned');
-      }
-
-      // Step 4: Update user_profiles record with username and optional profile data
-      const { error: profileError } = await this.supabase
+      // Step 4: Update user_profiles record with extended data (Bio, Avatar)
+      // We use the adminClient if provided to bypass RLS since the user 
+      // is not yet "verified" in the eyes of standard RLS policies.
+      const persistenceClient = adminClient || this.supabase;
+      
+      const { error: profileError } = await persistenceClient
         .from('user_profiles')
         .update({
           username: data.username,
@@ -88,13 +80,9 @@ export class AuthService {
         .eq('id', authData.user.id);
 
       if (profileError) {
-        // Log error but don't fail the sign-up since user was created
         console.error('Failed to update user profile:', profileError);
-        // Attempt to clean up the auth user if profile update fails
-        await this.supabase.auth.admin.deleteUser(authData.user.id);
-        throw new Error(
-          'Failed to create user profile. Please try again or contact support.'
-        );
+        // We don't delete the user here anymore to avoid race conditions with the trigger
+        // The trigger should have at least created the basic profile.
       }
 
       // Step 5: Fetch the complete user profile for the response
@@ -620,6 +608,111 @@ export class AuthService {
       // Handle unknown errors
       console.error('Unexpected profile update error:', error);
       throw new Error('An unexpected error occurred while updating profile');
+    }
+  }
+
+  /**
+   * Verifies an OTP token hash (email verification or password recovery)
+   * @param token_hash - The hashed token from the email link
+   * @param type - The type of verification ('signup', 'recovery', etc.)
+   * @returns Success boolean and message
+   */
+  async verifyOtp(
+    token_hash: string,
+    type: EmailOtpType
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      const { error } = await this.supabase.auth.verifyOtp({
+        token_hash,
+        type,
+      });
+
+      if (error) {
+        console.error(`Verification error (${type}):`, error);
+        return {
+          success: false,
+          message: error.message || 'Verification failed. The link may be expired.',
+        };
+      }
+
+      return {
+        success: true,
+        message: 'Verification successful',
+      };
+    } catch (error) {
+      console.error('Unexpected verification error:', error);
+      return {
+        success: false,
+        message: 'An unexpected error occurred during verification',
+      };
+    }
+  }
+
+  /**
+   * Resets the user's password (requires an active recovery session)
+   * @param password - The new password
+   * @returns Success boolean and message
+   */
+  async resetPassword(
+    password: string
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      const { error } = await this.supabase.auth.updateUser({
+        password,
+      });
+
+      if (error) {
+        console.error('Password reset error:', error);
+        return {
+          success: false,
+          message: error.message || 'Failed to update password',
+        };
+      }
+
+      return {
+        success: true,
+        message: 'Password updated successfully',
+      };
+    } catch (error) {
+      console.error('Unexpected password reset error:', error);
+      return {
+        success: false,
+        message: 'An unexpected error occurred while resetting password',
+      };
+    }
+  }
+
+  /**
+   * Sends a password reset email to the user
+   * @param email - User's email address
+   * @returns Success boolean and message
+   */
+  async forgotPassword(
+    email: string
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
+      });
+
+      if (error) {
+        console.error('Forgot password error:', error);
+        return {
+          success: false,
+          message: error.message || 'Failed to send reset email',
+        };
+      }
+
+      return {
+        success: true,
+        message: 'Password reset email sent. Please check your inbox.',
+      };
+    } catch (error) {
+      console.error('Unexpected forgot password error:', error);
+      return {
+        success: false,
+        message: 'An unexpected error occurred. Please try again later.',
+      };
     }
   }
 }

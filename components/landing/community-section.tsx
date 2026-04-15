@@ -60,10 +60,10 @@ export function CommunitySection() {
         )}
       >
         {/* Constellation Container - Staggered & Organic */}
-        <div className="flex flex-wrap justify-center gap-6 px-6 sm:gap-10">
+        <div className="flex flex-wrap justify-center gap-4 px-4 sm:gap-10 sm:px-6">
           
           {/* Top Sector: Cosplayer Orbitals */}
-          <div className="flex flex-wrap justify-center gap-6 mb-12 sm:mb-20 max-w-4xl">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-12 sm:mb-20 max-w-4xl">
             {cosplayers.map((item, i) => (
               <div 
                 key={`cosplayer-${i}`}
@@ -72,11 +72,11 @@ export function CommunitySection() {
               >
                 <Avatar
                   className={cn(
-                    "size-16 sm:size-20 border-2 border-white/10 shadow-glow-primary transition-all duration-500 hover:scale-110 hover:border-primary group cursor-pointer",
+                    "size-12 sm:size-20 border-2 border-white/10 shadow-glow-primary transition-all duration-500 hover:scale-110 hover:border-primary group cursor-pointer",
                     item.color
                   )}
                 >
-                  <AvatarFallback className="font-black bg-transparent text-white text-xl">
+                  <AvatarFallback className="font-black bg-transparent text-white text-base sm:text-xl">
                     {item.initial}
                   </AvatarFallback>
                   <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity pointer-events-none" />
@@ -88,18 +88,18 @@ export function CommunitySection() {
           {/* Central Anchor: Community Metrics Ribbon */}
           <div className="relative py-8 z-20 w-full mb-12 sm:mb-24">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent border-y border-white/5 backdrop-blur-sm" />
-            <div className="max-w-5xl mx-auto px-6 relative flex justify-between gap-8 overflow-x-auto no-scrollbar w-full">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 relative grid grid-cols-3 gap-4 sm:gap-8 w-full">
               {metrics.map((metric) => (
-                <div key={metric.label} className="flex flex-col items-center min-w-[120px]">
-                  <span className="text-2xl font-black text-foreground tracking-tighter">{metric.value}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">{metric.label}</span>
+                <div key={metric.label} className="flex flex-col items-center text-center">
+                  <span className="text-lg sm:text-2xl font-black text-foreground tracking-tighter">{metric.value}</span>
+                  <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground leading-tight">{metric.label}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Bottom Sector: Convention Sectors */}
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 max-w-5xl">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-8 max-w-5xl">
             {conventions.map((name, i) => (
               <div 
                 key={`con-${i}`}
@@ -108,7 +108,7 @@ export function CommunitySection() {
               >
                 <Badge
                   variant="outline"
-                  className="h-14 sm:h-16 px-8 sm:px-12 rounded-full text-sm sm:text-base font-black uppercase tracking-[0.2em] border-white/10 bg-white/5 backdrop-blur-xl whitespace-nowrap hover:border-primary hover:text-primary hover:shadow-glow-primary transition-all duration-500 cursor-pointer"
+                  className="h-12 sm:h-16 px-6 sm:px-12 rounded-full text-xs sm:text-base font-black uppercase tracking-[0.2em] border-white/10 bg-white/5 backdrop-blur-xl whitespace-nowrap hover:border-primary hover:text-primary hover:shadow-glow-primary transition-all duration-500 cursor-pointer"
                 >
                   {name}
                 </Badge>
@@ -130,9 +130,9 @@ export function CommunitySection() {
         )}
       >
         <Card className="relative border-none bg-transparent shadow-none group">
-          <div className="absolute inset-0 bg-primary/10 rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          <div className="absolute inset-0 bg-primary/10 rounded-[2rem] sm:rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
           
-          <CardContent className="relative rounded-[3rem] p-12 text-center glassmorphism border-white/10 shadow-glow-primary overflow-hidden transition-all duration-700 group-hover:bg-white/[0.03]">
+          <CardContent className="relative rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 text-center glassmorphism border-white/10 shadow-glow-primary overflow-hidden transition-all duration-700 group-hover:bg-white/[0.03]">
             {/* Holographic Scan Line */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent h-20 w-full animate-scan-line pointer-events-none opacity-30" />
             

@@ -1,6 +1,10 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from './lib/supabase/middleware'
  
+/**
+ * Next.js 16 Proxy Convention
+ * This function runs before every request to handle session synchronization.
+ */
 export async function proxy(request: NextRequest) {
   return await updateSession(request)
 }

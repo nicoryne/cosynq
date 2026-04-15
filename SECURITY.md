@@ -273,7 +273,9 @@ Our routing logic is centralized in `lib/constants/routes.ts`. Follow these inst
   ```typescript
   export const PUBLIC_ROUTES = [
     ROUTES.HOME,
-    // Add public routes here
+    ROUTES.PRIVACY,
+    ROUTES.TERMS,
+    ROUTES.CONTACT,
   ] as const;
   ```
 * **Adding an Authentication Route (Logged In Users Cannot Access):** Add the route reference to the `AUTH_ROUTES` array. 

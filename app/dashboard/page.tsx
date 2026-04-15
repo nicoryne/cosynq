@@ -1,10 +1,7 @@
-import { Navbar } from "@/components/layout/navbar"
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 import { AuthService } from "@/lib/services/auth.service"
 import { redirect } from "next/navigation"
-import { Starfield } from "@/components/landing/starfield"
-import { cn } from "@/lib/utils"
 import { getRelativeTime } from "@/lib/utils/time.utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,11 +17,6 @@ import {
   Clock
 } from "lucide-react"
 import Link from "next/link"
-
-/**
- * Dashboard Page
- * Requirements: 12.1-12.6 - User command center with stats, activity feed, and CTAs
- */
 export default async function DashboardPage() {
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
@@ -57,19 +49,8 @@ export default async function DashboardPage() {
   ]
 
   return (
-    <div className="relative min-h-screen w-full bg-background overflow-hidden">
-      <Navbar />
-      <Starfield />
-
-      {/* Atmospheric Background Blurs - Hidden from screen readers */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
-        <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[10%] right-[10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '3s' }} />
-      </div>
-
-      <main id="main-content" className="relative z-10 container mx-auto px-6 pt-32 pb-24">
-        <div className="mx-auto max-w-7xl space-y-12">
-          {/* User Greeting with Avatar */}
+    <div className="space-y-12">
+      {/* User Greeting with Avatar */}
           <header className="flex items-center gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <Avatar size="lg" className="shadow-glow-primary">
               <AvatarImage src={user.profile.avatarUrl || undefined} alt={displayName} />
@@ -240,8 +221,6 @@ export default async function DashboardPage() {
               </Card>
             </div>
           </div>
-        </div>
-      </main>
     </div>
   )
 }

@@ -31,9 +31,9 @@ export function HeroSection() {
       <div className="relative z-10 flex flex-col items-center text-center max-w-7xl mx-auto pt-10">
         {/* Giant Branding Focal Point - Background Layer */}
         <div className="relative mb-0 flex flex-col items-center select-none pointer-events-none w-full px-4 overflow-x-clip">
-          <h1 className="font-heading text-[clamp(4rem,18vw,26rem)] font-black tracking-tighter leading-[0.85] pb-4 whitespace-nowrap">
+          <h1 className="font-heading text-[clamp(3.5rem,15vw,26rem)] font-black tracking-tighter leading-[0.85] pb-4">
             <span className={cn(
-              "block bg-gradient-to-b from-foreground via-foreground to-transparent bg-clip-text text-transparent transform -translate-y-4 sm:-translate-y-12 transition-opacity duration-500",
+              "block bg-gradient-to-b from-foreground via-foreground to-transparent bg-clip-text text-transparent transform -translate-y-6 sm:-translate-y-12 transition-opacity duration-500",
               isDark ? "opacity-90" : "opacity-50"
             )}>
               cosynq
@@ -67,7 +67,6 @@ export function HeroSection() {
           >
             <Link href={ROUTES.SIGN_UP}>
               Get Started
-              <Sparkles className="ml-2 size-5" />
             </Link>
           </Button>
           <Button

@@ -70,7 +70,7 @@ export function JourneySection() {
         <div ref={timelineRef as React.RefObject<HTMLDivElement>} className="relative">
           {/* Vertical connecting line with gradient (Requirements 7.2) */}
           <div
-            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px md:-translate-x-px bg-gradient-to-b from-primary via-secondary to-accent"
+            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px md:-translate-x-px bg-gradient-to-b from-primary via-secondary to-accent"
           />
 
           {phases.map((phase, index) => (
@@ -127,20 +127,20 @@ export function JourneySection() {
                 {/* Timeline Node (Requirements 7.3) */}
                 <div
                   className={cn(
-                    "absolute left-6 md:left-1/2 md:-translate-x-1/2 z-10",
+                    "absolute left-4 -translate-x-1/2 md:left-1/2 md:-translate-x-1/2 z-10",
                     "md:relative md:left-0 md:translate-x-0",
                     index % 2 === 0 ? "md:order-2" : "md:order-1"
                   )}
                 >
                   <div className="flex justify-center">
-                    <div className="size-16 rounded-full flex items-center justify-center text-2xl glassmorphism shadow-glow-primary">
+                    <div className="size-12 sm:size-16 rounded-full flex items-center justify-center text-xl sm:text-2xl glassmorphism shadow-glow-primary">
                       {phase.emoji}
                     </div>
                   </div>
                 </div>
 
                 {/* Mobile content */}
-                <div className="md:hidden ml-16">
+                <div className="md:hidden ml-20">
                   <Badge
                     variant="outline"
                     className="mb-3 px-3 py-1 bg-primary/10 border-primary/20 text-primary uppercase font-black tracking-widest text-[10px]"

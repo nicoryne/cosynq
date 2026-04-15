@@ -17,6 +17,8 @@ import {
   usernameSchema,
   signUpSchema,
   signInSchema,
+  resetPasswordSchema,
+  type ResetPasswordInput,
 } from '@/lib/validations/auth.validation';
 import type {
   AvailabilityResult,
@@ -25,6 +27,7 @@ import type {
   UserProfileDTO,
 } from '@/lib/types/auth.types';
 import { SecurityLogger } from '@/lib/utils/security-logger';
+import { type EmailOtpType } from '@supabase/supabase-js';
 
 // =====================================================================
 // Action Response Type
@@ -328,7 +331,8 @@ export async function signUpAction(
 
     // Step 4: Call AuthService.signUp() with validated data
     const authService = new AuthService(supabase);
-    const result = await authService.signUp(validatedData);
+    const adminClient = createAdminClient();
+    const result = await authService.signUp(validatedData, adminClient);
 
     // Step 5: Handle errors and return response
     if (!result.success) {
@@ -644,6 +648,162 @@ export async function updateProfileAction(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'An unexpected error occurred',
+    };
+  }
+}
+
+/**
+ * Server Action: Verify OTP token hash
+ * Handles email verification and password recovery links
+ */
+export async function verifyOtpAction(
+  token_hash: string,
+  type: EmailOtpType
+): Promise<ActionResponse> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    const authService = new AuthService(supabase);
+    
+    const result = await authService.verifyOtp(token_hash, type);
+    
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+      };
+    }
+    
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error) {
+    console.error('Verify OTP action error:', error);
+    return {
+      success: false,
+      message: 'Failed to verify token',
+    };
+  }
+}
+
+/**
+ * Server Action: Reset user password
+ * Requires user to have a valid recovery session
+ */
+export async function resetPasswordAction(
+  data: ResetPasswordInput
+): Promise<ActionResponse> {
+  try {
+    // 1. Validate input
+    const validation = resetPasswordSchema.safeParse(data);
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation failed',
+        errors: {
+          password: validation.error.issues.map(i => i.message),
+        },
+      };
+    }
+    
+    // 2. Execute reset via AuthService
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    const authService = new AuthService(supabase);
+    
+    // Check if user is actually authenticated (recovery session)
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return {
+        success: false,
+        message: 'No active recovery session found. Please request a new link.',
+      };
+    }
+    
+    const result = await authService.resetPassword(validation.data.password);
+    
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+      };
+    }
+    
+    // 3. Log event
+    SecurityLogger.logPasswordReset(user.id, user.email || 'unknown', {
+      ipAddress: await getClientIP(),
+    });
+    
+    return {
+      success: true,
+      message: 'Password reset successfully. You can now sign in with your new password.',
+    };
+  } catch (error) {
+    console.error('Reset password action error:', error);
+    return {
+      success: false,
+      message: 'An unexpected error occurred during password reset',
+    };
+  }
+}
+
+/**
+ * Server Action: Request password reset email
+ */
+export async function forgotPasswordAction(
+  email: string
+): Promise<ActionResponse> {
+  try {
+    // 1. Rate limiting check
+    const clientIP = await getClientIP();
+    if (isRateLimited(`forgot-password-${clientIP}`)) {
+      return {
+        success: false,
+        message: 'Too many requests. Please try again later.',
+      };
+    }
+
+    // 2. Validate email
+    const validation = emailSchema.safeParse(email);
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Invalid email format',
+        errors: {
+          email: validation.error.issues.map(i => i.message),
+        },
+      };
+    }
+
+    // 3. Execute via AuthService
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    const authService = new AuthService(supabase);
+    const result = await authService.forgotPassword(validation.data);
+
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+      };
+    }
+
+    // 4. Log event (Attempt - we don't know if email exists for security reasons, 
+    // but we log the request)
+    SecurityLogger.logPasswordResetRequested(validation.data, {
+      ipAddress: clientIP,
+    });
+
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error) {
+    console.error('Forgot password action error:', error);
+    return {
+      success: false,
+      message: 'An unexpected error occurred. Please try again.',
     };
   }
 }

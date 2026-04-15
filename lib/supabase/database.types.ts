@@ -112,7 +112,6 @@ export type Database = {
         Returns: boolean
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
-      get_email_for_auth: { Args: { lookup_username: string }; Returns: string }
     }
     Enums: {
       app_role: "user" | "moderator" | "admin"

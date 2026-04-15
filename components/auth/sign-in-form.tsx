@@ -4,7 +4,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Loader2, AlertCircle, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Loader2, AlertCircle, CheckCircle, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,7 @@ interface SignInFormProps {
 }
 
 export function SignInForm({ className, redirectTo }: SignInFormProps) {
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState<SignInFormData>({
     emailOrUsername: '',
     password: '',
@@ -140,6 +142,20 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
             </div>
           </div>
 
+          {/* Success Message for Password Reset */}
+          {searchParams.get('reset') === 'success' && (
+            <div
+              className="flex items-start gap-4 rounded-[2rem] bg-green-500/10 p-5 text-sm text-green-500 border border-green-500/20 glassmorphism animate-in fade-in zoom-in-95 duration-300"
+              role="alert"
+            >
+              <CheckCircle className="size-5 shrink-0 mt-0.5" />
+              <div className="flex-1 space-y-1">
+                <p className="font-black uppercase tracking-widest text-[10px]">Security Updated</p>
+                <p className="font-medium text-green-500/90">Your password has been successfully reset. You can now sign in with your new credentials.</p>
+              </div>
+            </div>
+          )}
+
           {/* Error Message */}
           {error && (
             <div
@@ -189,7 +205,6 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
             ) : (
               <>
                 Sign In
-                <Sparkles className="ml-2 size-5" />
               </>
             )}
           </Button>

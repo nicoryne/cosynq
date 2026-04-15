@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { Menu, Sparkles, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -16,17 +16,14 @@ import {
 import { Button } from "@/components/ui/button"
 import { UserNav } from "./user-nav"
 import { NavbarClock } from "./navbar-clock"
-
-const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#journey" },
-  { label: "Community", href: "#community" },
-]
+import { LANDING_NAV_LINKS } from "@/lib/constants/navigation"
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -41,31 +38,27 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed top-6 left-1/2 z-50 -translate-x-1/2",
-        "flex items-center gap-6 whitespace-nowrap",
-        "rounded-[2.5rem] px-8 py-4",
-        "glassmorphism transition-all duration-500",
-        scrolled ? "top-3 py-3 border-primary/20 shadow-glow-primary" : "shadow-2xl border-white/5",
-        "w-[calc(100%-3rem)] max-w-5xl"
+        "fixed z-50 flex items-center gap-6 transition-all duration-500 glassmorphism whitespace-nowrap",
+        // Desktop: Floating Pill
+        "md:top-4 md:left-1/2 md:-translate-x-1/2 md:w-[calc(100%-3rem)] md:max-w-5xl md:rounded-2xl md:px-6 md:py-2.5",
+        // Mobile: End-to-End Header
+        "top-0 left-0 right-0 w-full rounded-none px-4 py-3 border-b border-white/5 md:border-none",
+        scrolled ? "md:top-3 md:py-2 border-primary/20 shadow-glow-primary" : "shadow-2xl md:border-white/5"
       )}
     >
       {/* Logo */}
       <Link
         href="/"
-        className="font-heading font-black text-2xl tracking-tighter select-none shrink-0 group flex items-center gap-2"
+        className="font-heading font-black text-xl tracking-tighter select-none shrink-0 transition-opacity hover:opacity-80"
       >
-        <div className="size-10 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground shadow-glow-primary transition-all group-hover:scale-110 group-hover:rotate-6">
-          <Sparkles className="size-6" />
-        </div>
         <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent hidden sm:block">cosynq</span>
       </Link>
 
       {/* Divider */}
       <div className="h-6 w-px shrink-0 bg-white/10 hidden lg:block" />
 
-      {/* Desktop Nav Links */}
       <div className="hidden md:flex items-center gap-2">
-        {navLinks.map((link) => (
+        {LANDING_NAV_LINKS.map((link) => (
           <Button
             key={link.href}
             variant="ghost"
@@ -80,9 +73,9 @@ export function Navbar() {
       <div className="flex-1" />
 
       {/* Actions Container */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {/* Theme Toggle */}
-        <ThemeToggle className="size-12 rounded-2xl hover:bg-white/5 transition-all shrink-0" />
+        <ThemeToggle className="size-10 rounded-xl hover:bg-white/5 transition-all shrink-0" />
 
         {/* User Profile / Auth */}
         <UserNav className="shrink-0" />
@@ -94,40 +87,67 @@ export function Navbar() {
 
         {/* Mobile Menu Button - Sheet Trigger */}
         <div className="md:hidden flex items-center">
-          <Sheet>
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="size-12 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors shrink-0"
+                className="size-10 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors shrink-0"
               >
-                <Menu className="size-6" />
+                <Menu className="size-5" />
               </Button>
             </SheetTrigger>
             <SheetContent 
-              side="top" 
-              className="w-[calc(100%-3rem)] mx-auto mt-6 rounded-[3rem] glassmorphism border-white/10 p-8 pt-12 animate-in slide-in-from-top-12 duration-500"
+              side="right" 
+              showCloseButton={false}
+              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden animate-in slide-in-from-right duration-700 ease-in-out"
             >
-              <SheetHeader className="mb-8">
-                <SheetTitle className="text-4xl font-black text-primary shadow-glow-primary shadow-none">ORBITAL NAVIGATION</SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <Button
-                    key={link.href}
-                    variant="ghost"
-                    asChild
-                    className="justify-start text-lg font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-8 rounded-[2rem] hover:bg-white/5 px-8"
+              {/* Decorative Atmosphere Orb */}
+              <div className="absolute top-1/2 -right-20 size-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
+              <div className="absolute -bottom-20 -left-20 size-80 bg-secondary/10 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
+
+              <div className="relative z-10 flex flex-col h-full bg-background/40 backdrop-blur-3xl">
+                {/* Drawer Header with Close Button */}
+                <div className="p-8 pt-12 flex items-center justify-between">
+                  <Link
+                    href="/"
+                    onClick={() => setIsOpen(false)}
+                    className="font-heading font-black text-3xl tracking-tighter text-foreground"
                   >
-                    <a href={link.href}>{link.label}</a>
+                    cosynq
+                  </Link>
+                  
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsOpen(false)}
+                    className="size-12 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all"
+                  >
+                    <X className="size-6 text-muted-foreground" />
                   </Button>
-                ))}
-                <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4 px-8">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Local Orbital Time</span>
-                  <div className="flex items-center justify-between">
-                    <NavbarClock />
-                    <Sparkles className="size-6 text-primary animate-pulse" />
-                  </div>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="px-6 flex flex-col gap-2 flex-1 mt-4">
+                  {LANDING_NAV_LINKS.map((link) => (
+                    <Button
+                      key={link.href}
+                      variant="ghost"
+                      asChild
+                      onClick={() => setIsOpen(false)}
+                      className="text-xl font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-all duration-300 flex justify-start"
+                    >
+                      <a href={link.href}>
+                        {link.label}
+                      </a>
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Footer / Time */}
+                <div className="p-8 pb-12 mt-auto border-t border-white/10">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block mb-4">Local Orbital Time</span>
+                   <NavbarClock />
                 </div>
               </div>
             </SheetContent>

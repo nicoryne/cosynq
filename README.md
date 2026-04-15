@@ -1,6 +1,6 @@
 # 🌌 cosynq
 
-> **align your orbit. sync your universe.**
+> **Simplify your craft. Sync your universe.**
 > 
 > 🔗 **Live Orbit:** [cosynq.ryne.dev](https://cosynq.ryne.dev)
 

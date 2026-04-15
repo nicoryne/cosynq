@@ -24,26 +24,26 @@ export function SignalSyncCard() {
 
   return (
     <div className="h-full flex flex-col">
-      <CardHeader className="p-0 mb-10 text-center">
-        <CardTitle className="text-3xl font-bold">Signal Sync</CardTitle>
-        <CardDescription className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/60 mt-2">FIND YOUR SQUAD & COSPLAY GROUPS</CardDescription>
+      <CardHeader className="p-0 mb-8 sm:mb-10 text-center">
+        <CardTitle className="text-2xl sm:text-3xl font-bold">Signal Sync</CardTitle>
+        <CardDescription className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/60 mt-2">FIND YOUR SQUAD & COSPLAY GROUPS</CardDescription>
       </CardHeader>
       <CardContent className="p-0 flex-1 space-y-8">
-        <div className="rounded-[2.8rem] border border-border/20 bg-muted/10 p-10 space-y-10">
+        <div className="rounded-[1.5rem] sm:rounded-[2.8rem] border border-border/20 bg-muted/10 p-5 sm:p-10 space-y-8 sm:space-y-10">
           {/* Group Header Info */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div className="space-y-3">
-              <Badge className="bg-primary/15 text-primary border-none rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.15em]">
+            <div className="space-y-2 sm:space-y-3">
+              <Badge className="bg-primary/15 text-primary border-none rounded-full px-4 sm:px-5 py-1.5 sm:py-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.15em]">
                 PRIORITY RECRUITMENT
               </Badge>
-              <h4 className="text-2xl font-bold leading-tight tracking-tight text-foreground">Archon Gathering</h4>
+              <h4 className="text-xl sm:text-2xl font-bold leading-tight tracking-tight text-foreground">Archon Gathering</h4>
             </div>
-            <div className="flex flex-col text-right gap-1.5">
-              <div className="flex items-center gap-2 justify-end">
+            <div className="flex flex-col text-left md:text-right gap-1.5">
+              <div className="flex items-center gap-2 justify-start md:justify-end">
                 <span className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-widest">REGISTRATION ENDS AT</span>
                 <span className="text-[10px] font-bold text-foreground/80">{formatSmartDateTime(regDeadline.toISOString())}</span>
               </div>
-              <div className="flex items-center gap-2 justify-end">
+              <div className="flex items-center gap-2 justify-start md:justify-end">
                 <span className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-widest">EVENT AT</span>
                 <span className="text-[10px] font-bold text-primary">{formatSmartDateTime(eventTime.toISOString())}</span>
               </div>
@@ -92,7 +92,7 @@ export function SignalSyncCard() {
                     <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">{char.role}</span>
                   </div>
                   {char.status === "open" ? (
-                    <Badge className="bg-primary text-primary-foreground rounded-full px-3 py-0.5 text-[8px] font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity">APPLY</Badge>
+                    <Badge className="bg-primary text-background rounded-full px-3 py-0.5 text-[8px] font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity">APPLY</Badge>
                   ) : (
                     <Badge variant="outline" className="border-primary/80 text-primary rounded-full px-3 py-0.5 text-[8px] font-bold uppercase">TAKEN</Badge>
                   )}
