@@ -40,8 +40,8 @@ export function CommunitySection() {
       {/* Header with fade-in animation */}
       <div
         className={cn(
-          "text-center mb-16 px-6 transition-all duration-700",
-          isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          "text-center mb-16 px-6 transition-all duration-500",
+          isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}
       >
         <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6">
@@ -67,8 +67,8 @@ export function CommunitySection() {
             {cosplayers.map((item, i) => (
               <div 
                 key={`cosplayer-${i}`}
-                className="animate-float-slow"
-                style={{ animationDelay: `${i * 1.5}s`, animationDuration: `${10 + i}s` }}
+                className="md:animate-float-slow"
+                style={{ animationDelay: `${i * 1}s`, animationDuration: `${8 + i}s` }}
               >
                 <Avatar
                   className={cn(
@@ -103,8 +103,8 @@ export function CommunitySection() {
             {conventions.map((name, i) => (
               <div 
                 key={`con-${i}`}
-                className="animate-float-slow"
-                style={{ animationDelay: `${i * 2 + 1}s`, animationDuration: `${12 + i}s` }}
+                className="md:animate-float-slow"
+                style={{ animationDelay: `${i * 1 + 1}s`, animationDuration: `${10 + i}s` }}
               >
                 <Badge
                   variant="outline"
@@ -125,8 +125,8 @@ export function CommunitySection() {
       {/* Testimonial Card with Holographic effects */}
       <div
         className={cn(
-          "max-w-2xl mx-auto mt-24 px-6 transition-all duration-1000 delay-[400ms]",
-          isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          "max-w-2xl mx-auto mt-24 px-6 transition-all duration-700 delay-300",
+          isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         )}
       >
         <Card className="relative border-none bg-transparent shadow-none group">

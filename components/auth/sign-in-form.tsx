@@ -1,11 +1,9 @@
 'use client';
 
-'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Loader2, AlertCircle, CheckCircle, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle, Eye, EyeOff, Sparkles, Mail, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -76,8 +74,11 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
   };
 
   return (
-    <Card className={cn('w-full border-none glassmorphism shadow-glow-primary/10 relative overflow-hidden', className)}>
-      <CardHeader className="p-10 pb-4 text-center">
+    <Card className={cn(
+      'w-full border-none shadow-none md:shadow-glow-primary/10 relative overflow-hidden bg-transparent backdrop-blur-none md:bg-background/60 md:backdrop-blur-2xl md:p-10 p-0', 
+      className
+    )}>
+      <CardHeader className="px-0 py-8 md:p-10 md:pb-4 text-center">
         <CardTitle className="text-3xl font-black tracking-tight">Sign In</CardTitle>
         <CardDescription className="text-sm font-medium text-muted-foreground/80 mt-2">
           Let's get you in!
@@ -85,24 +86,27 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+        <form onSubmit={handleSubmit} className="space-y-8 relative z-10 px-2">
           {/* Email or Username Input */}
           <div className="flex flex-col gap-3">
             <Label htmlFor="emailOrUsername" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
               Email or Username
             </Label>
-            <Input
-              id="emailOrUsername"
-              type="text"
-              value={formData.emailOrUsername}
-              onChange={(e) => handleChange('emailOrUsername', e.target.value)}
-              placeholder="Enter your email or @username"
-              autoComplete="username"
-              required
-              className="rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
-              aria-invalid={!!error}
-              aria-describedby={error ? 'signin-error' : undefined}
-            />
+            <div className="relative">
+              <Input
+                id="emailOrUsername"
+                type="text"
+                value={formData.emailOrUsername}
+                onChange={(e) => handleChange('emailOrUsername', e.target.value)}
+                placeholder="Enter your email or @username"
+                autoComplete="username"
+                required
+                className="pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50"
+                aria-invalid={!!error}
+                aria-describedby={error ? 'signin-error' : undefined}
+              />
+              <Mail className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+            </div>
           </div>
 
           {/* Password Input */}
@@ -127,10 +131,11 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
-                className="pr-14 rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50"
+                className="pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50"
                 aria-invalid={!!error}
                 aria-describedby={error ? 'signin-error' : undefined}
               />
+              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -214,7 +219,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
       <CardFooter className="p-10 pt-0 flex flex-col gap-6">
         <div className="w-full h-px bg-white/5" />
         <div className="text-center text-sm font-medium relative z-10 w-full">
-          <span className="text-muted-foreground">Don't have an account?</span>{' '}
+          <span className="text-muted-foreground">Don't have an account?</span>{' '}<br className='block md:hidden' />
           <Link href="/sign-up" className="text-primary font-black hover:underline transition-all">
             Join the Dreamers
           </Link>

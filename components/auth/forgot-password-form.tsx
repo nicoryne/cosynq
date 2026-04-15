@@ -84,7 +84,7 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="commander@cosynq.space"
                 required
-                className="h-14 pl-12 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50 transition-all font-medium"
+                className="h-14 pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50 transition-all font-medium"
                 disabled={isPending}
               />
               <Mail className="absolute left-5 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/50" />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, AlertCircle, Eye, EyeOff, Sparkles, ShieldCheck } from 'lucide-react';
+import { Loader2, AlertCircle, Eye, EyeOff, Sparkles, ShieldCheck, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,9 +62,10 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
                 onChange={(e) => handleChange('password', e.target.value)}
                 placeholder="••••••••"
                 required
-                className="h-14 pr-14 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50 transition-all"
+                className="pl-[4.5rem] md:pl-[4.5rem] pr-14 md:pr-14 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50"
                 disabled={isPending}
               />
+              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -87,16 +88,19 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
             <Label htmlFor="confirmPassword" className={cn("ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground")}>
               Confirm New Password
             </Label>
-            <Input
-              id="confirmPassword"
-              type={showPassword ? 'text' : 'password'}
-              value={formData.confirmPassword}
-              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-              placeholder="••••••••"
-              required
-              className="h-14 text-base rounded-full border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50 transition-all"
-              disabled={isPending}
-            />
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.confirmPassword}
+                onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                placeholder="••••••••"
+                required
+                className="pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50"
+                disabled={isPending}
+              />
+              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+            </div>
           </div>
 
           {/* Error Message */}

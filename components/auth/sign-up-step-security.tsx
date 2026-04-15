@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Lock, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,9 +35,9 @@ export function SignUpStepSecurity({
         </p>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 px-2">
         <div className="flex flex-col gap-3">
-          <Label htmlFor="password" className="ml-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+          <Label htmlFor="password" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Password
           </Label>
           <div className="relative">
@@ -47,12 +47,13 @@ export function SignUpStepSecurity({
               value={password}
               onChange={(e) => onChange('password', e.target.value)}
               className={cn(
-                'h-14 pr-14 text-base rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                'pl-[4.5rem] md:pl-[4.5rem] pr-14 md:pr-14 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
                 errors.password && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="••••••••"
               autoComplete="new-password"
             />
+            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -69,7 +70,7 @@ export function SignUpStepSecurity({
         <PasswordChecklist password={password} />
 
         <div className="flex flex-col gap-3">
-          <Label htmlFor="confirmPassword" className="ml-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+          <Label htmlFor="confirmPassword" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Confirm Password
           </Label>
           <div className="relative">
@@ -79,12 +80,13 @@ export function SignUpStepSecurity({
               value={confirmPassword}
               onChange={(e) => onChange('confirmPassword', e.target.value)}
               className={cn(
-                'h-14 pr-14 text-base rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                'pl-[4.5rem] md:pl-[4.5rem] pr-14 md:pr-14 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
                 errors.confirmPassword && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="••••••••"
               autoComplete="new-password"
             />
+            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}

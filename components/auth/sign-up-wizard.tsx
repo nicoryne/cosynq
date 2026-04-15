@@ -391,41 +391,56 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
   };
 
   return (
-    <Card className={cn('w-full max-w-2xl border-none glassmorphism shadow-2xl relative overflow-hidden', className)}>
-      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] -mr-32 -mt-32 z-20 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/10 rounded-full blur-[60px] -ml-24 -mb-24 z-20 pointer-events-none" />
+    <Card className={cn(
+      'w-full max-w-2xl border-none shadow-none md:shadow-2xl relative overflow-hidden bg-transparent backdrop-blur-none md:bg-background/60 md:backdrop-blur-2xl p-0 md:p-10', 
+      className
+    )}>
+      <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] -mr-32 -mt-32 z-20 pointer-events-none" />
+      <div className="hidden md:block absolute bottom-0 left-0 w-48 h-48 bg-secondary/10 rounded-full blur-[60px] -ml-24 -mb-24 z-20 pointer-events-none" />
 
-      <CardHeader className="px-4 py-6 md:px-8 md:py-8 relative z-30">
-        <div className="space-y-4 md:space-y-6">
-          <div className="flex items-center justify-between">
+      <CardHeader className="px-0 py-8 md:p-10 md:pb-8 relative z-30">
+        <div className="space-y-6 md:space-y-8">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="flex size-10 md:size-12 items-center justify-center rounded-xl md:rounded-2xl bg-primary/20 text-primary border border-primary/20 font-black text-base md:text-xl shadow-glow-primary">
+              <div className="flex size-10 md:size-12 items-center justify-center rounded-xl md:rounded-2xl bg-primary/20 text-primary border border-primary/20 font-black text-base md:text-xl shadow-glow-primary shrink-0">
                 0{state.currentStep}
               </div>
               <div className="space-y-0.5 md:space-y-1">
-                <CardTitle className="text-xl md:text-3xl font-black tracking-tight">Sign Up</CardTitle>
-                <CardDescription className="text-[10px] md:text-sm font-medium text-muted-foreground/80">
+                <CardTitle className="text-xl md:text-3xl font-black tracking-tight leading-none">Sign Up</CardTitle>
+                <CardDescription className="text-[10px] md:text-sm font-medium text-muted-foreground/80 leading-none">
                   Let's get you started!
                 </CardDescription>
               </div>
             </div>
-            <div className="text-right">
-              <span className="text-xl md:text-3xl font-black tracking-tighter text-primary">
+            
+            {/* Percentage on desktop, hidden on mobile in this slot */}
+            <div className="text-right hidden md:block">
+              <span className="text-2xl md:text-3xl font-black tracking-tighter text-primary">
                 {Math.round((state.currentStep / 4) * 100)}%
               </span>
               <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block leading-none">Progress</span>
             </div>
           </div>
-          <Progress
-            value={(state.currentStep / 4) * 100}
-            className="h-1.5 md:h-2"
-            aria-label="Registration progress"
-          />
+          
+          <div className="space-y-3">
+            <Progress
+              value={(state.currentStep / 4) * 100}
+              className="h-1.5 md:h-2"
+              aria-label="Registration progress"
+            />
+            {/* Percentage below bar on mobile */}
+            <div className="flex justify-between items-center md:hidden px-1">
+              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 leading-none">Stellar Journey</span>
+              <span className="text-[10px] font-black tracking-tight text-primary tabular-nums">
+                {Math.round((state.currentStep / 4) * 100)}% COMPLETE
+              </span>
+            </div>
+          </div>
         </div>
       </CardHeader>
 
-      <CardContent className='px-4 pb-8 md:px-8 md:pb-10'>
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <CardContent className='px-0 pb-8 md:px-10 md:pb-10'>
+        <form onSubmit={handleSubmit} className="space-y-10 md:space-y-6">
           {state.currentStep === 1 && (
             <SignUpStepCredentials
               email={state.formData.step1.email}
@@ -545,6 +560,30 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
           </div>
         </form>
       </CardContent>
+
+      {state.currentStep === 1 && (
+        <CardFooter className="px-10 pt-0 pb-10 flex flex-col gap-6 hidden md:flex">
+          <div className="w-full h-px bg-white/5" />
+          <div className="text-center text-sm font-medium relative z-10 w-full">
+            <span className="text-muted-foreground">Already a Dreamer?</span>{' '}
+            <Link href="/sign-in" className="text-primary font-black hover:underline transition-all">
+              Sign In
+            </Link>
+          </div>
+        </CardFooter>
+      )}
+
+      {state.currentStep === 1 && (
+        <div className="px-6 pb-8 md:hidden flex flex-col gap-4">
+          <div className="w-full h-px bg-white/5" />
+          <div className="text-center text-xs font-medium relative z-10 w-full">
+            <span className="text-muted-foreground">Already a Dreamer?</span>{' '}
+            <Link href="/sign-in" className="text-primary font-black hover:underline transition-all">
+              Sign In
+            </Link>
+          </div>
+        </div>
+      )}
     </Card>
   );
 }

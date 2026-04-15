@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Pencil } from 'lucide-react';
 
 export interface Step3IdentityProps {
   displayName: string;
@@ -37,36 +38,39 @@ export function SignUpStepIdentity({
 
       <div className="space-y-6">
         <div className="flex flex-col gap-3">
-          <Label htmlFor="displayName" className="ml-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+          <Label htmlFor="displayName" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Display Name
           </Label>
-          <Input
-            id="displayName"
-            type="text"
-            value={displayName}
-            onChange={(e) => onChange('displayName', e.target.value)}
-            className={cn(
-              'h-14 text-base rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
-              errors.displayName && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
-            )}
-            placeholder="E.g. Jace Beleren"
-            autoComplete="name"
-            maxLength={50}
-          />
+          <div className="relative">
+            <Input
+              id="displayName"
+              type="text"
+              value={displayName}
+              onChange={(e) => onChange('displayName', e.target.value)}
+              className={cn(
+                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                errors.displayName && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
+              )}
+              placeholder="E.g. Jace Beleren"
+              autoComplete="name"
+              maxLength={50}
+            />
+            <Pencil className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+          </div>
           {errors.displayName && (
             <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">{errors.displayName}</p>
           )}
         </div>
 
         <div className="space-y-4 flex flex-col">
-          <Label htmlFor="bio" className="ml-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+          <Label htmlFor="bio" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             The Chronicle (Bio)
           </Label>
           <Textarea
             id="bio"
             value={bio}
             onChange={(e) => onChange('bio', e.target.value)}
-            className="rounded-[2rem] border-foreground/10 bg-foreground/5 focus-visible:ring-primary/50 p-6 shadow-inner transition-all"
+            className="px-8 py-6 rounded-[2rem] border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50"
             placeholder="I build props out of foam and dreams..."
             rows={5}
             maxLength={500}

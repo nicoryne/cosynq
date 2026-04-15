@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, Check } from 'lucide-react';
+import { Loader2, Check, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -50,24 +50,27 @@ export function SignUpStepCredentials({
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 px-2">
         {/* Email Input */}
         <div className="flex flex-col gap-3">
           <Label htmlFor="email" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Email Address
           </Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => onChange('email', e.target.value)}
-            className={cn(
-              'h-14 text-base rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
-              errors.email && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
-            )}
-            placeholder="you@example.com"
-            autoComplete="email"
-          />
+          <div className="relative">
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => onChange('email', e.target.value)}
+              className={cn(
+                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                errors.email && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
+              )}
+              placeholder="you@example.com"
+              autoComplete="email"
+            />
+            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+          </div>
           {isCheckingEmail && (
             <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-4 animate-pulse">
               <Loader2 className="size-3 animate-spin" />
@@ -87,12 +90,12 @@ export function SignUpStepCredentials({
 
         {/* Username Input */}
         <div className="flex flex-col gap-3">
-          <Label htmlFor="username" className="ml-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+          <Label htmlFor="username" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Username
           </Label>
           <div className="relative">
             <span className={cn(
-              "absolute left-6 top-1/2 -translate-y-1/2 text-lg font-black text-muted-foreground/40",
+              "absolute left-6 top-1/2 -translate-y-1/2 text-lg font-black text-muted-foreground/40 z-10 pointer-events-none",
               errors.username && "text-destructive/40"
             )}>@</span>
             <Input
@@ -101,7 +104,7 @@ export function SignUpStepCredentials({
               value={username}
               onChange={(e) => onChange('username', e.target.value)}
               className={cn(
-                'h-14 pl-12 text-base rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
                 errors.username && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="cosplayer123"

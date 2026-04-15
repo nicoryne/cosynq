@@ -54,8 +54,8 @@ export function JourneySection() {
         <div
           ref={headerRef as React.RefObject<HTMLDivElement>}
           className={cn(
-            "text-center mb-20 transition-all duration-700",
-            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            "text-center mb-20 transition-all duration-500",
+            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}
         >
           <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6">
@@ -78,9 +78,9 @@ export function JourneySection() {
               key={phase.title}
               className={cn(
                 "relative mb-16 last:mb-0 transition-all duration-700",
-                timelineVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                timelineVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               )}
-              style={{ transitionDelay: timelineVisible ? `${300 + index * 200}ms` : "0ms" }}
+              style={{ transitionDelay: timelineVisible ? `${150 + index * 100}ms` : "0ms" }}
             >
               {/* Grid layout for alternating content (Requirements 7.4) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start">
