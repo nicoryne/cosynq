@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getCloudinarySignature } from "@/lib/actions/upload.action";
+import { getCloudinarySignature } from "@/lib/actions/upload.actions";
 import { IMAGE_MAX_SIZE, ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE_5MB } from "@/lib/constants/file-size";
 
 export interface CloudinaryUploadResult {
