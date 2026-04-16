@@ -38,6 +38,10 @@ const faqs = [
     question: "Someone claimed my Facebook profile, how do I fix this?",
     answer: "Identity integrity is vital to cosynq. If your Facebook profile has been claimed by another user, you can manually dispute it even if you don't have an account. Simply use the 'Contact Us' form or email us directly to start the rebuttal process. We'll verify your ownership and restore your identity on the platform.",
   },
+  {
+    question: "Why do I need to link my Facebook profile?",
+    answer: "To ensure a safe and authentic sanctuary for all cosplayers, we mandate identity linking to prevent catfishing and the creation of fake accounts. This helps maintain a high-trust community where groups can recruit with confidence and users can plan projects without fear of impersonation.",
+  },
 ]
 
 export function FAQSection() {
