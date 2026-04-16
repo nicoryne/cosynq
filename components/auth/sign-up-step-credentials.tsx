@@ -4,14 +4,18 @@ import { Loader2, Check, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import Link from 'next/link';
 
 export interface Step1CredentialsProps {
   email: string;
   username: string;
-  onChange: (field: 'email' | 'username', value: string) => void;
+  agreedToTerms: boolean;
+  onChange: (field: 'email' | 'username' | 'agreedToTerms', value: string | boolean) => void;
   errors: {
     email?: string;
     username?: string;
+    agreedToTerms?: string;
   };
   isCheckingEmail: boolean;
   isCheckingUsername: boolean;
@@ -24,6 +28,7 @@ export interface Step1CredentialsProps {
 export function SignUpStepCredentials({
   email,
   username,
+  agreedToTerms,
   onChange,
   errors,
   isCheckingEmail,
@@ -125,6 +130,39 @@ export function SignUpStepCredentials({
           )}
           {errors.username && (
             <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">{errors.username}</p>
+          )}
+        </div>
+
+        {/* Agreement Checkbox */}
+        <div className="pt-2">
+          <div className="flex items-center gap-3 ml-2 group cursor-pointer">
+            <Checkbox
+              id="terms"
+              checked={agreedToTerms}
+              onCheckedChange={(checked) => onChange('agreedToTerms', checked as boolean)}
+              className="mt-1 transition-transform group-hover:scale-110"
+            />
+            <Label
+              htmlFor="terms"
+              className={cn(
+                "text-xs leading-relaxed cursor-pointer select-none transition-colors",
+                errors.agreedToTerms ? "text-destructive" : "text-muted-foreground group-hover:text-foreground"
+              )}
+            >
+              I agree to the{" "}
+              <Link href="/terms" target="_blank" className="font-bold text-primary hover:text-primary/80 transition-colors">
+                Terms of Service
+              </Link>
+              {" "}and{" "}
+              <Link href="/privacy" target="_blank" className="font-bold text-primary hover:text-primary/80 transition-colors">
+                Privacy Policy
+              </Link>
+            </Label>
+          </div>
+          {errors.agreedToTerms && (
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-11 mt-2 animate-in fade-in slide-in-from-left-2">
+              {errors.agreedToTerms}
+            </p>
           )}
         </div>
       </div>

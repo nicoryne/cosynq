@@ -50,6 +50,7 @@ import { SignUpStepCredentials } from './sign-up-step-credentials';
 import { SignUpStepSecurity } from './sign-up-step-security';
 import { SignUpStepIdentity } from './sign-up-step-identity';
 import { SignUpStepVisual } from './sign-up-step-visual';
+import { TurnstileWidget } from './turnstile-widget';
 import Link from 'next/link';
 
 // =====================================================================
@@ -76,15 +77,16 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
   const { mutate: signUp, isPending: isActuallyCreating } = useSignUp();
   const { uploadFile, isUploading, progress: uploadProgress } = useCloudinaryUpload();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const [state, setState] = useState<WizardState>({
     currentStep: 1,
     formData: {
-      step1: { email: '', username: '' },
+      step1: { email: '', username: '', agreedToTerms: false },
       step2: { password: '', confirmPassword: '' },
       step3: { displayName: '', bio: '' },
-      step4: { avatarUrl: undefined, avatarPublicId: undefined },
+      step4: { avatarUrl: undefined, avatarPublicId: undefined, turnstileToken: '' },
     },
     errors: {},
     selectedFile: null,
@@ -108,7 +110,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
     debouncedUsername,
   } = useUsernameAvailability(state.formData.step1.username);
 
-  const handleStep1Change = (field: 'email' | 'username', value: string) => {
+  const handleStep1Change = (field: 'email' | 'username' | 'agreedToTerms', value: string | boolean) => {
     setState((prev) => ({
       ...prev,
       formData: {
@@ -321,12 +323,19 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
         confirmPassword: state.formData.step2.confirmPassword,
         displayName: state.formData.step3.displayName,
         bio: state.formData.step3.bio,
+        agreedToTerms: state.formData.step1.agreedToTerms,
         avatarUrl,
         avatarPublicId,
+        turnstileToken: state.formData.step4.turnstileToken,
       };
 
       signUp(formData as any, {
+        onSuccess: () => {
+          setIsRedirecting(true);
+          setIsProcessing(false);
+        },
         onError: (error) => {
+          setIsRedirecting(false);
           const newErrors: Record<string, string> = { submit: error.message };
           
           if (error.errors) {
@@ -353,9 +362,6 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
           }
           
           setIsProcessing(false);
-        },
-        onSuccess: () => {
-          setIsProcessing(false);
         }
       });
     } catch (err) {
@@ -369,6 +375,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
         return (
           state.formData.step1.email.length > 0 &&
           state.formData.step1.username.length > 0 &&
+          state.formData.step1.agreedToTerms === true &&
           !isCheckingEmail &&
           !isCheckingUsername &&
           emailAvailability?.available === true &&
@@ -446,10 +453,12 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
             <SignUpStepCredentials
               email={state.formData.step1.email}
               username={state.formData.step1.username}
+              agreedToTerms={state.formData.step1.agreedToTerms}
               onChange={handleStep1Change}
               errors={{
                 email: state.errors.email,
                 username: state.errors.username,
+                agreedToTerms: state.errors.agreedToTerms,
               }}
               isCheckingEmail={isCheckingEmail}
               isCheckingUsername={isCheckingUsername}
@@ -495,6 +504,22 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
             />
           )}
 
+          {state.currentStep === 4 && (
+            <div className="py-4">
+              <TurnstileWidget 
+                onSuccess={(token) => {
+                  setState(prev => ({
+                    ...prev,
+                    formData: {
+                      ...prev.formData,
+                      step4: { ...prev.formData.step4, turnstileToken: token }
+                    }
+                  }))
+                }}
+              />
+            </div>
+          )}
+
           {state.errors.submit && (
             <CelestialError message={state.errors.submit} className="mx-auto max-w-sm" />
           )}
@@ -518,7 +543,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
             ) : (
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isRedirecting}
                 className="w-full md:flex-1 h-12 md:h-16 rounded-full relative overflow-hidden group shadow-glow-primary order-1 md:order-2"
                 variant="default"
               >
@@ -537,6 +562,11 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
                           ? 'Synchronizing...' 
                           : 'Processing...'}
                     </span>
+                  </div>
+                ) : isRedirecting ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="size-5 animate-spin" />
+                    <span>Finalizing Account...</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">

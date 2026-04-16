@@ -47,7 +47,7 @@ export function HeroSection() {
           <h2 className={cn(
             "font-heading text-[clamp(1rem,6vw,4.5rem)] font-black tracking-tighter transition-colors duration-500 text-foreground"
           )}>
-            Simplify the craft.
+            Simplify your craft.
           </h2>
         </div>
 

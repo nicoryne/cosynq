@@ -1,30 +1,17 @@
+import { SignUpInput, SignInInput, Step1Input, Step2Input, Step3Input, Step4Input } from '../validations/auth.validation';
+
 // Sign-Up Types
-export interface SignUpFormData {
-  email: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-  displayName?: string;
-  bio?: string;
-  avatarUrl?: string;
-  avatarPublicId?: string;
-}
+export type SignUpFormData = SignUpInput;
 
 export interface SignUpStepData {
-  step1: { email: string; username: string };
-  step2: { password: string; confirmPassword: string };
-  step3: { displayName?: string; bio?: string };
-  step4: {
-    avatarUrl?: string;
-    avatarPublicId?: string;
-  };
+  step1: Step1Input;
+  step2: Step2Input;
+  step3: Step3Input;
+  step4: Step4Input;
 }
 
 // Sign-In Types
-export interface SignInFormData {
-  emailOrUsername: string;
-  password: string;
-}
+export type SignInFormData = SignInInput;
 
 // Password Validation
 export interface PasswordStrength {

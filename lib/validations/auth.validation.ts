@@ -95,6 +95,10 @@ export const signUpSchema = z
     bio: bioSchema,
     avatarUrl: z.string().url().optional(),
     avatarPublicId: z.string().optional(),
+    agreedToTerms: z.boolean().refine((val) => val === true, {
+      message: 'You must agree to the terms and privacy policy',
+    }),
+    turnstileToken: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -112,6 +116,7 @@ export const signInSchema = z.object({
     .min(1, 'Email or username is required')
     .max(255, 'Input must be less than 255 characters'),
   password: z.string().min(1, 'Password is required'),
+  turnstileToken: z.string().optional(),
 });
 
 // =====================================================================
@@ -125,6 +130,9 @@ export const signInSchema = z.object({
 export const step1Schema = z.object({
   email: emailSchema,
   username: usernameSchema,
+  agreedToTerms: z.boolean().refine((val) => val === true, {
+    message: 'You must agree to the terms and privacy policy',
+  }),
 });
 
 /**
@@ -157,6 +165,7 @@ export const step3Schema = z.object({
 export const step4Schema = z.object({
   avatarUrl: z.string().url().optional(),
   avatarPublicId: z.string().optional(),
+  turnstileToken: z.string().optional(),
 });
 
 /**

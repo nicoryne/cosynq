@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { motion } from "framer-motion"
 import { useIntersectionObserver } from "@/lib/hooks/use-intersection-observer"
 import { cn } from "@/lib/utils"
 
@@ -74,7 +75,17 @@ export function FAQSection() {
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent>
-                  {faq.answer}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    transition={{ 
+                      duration: 0.5,
+                      ease: "easeOut"
+                    }}
+                    className="text-muted-foreground/90"
+                  >
+                    {faq.answer}
+                  </motion.div>
                 </AccordionContent>
               </AccordionItem>
             ))}

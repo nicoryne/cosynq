@@ -107,15 +107,19 @@ export class SecurityLogger {
 
   /**
    * Logs the entry to the appropriate destination
-   * In production, this should send to a logging service (e.g., CloudWatch, Datadog)
+   * Requirements: NODE_ENV check for production suppression
    * @param entry - Log entry to write
    */
   private static writeLog(entry: SecurityLogEntry): void {
+    // Disable logs entirely on 'prod' as requested
+    if (process.env.NODE_ENV === 'production') {
+      return;
+    }
+
     // Format the log message
     const logMessage = `[${entry.severity}] ${entry.eventType} - ${entry.message}`;
     const logData = {
       ...entry,
-      // Add additional context if available
       environment: process.env.NODE_ENV,
     };
 
@@ -134,10 +138,6 @@ export class SecurityLogger {
         console.error(`🚨 ${logMessage}`, logData);
         break;
     }
-
-    // TODO: In production, send to centralized logging service
-    // Example: await sendToCloudWatch(logData);
-    // Example: await sendToDatadog(logData);
   }
 
   /**

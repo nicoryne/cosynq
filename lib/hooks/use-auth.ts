@@ -72,12 +72,14 @@ export function useSignUp() {
 
       return response;
     },
-    onSuccess: (data) => {
-      // Invalidate current user query to refetch user data
-      queryClient.invalidateQueries({ queryKey: ['current-user'] });
+    onSuccess: (response) => {
+      // Direct cache update - avoids redundant fetch before redirect
+      if (response.data) {
+        queryClient.setQueryData(['current-user'], response.data);
+      }
 
       // Redirect to email verification screen
-      router.push(`/verify-email?email=${encodeURIComponent(data.data?.email || '')}`);
+      router.push(`/verify-email?email=${encodeURIComponent(response.data?.email || '')}`);
     },
   });
 }
@@ -116,10 +118,7 @@ export function useSignIn() {
     SignInFormData
   >({
     mutationFn: async (data: SignInFormData) => {
-      const response = await signInAction(
-        data.emailOrUsername,
-        data.password
-      );
+      const response = await signInAction(data);
 
       if (!response.success) {
         throw new Error(response.message);
@@ -127,9 +126,11 @@ export function useSignIn() {
 
       return response;
     },
-    onSuccess: () => {
-      // Invalidate current user query to refetch user data
-      queryClient.invalidateQueries({ queryKey: ['current-user'] });
+    onSuccess: (response) => {
+      // Direct cache update - immediately populates the app state
+      if (response.data) {
+        queryClient.setQueryData(['current-user'], response.data);
+      }
 
       // Redirect to hub
       router.push('/hub');

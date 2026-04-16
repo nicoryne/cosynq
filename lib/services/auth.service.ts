@@ -144,39 +144,29 @@ export class AuthService {
         data: userDTO,
       };
     } catch (error) {
-      // Handle specific Supabase errors
+      // 1. Diagnostic Logging (Local Only)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Sign-up service error:', error);
+      }
+      
+      // 2. Handle Expected User Errors (Show in all environments)
       if (error instanceof Error) {
-        // Check for common Supabase error patterns
-        if (error.message.includes('already registered')) {
-          return {
-            success: false,
-            message: 'An account with this email already exists',
-          };
+        if (error.message.toLowerCase().includes('already registered')) {
+          return { success: false, message: 'An account with this email already exists' };
         }
-        if (error.message.includes('network')) {
-          return {
-            success: false,
-            message: 'Unable to connect. Please check your internet connection',
-          };
+        if (error.message.toLowerCase().includes('already been taken')) {
+          return { success: false, message: 'This username is already taken' };
         }
-        if (error.message.includes('service')) {
-          return {
-            success: false,
-            message:
-              'Authentication service is temporarily unavailable. Please try again later',
-          };
-        }
+      }
 
-        // Log the full error for debugging
-        console.error('Sign-up error:', error);
-
-        // Return a generic error message without exposing technical details
-        return {
-          success: false,
-          message:
-            'An error occurred during account creation. Please try again or contact support.',
+      // 3. Security Masking (Internal Failures in Production)
+      if (process.env.NODE_ENV === 'production') {
+        return { 
+          success: false, 
+          message: 'An unexpected transmission error occurred. Please try again later.' 
         };
       }
+
 
       // Fallback for non-Error objects
       console.error('Unknown sign-up error:', error);

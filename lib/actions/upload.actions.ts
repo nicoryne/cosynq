@@ -74,12 +74,14 @@ export async function getCloudinarySignature() {
 
     const signature = cloudinary.utils.api_sign_request(paramsToSign, apiSecret);
 
-    // DEBUG: Log the parameters being signed (internal only)
-    console.log("--- Cloudinary Signature Debug ---");
-    console.log("Timestamp:", timestamp);
-    console.log("Upload Preset:", uploadPreset);
-    console.log("Signature Generated:", signature.substring(0, 5) + "...");
-    console.log("----------------------------------");
+    // DEBUG: Log the parameters being signed (internal only, dev mode)
+    if (process.env.NODE_ENV === 'development') {
+      console.log("--- Cloudinary Signature Debug ---");
+      console.log("Timestamp:", timestamp);
+      console.log("Upload Preset:", uploadPreset);
+      console.log("Signature Generated:", signature.substring(0, 5) + "...");
+      console.log("----------------------------------");
+    }
 
     return {
       success: true,
@@ -89,10 +91,15 @@ export async function getCloudinarySignature() {
       apiKey: (process.env.CLOUDINARY_API_KEY || "").trim(),
     };
   } catch (error: any) {
-    console.error("Error generating Cloudinary signature:", error);
+    if (process.env.NODE_ENV === 'development') {
+        console.error("Error generating Cloudinary signature:", error);
+    }
+    
     return {
       success: false,
-      error: error.message || "Failed to generate upload signature.",
+      error: process.env.NODE_ENV === 'production' 
+        ? "Failed to generate upload signature." 
+        : (error.message || "Failed to generate upload signature."),
     };
   }
 }

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSignIn } from '@/lib/hooks/use-auth';
 import { useResendVerification } from '@/lib/hooks/use-auth';
+import { TurnstileWidget } from './turnstile-widget';
 import type { SignInFormData } from '@/lib/types/auth.types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -29,10 +30,12 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
   const [formData, setFormData] = useState<SignInFormData>({
     emailOrUsername: '',
     password: '',
+    turnstileToken: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showResendLink, setShowResendLink] = useState(false);
   const [userEmail, setUserEmail] = useState<string>('');
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const { mutate: signIn, isPending, error } = useSignIn();
   const {
@@ -50,7 +53,11 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
     e.preventDefault();
 
     signIn(formData, {
+      onSuccess: () => {
+        setIsRedirecting(true);
+      },
       onError: (error) => {
+        setIsRedirecting(false);
         // Check if error is due to unverified email
         if (
           error.message.includes('verify your email') ||
@@ -194,10 +201,16 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
             </div>
           )}
 
+          {/* Bot Protection */}
+          <TurnstileWidget 
+            onSuccess={(token) => handleChange('turnstileToken', token)}
+            className="my-2"
+          />
+
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={isPending}
+            disabled={isPending || isRedirecting}
             className="w-full h-14 md:h-16"
             size="xl"
             variant="celestial"
@@ -206,6 +219,11 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
               <>
                 <Loader2 className="mr-2 size-5 animate-spin" />
                 Initializing...
+              </>
+            ) : isRedirecting ? (
+              <>
+                <Loader2 className="mr-2 size-5 animate-spin" />
+                Entering Sanctuary...
               </>
             ) : (
               <>

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
+import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
 import {
@@ -36,7 +37,15 @@ export function Navbar() {
   }, [])
 
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ 
+        type: "spring",
+        stiffness: 120,
+        damping: 20,
+        delay: 0.2
+      }}
       className={cn(
         "fixed z-50 flex items-center gap-6 transition-all duration-500 glassmorphism whitespace-nowrap",
         // Desktop: Floating Pill
@@ -96,18 +105,53 @@ export function Navbar() {
               >
                 <Menu className="size-5" />
               </Button>
-            </SheetTrigger>
-            <SheetContent 
+            </SheetTrigger>            <SheetContent 
               side="right" 
               showCloseButton={false}
-              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden"
+              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden data-[state=open]:animate-none data-[state=closed]:animate-none"
             >
-              {/* Decorative Atmosphere Orb */}
-              <div className="absolute top-1/2 -right-20 size-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-              <div className="absolute -bottom-20 -left-20 size-80 bg-secondary/10 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30,
+                  restDelta: 0.001
+                }}
+                className="relative z-10 flex flex-col h-full bg-background/40 backdrop-blur-3xl"
+              >
+                {/* Decorative Atmosphere Orbs - Drift & Pulse */}
+                <motion.div 
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                    x: [0, 20, 0],
+                    y: [0, -20, 0]
+                  }}
+                  transition={{ 
+                    duration: 12, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                  className="absolute top-1/2 -right-20 size-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none" 
+                />
+                <motion.div 
+                  animate={{ 
+                    scale: [1.2, 1, 1.2],
+                    opacity: [0.2, 0.4, 0.2],
+                    x: [0, -30, 0],
+                    y: [0, 30, 0]
+                  }}
+                  transition={{ 
+                    duration: 15, 
+                    repeat: Infinity, 
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                  className="absolute -bottom-20 -left-20 size-80 bg-secondary/10 rounded-full blur-[100px] pointer-events-none" 
+                />
 
-              <div className="relative z-10 flex flex-col h-full bg-background/40 backdrop-blur-3xl">
-                {/* Drawer Header with Close Button */}
                 <div className="p-8 pt-12 flex items-center justify-between">
                   <Link
                     href="/"
@@ -129,18 +173,29 @@ export function Navbar() {
 
                 {/* Navigation Links */}
                 <div className="px-6 flex flex-col gap-2 flex-1 mt-4">
-                  {LANDING_NAV_LINKS.map((link) => (
-                    <Button
+                  {LANDING_NAV_LINKS.map((link, index) => (
+                    <motion.div
                       key={link.href}
-                      variant="ghost"
-                      asChild
-                      onClick={() => setIsOpen(false)}
-                      className="text-xl font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-colors duration-200 flex justify-start"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        delay: 0.2 + index * 0.1, // Added extra delay to wait for panel slide
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20 
+                      }}
                     >
-                      <a href={link.href}>
-                        {link.label}
-                      </a>
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        asChild
+                        onClick={() => setIsOpen(false)}
+                        className="text-xl font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-colors duration-200 flex justify-start w-full"
+                      >
+                        <a href={link.href}>
+                          {link.label}
+                        </a>
+                      </Button>
+                    </motion.div>
                   ))}
                 </div>
 
@@ -149,12 +204,13 @@ export function Navbar() {
                   <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block mb-4">Local Orbital Time</span>
                    <NavbarClock />
                 </div>
-              </div>
+              </motion.div>
             </SheetContent>
+
           </Sheet>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   )
 }
 

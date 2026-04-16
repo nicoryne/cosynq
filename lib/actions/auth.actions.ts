@@ -25,8 +25,10 @@ import type {
   SignUpFormData,
   AuthUserDTO,
   UserProfileDTO,
+  SignInFormData,
 } from '@/lib/types/auth.types';
 import { SecurityLogger } from '@/lib/utils/security-logger';
+import { TurnstileService } from '@/lib/services/turnstile.service';
 import { type EmailOtpType } from '@supabase/supabase-js';
 
 // =====================================================================
@@ -66,6 +68,11 @@ const RATE_LIMIT_MAX_REQUESTS = 10; // 10 requests per minute
  * @returns true if rate limit exceeded, false otherwise
  */
 function isRateLimited(identifier: string): boolean {
+  // 1. DX Optimization: Bypass rate limiting in development
+  if (process.env.NODE_ENV === 'development') {
+    return false;
+  }
+
   const now = Date.now();
   const entry = rateLimitStore.get(identifier);
 
@@ -269,12 +276,28 @@ export async function signUpAction(
       };
     }
 
-    // Step 2: Validate all wizard steps are completed (server-side guard)
+    // Step 2: Bot Protection (Turnstile Verify)
+    const turnstileCheck = await TurnstileService.verifyToken(validation.data.turnstileToken);
+    if (!turnstileCheck.success) {
+      return {
+        success: false,
+        message: turnstileCheck.message || 'Bot protection check failed',
+      };
+    }
+
+    // Step 3: Validate all wizard steps are completed (server-side guard)
     // Requirements: 18.6, 18.7
     const validatedData = validation.data;
+
+    if (!validatedData) {
+      return {
+        success: false,
+        message: 'Invalid form data',
+      };
+    }
     
     // Ensure required fields from all steps are present
-    if (!validatedData.email || !validatedData.username || !validatedData.password) {
+    if (!validatedData.email || !validatedData.username || !validatedData.password || !validatedData.agreedToTerms) {
       return {
         success: false,
         message: 'All required steps must be completed',
@@ -374,12 +397,11 @@ export async function signUpAction(
  * Requirements: 2.2, 2.3, 3.8, 5.1, 9.4, 9.9
  */
 export async function signInAction(
-  emailOrUsername: string,
-  password: string
+  data: SignInFormData
 ): Promise<ActionResponse<AuthUserDTO>> {
   try {
     // Step 1: Validate inputs with Zod schema
-    const validation = signInSchema.safeParse({ emailOrUsername, password });
+    const validation = signInSchema.safeParse(data);
     if (!validation.success) {
       const errors: Record<string, string[]> = {};
       validation.error.issues.forEach((issue) => {
@@ -397,7 +419,16 @@ export async function signInAction(
       };
     }
 
-    // Step 2: Call AuthService.signIn() with validated credentials
+    // Step 2: Bot Protection (Turnstile Verify)
+    const turnstileCheck = await TurnstileService.verifyToken(validation.data.turnstileToken);
+    if (!turnstileCheck.success) {
+      return {
+        success: false,
+        message: turnstileCheck.message || 'Bot protection check failed',
+      };
+    }
+
+    // Step 3: Call AuthService.signIn() with validated credentials
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);
     const adminClient = createAdminClient();

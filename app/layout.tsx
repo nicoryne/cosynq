@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { CookieConsent } from "@/components/layout/cookie-consent";
 
 export const metadata: Metadata = siteMetadata;
 
@@ -38,8 +39,9 @@ export default function RootLayout({
             disableTransitionOnChange={true}
           >
             <TooltipProvider>
-              {children}
+                {children}
             </TooltipProvider>
+            <CookieConsent />
             <Toaster position="bottom-right" className="glassmorphism" />
           </ThemeProvider>
         </QueryProvider>
