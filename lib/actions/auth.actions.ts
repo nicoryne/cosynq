@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { AvailabilityService } from '@/lib/services/availability.service';
 import { AuthService } from '@/lib/services/auth.service';
+import { UserService } from '@/lib/services/user.service';
 import {
   emailSchema,
   usernameSchema,
@@ -836,5 +837,187 @@ export async function forgotPasswordAction(
       success: false,
       message: 'An unexpected error occurred. Please try again.',
     };
+  }
+}
+
+/**
+ * Server Action: Update galactic handle (username)
+ * Implements 30-day interval guard via UserService
+ */
+export async function updateUsernameAction(
+  newUsername: string
+): Promise<ActionResponse<UserProfileDTO>> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    
+    // 1. Verify session
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, message: 'You must be signed in to recalibrate your handle.' };
+    }
+
+    // 2. Validate input
+    const validation = usernameSchema.safeParse(newUsername);
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation failed',
+        errors: { username: validation.error.issues.map(i => i.message) },
+      };
+    }
+
+    // 3. Execute via UserService
+    const userService = new UserService(supabase);
+    const updatedProfile = await userService.updateUsername(user.id, validation.data);
+
+    // 4. Revalidate
+    revalidatePath(`/u/${updatedProfile.username}`);
+    revalidatePath('/hub');
+    revalidatePath('/settings');
+
+    return {
+      success: true,
+      message: 'Galactic handle successfully manifested.',
+      data: updatedProfile,
+    };
+  } catch (error) {
+    console.error('Update username action error:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Handle manifestation failed.',
+    };
+  }
+}
+
+/**
+ * Server Action: Recalibrate galactic coordinates (Email)
+ */
+export async function recalibrateEmailAction(
+  newEmail: string
+): Promise<ActionResponse> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    
+    // 1. Verify session
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, message: 'You must be signed in to recalibrate coordinates.' };
+    }
+
+    // 2. Validate input
+    const validation = emailSchema.safeParse(newEmail);
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation failed',
+        errors: { email: validation.error.issues.map(i => i.message) },
+      };
+    }
+
+    // 3. Execute via AuthService
+    const authService = new AuthService(supabase);
+    const result = await authService.recalibrateEmail(validation.data);
+
+    return {
+      success: result.success,
+      message: result.message,
+    };
+  } catch (error) {
+    console.error('Email recalibration action error:', error);
+    return {
+      success: false,
+      message: 'Failed to dispatch recalibration signals.',
+    };
+  }
+}
+
+/**
+ * Server Action: Recalibrate credentials (Password)
+ */
+export async function recalibratePasswordAction(
+  data: ResetPasswordInput
+): Promise<ActionResponse> {
+  // Reusing resetPasswordAction logic but for authenticated settings context
+  return resetPasswordAction(data);
+}
+
+/**
+ * Server Action: Enter Account Stasis (Deactivation)
+ */
+export async function deactivateAccountAction(): Promise<ActionResponse> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    
+    // 1. Verify session
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, message: 'You must be signed in to initiate deactivation.' };
+    }
+
+    // 2. Execute via AuthService
+    const authService = new AuthService(supabase);
+    const success = await authService.deactivateAccount(user.id);
+
+    if (success) {
+      // 3. Log event
+      SecurityLogger.logAccountDeactivated(user.id, user.email || 'unknown', {
+        ipAddress: await getClientIP(),
+      });
+      
+      revalidatePath('/');
+      return { success: true, message: 'Manifest entered stasis. Redirecting...' };
+    }
+
+    return { success: false, message: 'Failed to initiate deactivation stasis.' };
+  } catch (error) {
+    console.error('Deactivation action error:', error);
+    return { success: false, message: 'Signal lost during deactivation.' };
+  }
+}
+
+/**
+ * Server Action: Resurrect Manifest (Recovery)
+ */
+export async function recoverAccountAction(
+  data: SignInFormData
+): Promise<ActionResponse<AuthUserDTO>> {
+  try {
+    // 1. Validate
+    const validation = signInSchema.safeParse(data);
+    if (!validation.success) {
+      return { success: false, message: 'Validation failed' };
+    }
+
+    // 2. Execute via AuthService
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    const authService = new AuthService(supabase);
+    
+    const result = await authService.recoverAccount(
+      validation.data.emailOrUsername,
+      validation.data.password
+    );
+
+    if (result.success && result.data) {
+      // 3. Log event
+      SecurityLogger.logAccountRecovered(result.data.id, result.data.email, {
+        ipAddress: await getClientIP(),
+      });
+      
+      revalidatePath('/hub');
+      return {
+        success: true,
+        message: 'Manifest Resurrected. Welcome back to the sector.',
+        data: result.data,
+      };
+    }
+
+    return { success: false, message: result.message };
+  } catch (error) {
+    console.error('Account recovery action error:', error);
+    return { success: false, message: 'Resurrection failure. Manifest lost.' };
   }
 }

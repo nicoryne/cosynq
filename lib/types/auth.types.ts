@@ -47,6 +47,8 @@ export interface UserProfileDTO {
   avatarUrl: string | null;
   location: string | null;
   website: string | null;
+  usernameLastChangedAt: string | null; // ISO format
+  deactivatedAt: string | null; // ISO format
   createdAt: string; // ISO format
 }
 
@@ -64,6 +66,7 @@ export interface AuthOperationResult {
   message: string;
   data?: AuthUserDTO;
   requiresVerification?: boolean;
+  requiresRecovery?: boolean;
 }
 
 export interface AvailabilityResult {

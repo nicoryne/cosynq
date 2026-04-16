@@ -48,11 +48,6 @@ export function SignUpStepCredentials({
         <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
           The stars need a way to reach you and a name to call you in the void.
         </p>
-        <div className="inline-block rounded-lg py-1.5">
-          <p className="text-sm md:text-base font-medium text-muted-foreground">
-            Email and username are permanent
-          </p>
-        </div>
       </div>
 
       <div className="space-y-6 px-2">

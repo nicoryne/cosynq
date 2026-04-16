@@ -19,6 +19,8 @@ export enum SecurityEventType {
   AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED',
   AUTHORIZATION_FAILED = 'AUTHORIZATION_FAILED',
   PASSWORD_RESET = 'PASSWORD_RESET',
+  ACCOUNT_DEACTIVATED = 'ACCOUNT_DEACTIVATED',
+  ACCOUNT_RECOVERED = 'ACCOUNT_RECOVERED',
 }
 
 /**
@@ -361,6 +363,42 @@ export class SecurityLogger {
       SecurityEventSeverity.INFO,
       `Password reset requested for: ${email}`,
       {
+        email,
+        ...metadata,
+      }
+    );
+    this.writeLog(entry);
+  }
+
+  /**
+   * Logs an account deactivation event
+   * Requirements: 3.9, 12.8
+   */
+  static logAccountDeactivated(userId: string, email: string, metadata?: Record<string, unknown>): void {
+    const entry = this.createLogEntry(
+      SecurityEventType.ACCOUNT_DEACTIVATED,
+      SecurityEventSeverity.WARNING,
+      `Account deactivated successfully: ${email}`,
+      {
+        userId,
+        email,
+        ...metadata,
+      }
+    );
+    this.writeLog(entry);
+  }
+
+  /**
+   * Logs an account recovery event
+   * Requirements: 3.9, 12.8
+   */
+  static logAccountRecovered(userId: string, email: string, metadata?: Record<string, unknown>): void {
+    const entry = this.createLogEntry(
+      SecurityEventType.ACCOUNT_RECOVERED,
+      SecurityEventSeverity.INFO,
+      `Account recovered successfully: ${email}`,
+      {
+        userId,
         email,
         ...metadata,
       }

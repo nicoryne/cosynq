@@ -14,6 +14,11 @@ import {
   getCurrentUserAction,
   resetPasswordAction,
   forgotPasswordAction,
+  recalibrateEmailAction,
+  recalibratePasswordAction,
+  updateUsernameAction,
+  deactivateAccountAction,
+  recoverAccountAction,
 } from '@/lib/actions/auth.actions';
 import type {
   SignUpFormData,
@@ -387,6 +392,96 @@ export function useVerificationPolling() {
     refetchIntervalInBackground: true, // Keep polling if they switch tabs
     staleTime: 0, // Always fetch fresh
     retry: true,
+  });
+}
+
+// =====================================================================
+// Account Command Center Hooks
+// =====================================================================
+
+/**
+ * Hook: Update galactic handle (username)
+ */
+export function useUpdateUsername() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (newUsername: string) => {
+      const response = await updateUsernameAction(newUsername);
+      if (!response.success) throw new Error(response.message);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['current-user'] });
+    },
+  });
+}
+
+/**
+ * Hook: Recalibrate galactic coordinates (Email)
+ */
+export function useUpdateEmail() {
+  return useMutation({
+    mutationFn: async (newEmail: string) => {
+      const response = await recalibrateEmailAction(newEmail);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+  });
+}
+
+/**
+ * Hook: Recalibrate credentials (Password)
+ */
+export function useUpdatePassword() {
+  return useMutation({
+    mutationFn: async (data: ResetPasswordInput) => {
+      const response = await recalibratePasswordAction(data);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+  });
+}
+
+/**
+ * Hook: Enter Account Stasis (Deactivation)
+ */
+export function useDeactivateAccount() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await deactivateAccountAction();
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/');
+    },
+  });
+}
+
+/**
+ * Hook: Resurrect Manifest (Recovery)
+ */
+export function useRecoverAccount() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: async (data: SignInFormData) => {
+      const response = await recoverAccountAction(data);
+      if (!response.success) throw new Error(response.message);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.setQueryData(['current-user'], data);
+      }
+      router.push('/hub');
+    },
   });
 }
 

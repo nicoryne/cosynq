@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Your Coordinates - cosynq</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0a0a12; 
+      color: #F8FAFC;
+    }
+    .wrapper {
+      width: 100%;
+      table-layout: fixed;
+      background-color: #0a0a12;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #11111a; 
+      border-radius: 24px;
+      border: 1px solid #1E293B;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+    .header {
+      background: linear-gradient(135deg, rgba(124, 212, 250, 0.15) 0%, rgba(212, 179, 255, 0.15) 100%);
+      border-bottom: 1px solid #1E293B;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #F8FAFC;
+    }
+    .header p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      color: #7CD4FA;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .content h2 {
+      margin: 0 0 16px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+    .content p {
+      margin: 0 0 24px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #CBD5E1;
+    }
+    .status-card {
+      padding: 24px;
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      margin: 24px 0;
+    }
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .status-item:last-child {
+      margin-bottom: 0;
+    }
+    .status-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748B;
+      font-weight: 700;
+    }
+    .status-value {
+      font-size: 14px;
+      color: #F8FAFC;
+      font-weight: 500;
+    }
+    .button-container {
+      text-align: center;
+      margin: 32px 0;
+    }
+    .button {
+      display: inline-block;
+      padding: 16px 48px;
+      background: linear-gradient(135deg, #7CD4FA 0%, #D4B3FF 100%);
+      color: #0B0C10 !important;
+      text-decoration: none;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      box-shadow: 0 4px 16px rgba(124, 212, 250, 0.3);
+    }
+    .footer {
+      padding: 24px 30px;
+      background-color: #0B0C10;
+      text-align: center;
+      font-size: 13px;
+      color: #64748B;
+    }
+    .footer a {
+      color: #D4B3FF;
+      text-decoration: none;
+    }
+    .divider {
+      height: 1px;
+      background-color: #1E293B;
+      margin: 32px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="header">
+        <h1>cosynq</h1>
+        <p>Coordinate Transition</p>
+      </div>
+      
+      <div class="content">
+        <h2>Recalibrate Your Orbit 🛰️</h2>
+        <p>
+          Traveler, a request has been made to recalibrate your account's galactic coordinates. This transition will update your primary manifesting email within the sanctuary.
+        </p>
+
+        <div class="status-card">
+          <div class="status-item">
+            <span class="status-label">Current Manifest</span>
+            <span class="status-value">{{ .Email }}</span>
+          </div>
+          <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 12px 0;"></div>
+          <div class="status-item">
+            <span class="status-label">Target Manifest</span>
+            <span class="status-value" style="color: #7CD4FA;">{{ .NewEmail }}</span>
+          </div>
+        </div>
+        
+        <p style="text-align: center;">
+          To finalize this trajectory and verify your new coordinates, please use the tactical link below:
+        </p>
+        
+        <div class="button-container">
+          <a href="{{ .ConfirmationURL }}" class="button">Confirm Manifest Shift</a>
+        </div>
+        
+        <p style="font-size: 13px; color: #64748B; text-align: center; margin-top: 32px;">
+          If you did not initiate this coordinate shift, please secure your manifest immediately.
+        </p>
+        
+        <div class="divider"></div>
+        
+        <p style="font-size: 12px; color: #475569; text-align: center;">
+          Verification signals expire within 24 hours for your absolute security.
+        </p>
+      </div>
+      
+      <div class="footer">
+        <p>© 2026 cosynq. All rights reserved.</p>
+        <p>
+          <a href="{{ .SiteURL }}">Visit Platform</a> &nbsp;•&nbsp; 
+          <a href="{{ .SiteURL }}/privacy">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

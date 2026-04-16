@@ -113,6 +113,8 @@ export class AuthService {
               avatarUrl: data.avatarUrl || null,
               location: null,
               website: null,
+              usernameLastChangedAt: null,
+              deactivatedAt: null,
               createdAt: authData.user.created_at,
             },
           },
@@ -133,6 +135,8 @@ export class AuthService {
           avatarUrl: profileData.avatar_url,
           location: profileData.location,
           website: profileData.website,
+          usernameLastChangedAt: null,
+          deactivatedAt: null,
           createdAt: profileData.created_at,
         },
       };
@@ -268,17 +272,24 @@ export class AuthService {
         };
       }
 
-      // Step 5: Fetch the complete user profile
-      const { data: profileData, error: fetchError } = await this.supabase
+      // Step 5: Fetch social and administrative manifests asynchronously
+      const profilePromise = this.supabase
         .from('user_profiles')
         .select('*')
         .eq('id', authData.user.id)
         .single();
 
-      if (fetchError || !profileData) {
-        console.error('Failed to fetch user profile:', fetchError);
-        // User authenticated but profile fetch failed
-        // Return minimal data
+      const telemetryPromise = this.supabase
+        .from('account_telemetry')
+        .select('username_last_changed_at, deactivated_at')
+        .eq('id', authData.user.id)
+        .single();
+
+      const [profileRes, telemetryRes] = await Promise.all([profilePromise, telemetryPromise]);
+
+      if (profileRes.error || !profileRes.data) {
+        console.error('Failed to fetch user profile manifest:', profileRes.error);
+        // User authenticated but profile fetch failed - return minimal data
         return {
           success: true,
           message: 'Sign-in successful',
@@ -295,9 +306,25 @@ export class AuthService {
               avatarUrl: null,
               location: null,
               website: null,
+              usernameLastChangedAt: null,
+              deactivatedAt: null,
               createdAt: authData.user.created_at,
             },
           },
+        };
+      }
+
+      const profileData = profileRes.data;
+      const telemetryData = telemetryRes.data;
+
+      // Step 5.5: Stasis Intercept (from asynchronous telemetry)
+      if (telemetryData?.deactivated_at) {
+        // Sign out for now until they decide to recover
+        await this.supabase.auth.signOut();
+        return {
+          success: false,
+          message: 'Account Stasis detected. Do you wish to resurrect your manifest?',
+          requiresRecovery: true,
         };
       }
 
@@ -316,6 +343,8 @@ export class AuthService {
           location: profileData.location,
           website: profileData.website,
           createdAt: profileData.created_at,
+          usernameLastChangedAt: telemetryData?.username_last_changed_at || null,
+          deactivatedAt: telemetryData?.deactivated_at || null,
         },
       };
 
@@ -463,15 +492,23 @@ export class AuthService {
         return null;
       }
 
-      // Fetch the complete user profile
-      const { data: profileData, error: profileError } = await this.supabase
+      // Fetch social and administrative manifests asynchronously
+      const profilePromise = this.supabase
         .from('user_profiles')
         .select('*')
         .eq('id', user.id)
         .single();
 
-      if (profileError || !profileData) {
-        console.error('Failed to fetch user profile:', profileError);
+      const telemetryPromise = this.supabase
+        .from('account_telemetry')
+        .select('username_last_changed_at, deactivated_at')
+        .eq('id', user.id)
+        .single();
+
+      const [profileRes, telemetryRes] = await Promise.all([profilePromise, telemetryPromise]);
+
+      if (profileRes.error || !profileRes.data) {
+        console.error('Failed to fetch user profile manifest:', profileRes.error);
         // Return minimal data if profile fetch fails
         return {
           id: user.id,
@@ -486,9 +523,19 @@ export class AuthService {
             avatarUrl: null,
             location: null,
             website: null,
+            usernameLastChangedAt: null,
+            deactivatedAt: null,
             createdAt: user.created_at,
           },
         };
+      }
+
+      const profileData = profileRes.data;
+      const telemetryData = telemetryRes.data;
+
+      // Stasis Intercept (for active check)
+      if (telemetryData?.deactivated_at) {
+        return null;
       }
 
       // Build and return the AuthUserDTO
@@ -505,6 +552,8 @@ export class AuthService {
           avatarUrl: profileData.avatar_url,
           location: profileData.location,
           website: profileData.website,
+          usernameLastChangedAt: telemetryData?.username_last_changed_at || null,
+          deactivatedAt: telemetryData?.deactivated_at || null,
           createdAt: profileData.created_at,
         },
       };
@@ -570,16 +619,39 @@ export class AuthService {
         throw new Error('Profile update failed: No data returned');
       }
 
-      // Return the updated profile as DTO
+      // Return the updated profile synthesized with telemetry (Asynchronous Synthesis)
+      const profilePromise = this.supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      const telemetryPromise = this.supabase
+        .from('account_telemetry')
+        .select('username_last_changed_at, deactivated_at')
+        .eq('id', userId)
+        .single();
+
+      const [profileRes, telemetryRes] = await Promise.all([profilePromise, telemetryPromise]);
+
+      if (profileRes.error || !profileRes.data) {
+        throw new Error('Profile synthesis failed after update.');
+      }
+
+      const profileData = profileRes.data;
+      const telemetryData = telemetryRes.data;
+
       return {
-        id: updatedProfile.id,
-        username: updatedProfile.username,
-        displayName: updatedProfile.display_name,
-        bio: updatedProfile.bio,
-        avatarUrl: updatedProfile.avatar_url,
-        location: updatedProfile.location,
-        website: updatedProfile.website,
-        createdAt: updatedProfile.created_at,
+        id: profileData.id,
+        username: profileData.username,
+        displayName: profileData.display_name,
+        bio: profileData.bio,
+        avatarUrl: profileData.avatar_url,
+        location: profileData.location,
+        website: profileData.website,
+        usernameLastChangedAt: telemetryData?.username_last_changed_at || null,
+        deactivatedAt: telemetryData?.deactivated_at || null,
+        createdAt: profileData.created_at,
       };
     } catch (error) {
       // Re-throw known errors (our custom error messages)
@@ -704,5 +776,85 @@ export class AuthService {
         message: 'An unexpected error occurred. Please try again later.',
       };
     }
+  }
+
+  /**
+   * Enters the user account into 30-day stasis deactivation
+   * @param userId - UUID of the user
+   * @returns Success boolean
+   */
+  async deactivateAccount(userId: string): Promise<boolean> {
+    const { error } = await this.supabase
+      .from('account_telemetry')
+      .update({ deactivated_at: new Date().toISOString() })
+      .eq('id', userId);
+
+    if (error) {
+      console.error('Account deactivation error:', error);
+      return false;
+    }
+    await this.supabase.auth.signOut();
+    return true;
+  }
+
+  /**
+   * Resurrection Flow: Clears the stasis marker to reactivate the manifest
+   * @param email - User's email
+   * @param password - User's password
+   * @returns AuthOperationResult with the reactivated profile
+   */
+  async recoverAccount(email: string, password: string): Promise<AuthOperationResult> {
+    // 1. Sign in normally (it might still trigger the intercept if profile isn't cleared yet)
+    const { data: authData, error: authError } = await this.supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (authError || !authData.user) {
+      return { success: false, message: 'Recovery failed. Invalid credentials.' };
+    }
+
+    // 2. Clear the stasis marker (from isolated telemetry)
+    const { error: telemetryError } = await this.supabase
+      .from('account_telemetry')
+      .update({ deactivated_at: null })
+      .eq('id', authData.user.id);
+
+    if (telemetryError) {
+      console.error('Account recovery error:', telemetryError);
+      return { success: false, message: 'Failed to clear stasis marker.' };
+    }
+
+    return this.signIn(email, password); // Log in properly after clearing
+  }
+
+  /**
+   * Recalibrates the user galactic coordinates (Email)
+   * This triggers Supabase's dual-verification flow
+   * @param newEmail - The new email address
+   * @returns Success boolean and status message
+   */
+  async recalibrateEmail(newEmail: string): Promise<{ success: boolean; message: string }> {
+    // 1. Availability Intercept: Check if the coordinate is already claimed
+    const { AvailabilityService } = await import('./availability.service');
+    const availabilityService = new AvailabilityService(this.supabase);
+    const availability = await availabilityService.checkEmailAvailability(newEmail);
+    
+    if (!availability.available) {
+      return { success: false, message: 'This coordinate is already registered to another manifest.' };
+    }
+
+    // 2. Dispatch recalibration signals
+    const { error } = await this.supabase.auth.updateUser({ email: newEmail });
+
+    if (error) {
+      console.error('Email recalibration error:', error);
+      return { success: false, message: error.message || 'Failed to recalibrate coordinates' };
+    }
+
+    return { 
+      success: true, 
+      message: 'Verification signals dispatched. Please check both your current and new inbox.' 
+    };
   }
 }

@@ -2,225 +2,133 @@ import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 import { AuthService } from "@/lib/services/auth.service"
 import { redirect } from "next/navigation"
-import { getRelativeTime } from "@/lib/utils/time.utils"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { 
-  Sparkles, 
-  Users, 
-  Calendar, 
-  Zap,
-  Plus,
-  UserPlus,
-  TrendingUp,
-  Clock
-} from "lucide-react"
-import Link from "next/link"
+import { HubPostComposer } from "@/components/hub/hub-post-composer"
+import { HubFeedCard } from "@/components/hub/hub-feed-card"
+import { HubFeedTabs } from "@/components/hub/hub-feed-tabs"
+import { HubProfileSummary } from "@/components/hub/hub-profile-summary"
+import { HubCalendarNode } from "@/components/hub/nodes/hub-calendar-node"
+import { HubBudgetNode } from "@/components/hub/nodes/hub-budget-node"
+import { HubProgressOverview } from "@/components/hub/nodes/hub-progress-overview"
+import { Card } from "@/components/ui/card"
+import { Sparkles, TrendingUp, Users } from "lucide-react"
+
 export default async function HubPage() {
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
   const authService = new AuthService(supabase)
   const user = await authService.getCurrentUser()
 
-  // Redirect if not authenticated
   if (!user) {
     redirect("/sign-in")
   }
 
   const displayName = user.profile.displayName || user.profile.username
+  const username = user.profile.username
   const initials = displayName.slice(0, 2).toUpperCase()
 
-  // Mock data for stats and activity (will be replaced with real data later)
-  const stats = {
-    cosplans: 0,
-    groups: 0,
-    events: 0,
-  }
-
-  const recentActivity = [
+  // High-fidelity mock signals for the sanctuary feed
+  const mockSignals = [
     {
-      id: 1,
-      type: 'profile',
-      message: 'Profile created',
-      timestamp: user.createdAt,
-      icon: <Sparkles className="size-4" />,
+      author: { name: "Aether Sculptor", username: "aesculpt", avatarUrl: undefined },
+      timestamp: "2h ago",
+      content: "Just finalized the primary mold for the Cyberpunk Ronin gauntlets. The EVA high-density foam responded perfectly to the thermal ritual.",
+      type: "progress" as const,
+      meta: { projectName: "Neon Ronin", progress: 85 },
+      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000&auto=format&fit=crop"
     },
+    {
+      author: { name: "Cosplay Cebu", username: "coscebu", avatarUrl: undefined },
+      timestamp: "5h ago",
+      content: "Establishing a new Vanguard Sync for Otaku Fest 2026. We are looking for high-fidelity prop makers and technical armor leads to join our 'Archon Gathering' squad.",
+      type: "invite" as const,
+      meta: { groupName: "Archon Gathering", roles: ["Armor Lead", "Prop Master"] }
+    },
+    {
+      author: { name: "Warp Stylist", username: "warpstyle", avatarUrl: undefined },
+      timestamp: "Yesterday",
+      content: "Tech Tip: When handling synthetic high-heat fibers for gravity-defying spikes, always ensure your signal frequency is set to 'low' before applying the thermal sealer.",
+      type: "blog" as const,
+      meta: { readTime: "4 min" }
+    }
   ]
 
   return (
-    <div className="space-y-12">
-      {/* User Greeting with Avatar */}
-          <header className="flex items-center gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <Avatar size="lg" className="shadow-glow-primary">
-              <AvatarImage src={user.profile.avatarUrl || undefined} alt={displayName} />
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
-            <div className="space-y-2">
-              <h1 className="font-heading text-4xl md:text-5xl font-black tracking-tighter leading-tight">
-                Welcome back, <span className="italic text-primary">{displayName}</span>
-              </h1>
-              <p className="text-muted-foreground text-base font-medium">
-                Your celestial command center awaits
-              </p>
-            </div>
-          </header>
-
-          {/* Quick Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
-            <Card size="sm" className="shadow-glow-primary">
-              <CardContent className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                    Cosplans
-                  </p>
-                  <p className="text-4xl font-black text-primary">
-                    {stats.cosplans}
-                  </p>
-                </div>
-                <div className="size-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                  <Zap className="size-8 text-primary" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card size="sm" className="shadow-glow-secondary">
-              <CardContent className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                    Groups
-                  </p>
-                  <p className="text-4xl font-black text-secondary">
-                    {stats.groups}
-                  </p>
-                </div>
-                <div className="size-16 rounded-2xl bg-secondary/10 flex items-center justify-center">
-                  <Users className="size-8 text-secondary" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card size="sm" className="shadow-glow-primary">
-              <CardContent className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                    Events
-                  </p>
-                  <p className="text-4xl font-black text-accent">
-                    {stats.events}
-                  </p>
-                </div>
-                <div className="size-16 rounded-2xl bg-accent/10 flex items-center justify-center">
-                  <Calendar className="size-8 text-accent" />
-                </div>
-              </CardContent>
-            </Card>
+    <div className="max-w-6xl mx-auto px-0 sm:px-6 space-y-8 sm:space-y-12">
+      {/* Social Grid - 2 Column Architecture */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-8 lg:gap-12 items-start">
+        
+        {/* Left Column: The Signal Stream */}
+        <main className="lg:col-span-8 space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 w-full overflow-hidden">
+          <HubPostComposer user={{ name: displayName, avatarUrl: user.profile.avatarUrl || undefined }} />
+          
+          <div className="pt-2">
+            <HubFeedTabs />
           </div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Recent Activity Feed */}
-            <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-12 duration-700 delay-300">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <TrendingUp className="size-6 text-primary" />
-                    Recent Activity
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {recentActivity.map((activity, index) => (
-                    <div
-                      key={activity.id}
-                      className="flex items-start gap-4 p-4 rounded-2xl bg-background/50 border border-white/5 hover:border-primary/20 transition-all"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                        {activity.icon}
-                      </div>
-                      <div className="flex-1 space-y-1">
-                        <p className="text-sm font-medium text-foreground">
-                          {activity.message}
-                        </p>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                          <Clock className="size-3" />
-                          {getRelativeTime(activity.timestamp)}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-
-                  {recentActivity.length === 1 && (
-                    <div className="py-12 text-center space-y-3">
-                      <div className="size-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center mx-auto">
-                        <TrendingUp className="size-8 text-muted-foreground/30" />
-                      </div>
-                      <p className="text-sm text-muted-foreground font-medium">
-                        Your activity feed will appear here
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* CTA Cards */}
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-12 duration-700 delay-450">
-              <Card size="sm" className="group hover:shadow-glow-primary transition-all duration-500">
-                <CardContent className="space-y-6">
-                  <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all">
-                    <Plus className="size-7 text-primary group-hover:text-primary-foreground" />
-                  </div>
-                  <div className="space-y-3">
-                    <h3 className="font-heading text-xl font-black tracking-tighter">
-                      Create Cosplan
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Start a new project and bring your vision to life
-                    </p>
-                  </div>
-                  <Button 
-                    variant="celestial" 
-                    size="lg" 
-                    className="w-full"
-                    asChild
-                  >
-                    <Link href="#">
-                      <Sparkles className="size-4" />
-                      Coming Soon
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card size="sm" className="group hover:shadow-glow-secondary transition-all duration-500">
-                <CardContent className="space-y-6">
-                  <div className="size-14 rounded-2xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary group-hover:scale-110 transition-all">
-                    <UserPlus className="size-7 text-secondary group-hover:text-secondary-foreground" />
-                  </div>
-                  <div className="space-y-3">
-                    <h3 className="font-heading text-xl font-black tracking-tighter">
-                      Join Groups
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Connect with fellow cosplayers and collaborate
-                    </p>
-                  </div>
-                  <Button 
-                    variant="celestial" 
-                    size="lg" 
-                    className="w-full border-secondary text-secondary hover:bg-secondary shadow-glow-secondary"
-                    asChild
-                  >
-                    <Link href="#">
-                      <Sparkles className="size-4" />
-                      Coming Soon
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+          
+          <div className="space-y-8">
+            {mockSignals.map((signal, i) => (
+              <div 
+                key={i} 
+                className="animate-in fade-in slide-in-from-bottom-12 duration-700"
+                style={{ animationDelay: `${(i + 1) * 150}ms` }}
+              >
+                <HubFeedCard {...signal} />
+              </div>
+            ))}
           </div>
+        </main>
+
+        {/* Right Column: Orbital Command Sidebar (Private Telemetry) - Hidden on Mobile */}
+        <aside className="hidden lg:flex lg:col-span-4 flex-col space-y-8 sticky top-4 animate-in fade-in slide-in-from-right-8 duration-700 delay-300">
+          <HubProfileSummary user={{ name: displayName, username, avatarUrl: user.profile.avatarUrl || undefined }} />
+
+          {/* Section: Your Command Status (Budget/Progress) */}
+          <section className="space-y-4">
+            <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 italic">
+              Personal Directives
+            </h3>
+            <Card className="border-white/5 bg-white/[0.01] backdrop-blur-3xl rounded-sm p-8 space-y-8 shadow-2xl overflow-hidden border-x-0 sm:border-x">
+              <HubProgressOverview />
+              <div className="h-px bg-white/5 w-full" />
+              <HubBudgetNode />
+            </Card>
+          </section>
+
+          {/* Section: Temporal Coordinates */}
+          <section className="space-y-4">
+             <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 italic">
+              Temporal Sync
+            </h3>
+            <Card className="border-white/5 bg-white/[0.01] backdrop-blur-3xl rounded-none sm:rounded-md p-8 shadow-2xl overflow-hidden border-x-0 sm:border-x">
+              <HubCalendarNode />
+            </Card>
+          </section>
+
+          {/* Section: Trending Signals */}
+          <section className="space-y-4">
+            <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 italic">
+              Vanguard Pulse
+            </h3>
+            <Card className="border-white/5 bg-white/[0.01] backdrop-blur-3xl rounded-none sm:rounded-md p-6 space-y-6 shadow-2xl overflow-hidden border-x-0 sm:border-x">
+              {[
+                { label: "Otaku Fest Props", trend: "+12 dispatches today", icon: <Sparkles className="size-4 text-primary" /> },
+                { label: "Cebu Cosplay Expo", trend: "High recruitment frequency", icon: <Users className="size-4 text-secondary" /> },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 group cursor-pointer hover:translate-x-1 transition-all">
+                  <div className="size-10 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                    {item.icon}
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-black tracking-tight group-hover:text-primary transition-colors">{item.label}</p>
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">{item.trend}</p>
+                  </div>
+                </div>
+              ))}
+            </Card>
+          </section>
+
+        </aside>
+      </div>
     </div>
   )
 }

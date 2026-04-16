@@ -22,16 +22,13 @@ export default function HubLayout({
         <div className="absolute bottom-[10%] right-[20%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '3s' }} />
       </div>
 
-      {/* Sidebar - Hidden on mobile, shown on md+ */}
-      <HubSidebar className="hidden md:flex shrink-0 shrink-0" />
-
       {/* Main viewport */}
       <div className="flex-1 flex flex-col h-screen relative z-10 overflow-hidden">
         <HubHeader />
         
         {/* Scrollable Canvas */}
         <main id="main-content" className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8 lg:p-10">
-          <div className="mx-auto max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
             {children}
           </div>
         </main>

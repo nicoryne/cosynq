@@ -24,7 +24,7 @@ export class UserProfileService {
     try {
       const { data, error } = await this.supabase
         .from('user_profiles')
-        .select('*')
+        .select('*, account_telemetry(username_last_changed_at, deactivated_at)')
         .eq('username', username)
         .single();
 
@@ -44,6 +44,8 @@ export class UserProfileService {
         avatarUrl: data.avatar_url,
         location: data.location,
         website: data.website,
+        usernameLastChangedAt: (data as any).account_telemetry?.username_last_changed_at || null,
+        deactivatedAt: (data as any).account_telemetry?.deactivated_at || null,
         createdAt: data.created_at,
       };
     } catch (error) {
@@ -61,7 +63,7 @@ export class UserProfileService {
     try {
       const { data, error } = await this.supabase
         .from('user_profiles')
-        .select('*')
+        .select('*, account_telemetry(username_last_changed_at, deactivated_at)')
         .eq('id', id)
         .single();
 
@@ -77,6 +79,8 @@ export class UserProfileService {
         avatarUrl: data.avatar_url,
         location: data.location,
         website: data.website,
+        usernameLastChangedAt: (data as any).account_telemetry?.username_last_changed_at || null,
+        deactivatedAt: (data as any).account_telemetry?.deactivated_at || null,
         createdAt: data.created_at,
       };
     } catch (error) {

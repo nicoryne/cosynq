@@ -14,6 +14,95 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_telemetry: {
+        Row: {
+          created_at: string | null
+          deactivated_at: string | null
+          id: string
+          updated_at: string | null
+          username_last_changed_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          deactivated_at?: string | null
+          id: string
+          updated_at?: string | null
+          username_last_changed_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          deactivated_at?: string | null
+          id?: string
+          updated_at?: string | null
+          username_last_changed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_telemetry_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          actor_id: string | null
+          content: string | null
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          is_read: boolean | null
+          metadata: Json | null
+          read_at: string | null
+          recipient_id: string
+          type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          is_read?: boolean | null
+          metadata?: Json | null
+          read_at?: string | null
+          recipient_id: string
+          type: string
+        }
+        Update: {
+          actor_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          is_read?: boolean | null
+          metadata?: Json | null
+          read_at?: string | null
+          recipient_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       role_audit_log: {
         Row: {
           changed_at: string
@@ -112,6 +201,7 @@ export type Database = {
         Returns: boolean
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      delete_old_notifications: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "user" | "moderator" | "admin"
