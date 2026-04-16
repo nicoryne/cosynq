@@ -76,7 +76,7 @@ export function SignUpStepIdentity({
               value={facebookUrl}
               onChange={(e) => onChange('facebookUrl', e.target.value)}
               className={cn(
-                'pl-[4.5rem] pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
                 errors.facebookUrl && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="facebook.com/yourprofile"
