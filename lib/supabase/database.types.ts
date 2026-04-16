@@ -362,7 +362,7 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
-          facebook_url: string | null
+          facebook_url: string
           id: string
           location: string | null
           updated_at: string
@@ -375,7 +375,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
-          facebook_url?: string | null
+          facebook_url: string
           id: string
           location?: string | null
           updated_at?: string
@@ -388,7 +388,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
-          facebook_url?: string | null
+          facebook_url?: string
           id?: string
           location?: string | null
           updated_at?: string

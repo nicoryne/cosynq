@@ -52,7 +52,7 @@ export default function PrivacyPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-foreground/80 mb-2">Social Identity</h3>
-                  <p>To prevent identity theft and "catfishing," we collect and store your unique Facebook Profile URL if you choose to link it. This data is used to verify your identity within the community.</p>
+                  <p>To prevent identity theft and "catfishing," we collect and store your unique Facebook Profile URL as a mandatory step for identity verification. This data is used to verify your identity within the community and ensure a safe, authenticated environment.</p>
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-foreground/80 mb-2">Technical Data</h3>

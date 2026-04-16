@@ -94,8 +94,8 @@ export function SignUpStepIdentity({
           {errors.facebookUrl ? (
             <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">{errors.facebookUrl}</p>
           ) : (
-             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 ml-4 italic">
-              Unique link for identity verification
+             <p className="text-[10px] font-black uppercase tracking-widest text-primary ml-4 italic">
+              Mandatory link for identity verification
             </p>
           )}
         </div>

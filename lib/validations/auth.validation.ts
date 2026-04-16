@@ -82,13 +82,12 @@ export const bioSchema = z
  */
 export const facebookUrlSchema = z
   .string()
+  .min(1, 'Facebook profile link is required for verification')
   .url('Invalid URL format')
   .regex(
     /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.com)\/.+$/,
     'Must be a valid Facebook profile link'
-  )
-  .optional()
-  .or(z.literal(''));
+  );
 
 // =====================================================================
 // Form Validation Schemas
