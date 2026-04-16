@@ -29,17 +29,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (!error) {
-      // Step 2: Handle success redirects
-      if (type === 'signup') {
-        return NextResponse.redirect(new URL('/verify-success', request.url));
-      }
-      
+      // Step 2: Handle success redirects based on verification type
       if (type === 'recovery') {
         return NextResponse.redirect(new URL('/reset-password', request.url));
       }
 
-      redirectTo.searchParams.delete('next');
-      return NextResponse.redirect(redirectTo);
+      // Default success redirect for signup and others
+      return NextResponse.redirect(new URL('/verify-success', request.url));
     }
 
     // Log verification failure
