@@ -24,7 +24,7 @@ export const TurnstileWidget = forwardRef<TurnstileInstance, TurnstileWidgetProp
       if (process.env.NODE_ENV === 'development') {
         return (
           <div className={cn(
-            "p-4 rounded-xl border border-dashed border-primary/20 bg-primary/5 text-center transition-all",
+            "p-4 border border-dashed border-primary/20 bg-primary/5 text-center transition-all",
             className
           )}>
             <p className="text-[10px] font-black uppercase tracking-widest text-primary/60">
@@ -38,7 +38,7 @@ export const TurnstileWidget = forwardRef<TurnstileInstance, TurnstileWidgetProp
 
     return (
       <div className={cn("flex justify-center w-full transition-all animate-in fade-in zoom-in-95 duration-500", className)}>
-        <div className="rounded-xl overflow-hidden shadow-glow-primary/5 p-1 bg-white/5 border border-white/10">
+        <div className="overflow-hidden shadow-glow-primary/5">
           <Turnstile
             ref={ref}
             siteKey={siteKey}
