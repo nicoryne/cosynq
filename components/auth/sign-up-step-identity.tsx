@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Pencil } from 'lucide-react';
+import { Pencil, Loader2, Check, AlertCircle } from 'lucide-react';
 
 export interface Step3IdentityProps {
   displayName: string;
@@ -16,6 +16,9 @@ export interface Step3IdentityProps {
     bio?: string;
     facebookUrl?: string;
   };
+  isCheckingFacebook?: boolean;
+  facebookAvailability?: { available: boolean; message?: string } | null;
+  debouncedFacebookUrl?: string;
 }
 
 export function SignUpStepIdentity({
@@ -24,6 +27,9 @@ export function SignUpStepIdentity({
   facebookUrl,
   onChange,
   errors,
+  isCheckingFacebook,
+  facebookAvailability,
+  debouncedFacebookUrl,
 }: Step3IdentityProps) {
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -76,8 +82,8 @@ export function SignUpStepIdentity({
               value={facebookUrl}
               onChange={(e) => onChange('facebookUrl', e.target.value)}
               className={cn(
-                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
-                errors.facebookUrl && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
+                'pl-[4.5rem] md:pl-[4.5rem] pr-12 md:pr-12 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                (errors.facebookUrl || (debouncedFacebookUrl === facebookUrl && facebookAvailability?.available === false)) && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="facebook.com/yourprofile"
             />
@@ -90,9 +96,30 @@ export function SignUpStepIdentity({
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </div>
+
+            {/* Availability Indicators */}
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-2">
+              {isCheckingFacebook && <Loader2 className="size-4 animate-spin text-primary" />}
+              {!isCheckingFacebook && debouncedFacebookUrl === facebookUrl && facebookUrl.length > 0 && (
+                <>
+                  {facebookAvailability?.available ? (
+                    <div className="rounded-full bg-primary/20 p-1 animate-in zoom-in duration-300">
+                      <Check className="size-3 text-primary stroke-[3px]" />
+                    </div>
+                  ) : (
+                    <div className="rounded-full bg-destructive/20 p-1 animate-in zoom-in duration-300">
+                      <AlertCircle className="size-3 text-destructive stroke-[3px]" />
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-          {errors.facebookUrl ? (
-            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">{errors.facebookUrl}</p>
+          
+          {(errors.facebookUrl || (debouncedFacebookUrl === facebookUrl && facebookAvailability?.available === false)) ? (
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+              {errors.facebookUrl || facebookAvailability?.message}
+            </p>
           ) : (
              <p className="text-[10px] font-black uppercase tracking-widest text-primary ml-4 italic">
               Mandatory link for identity verification

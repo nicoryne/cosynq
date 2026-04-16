@@ -9,9 +9,14 @@ import { useState, useEffect } from 'react';
 import {
   checkEmailAvailabilityAction,
   checkUsernameAvailabilityAction,
+  checkFacebookUrlAvailabilityAction,
 } from '@/lib/actions/auth.actions';
 import type { AvailabilityResult } from '@/lib/types/auth.types';
-import { emailSchema, usernameSchema } from '@/lib/validations/auth.validation';
+import { 
+  emailSchema, 
+  usernameSchema,
+  facebookUrlSchema 
+} from '@/lib/validations/auth.validation';
 
 // =====================================================================
 // Constants
@@ -154,5 +159,45 @@ export function useUsernameAvailability(username: string) {
     isError: query.isError,
     error: query.error,
     debouncedUsername,
+  };
+}
+
+// =====================================================================
+// Facebook URL Availability Hook
+// =====================================================================
+
+/**
+ * Hook: Check Facebook URL availability with debouncing
+ * Normalizes input before checking
+ */
+export function useFacebookUrlAvailability(facebookUrl: string) {
+  const debouncedUrl = useDebounce(facebookUrl, DEBOUNCE_DELAY_MS);
+
+  const isUrlValid = facebookUrlSchema.safeParse(debouncedUrl).success;
+  const shouldFetch = debouncedUrl.length > 0 && isUrlValid;
+
+  const query = useQuery<AvailabilityResult, Error>({
+    queryKey: ['facebook-availability', debouncedUrl],
+    queryFn: async () => {
+      const response = await checkFacebookUrlAvailabilityAction(debouncedUrl);
+
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      return response.data!;
+    },
+    enabled: shouldFetch,
+    staleTime: STALE_TIME_MS,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  return {
+    data: query.data,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+    debouncedUrl,
   };
 }

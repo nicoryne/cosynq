@@ -424,6 +424,10 @@ export type Database = {
     }
     Functions: {
       check_email_exists: { Args: { lookup_email: string }; Returns: boolean }
+      check_facebook_url_exists: {
+        Args: { lookup_url: string }
+        Returns: boolean
+      }
       check_username_exists: {
         Args: { lookup_username: string }
         Returns: boolean

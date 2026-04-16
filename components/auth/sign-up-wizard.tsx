@@ -9,8 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PasswordChecklist } from './password-checklist';
-import { useEmailAvailability } from '@/lib/hooks/use-availability';
-import { useUsernameAvailability } from '@/lib/hooks/use-availability';
+import { 
+  useEmailAvailability, 
+  useUsernameAvailability,
+  useFacebookUrlAvailability 
+} from '@/lib/hooks/use-availability';
 import { useSignUp, AuthError } from '@/lib/hooks/use-auth';
 
 // =====================================================================
@@ -109,6 +112,12 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
     isLoading: isCheckingUsername,
     debouncedUsername,
   } = useUsernameAvailability(state.formData.step1.username);
+
+  const {
+    data: facebookAvailability,
+    isLoading: isCheckingFacebook,
+    debouncedUrl: debouncedFacebookUrl,
+  } = useFacebookUrlAvailability(state.formData.step3.facebookUrl);
 
   const handleStep1Change = (field: 'email' | 'username' | 'agreedToTerms', value: string | boolean) => {
     setState((prev) => ({
@@ -390,7 +399,9 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
       case 3:
         return (
           state.formData.step3.displayName &&
-          state.formData.step3.displayName.length > 0
+          state.formData.step3.displayName.length > 0 &&
+          !isCheckingFacebook &&
+          facebookAvailability?.available === true
         );
       case 4:
         return true;
@@ -493,6 +504,9 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
                 bio: state.errors.bio,
                 facebookUrl: state.errors.facebookUrl,
               }}
+              isCheckingFacebook={isCheckingFacebook}
+              facebookAvailability={facebookAvailability}
+              debouncedFacebookUrl={debouncedFacebookUrl}
             />
           )}
 

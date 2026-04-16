@@ -19,8 +19,10 @@ import {
   signUpSchema,
   signInSchema,
   resetPasswordSchema,
+  facebookUrlSchema,
   type ResetPasswordInput,
 } from '@/lib/validations/auth.validation';
+import { canonicalizeFacebookUrl } from '@/lib/utils/url.utils';
 import type {
   AvailabilityResult,
   SignUpFormData,
@@ -226,6 +228,61 @@ export async function checkUsernameAvailabilityAction(
         error instanceof Error
           ? error.message
           : 'Failed to check username availability',
+    };
+  }
+}
+
+/**
+ * Server Action: Check Facebook URL availability
+ * Normalizes input before checking uniqueness
+ * Rate-limited to 10 requests per minute per IP
+ */
+export async function checkFacebookUrlAvailabilityAction(
+  facebookUrl: string
+): Promise<ActionResponse<AvailabilityResult>> {
+  try {
+    // Rate limiting check
+    const clientIP = await getClientIP();
+    if (isRateLimited(`facebook-${clientIP}`)) {
+      return {
+        success: false,
+        message: 'Too many requests. Please try again later.',
+      };
+    }
+
+    // Validate input
+    const validation = facebookUrlSchema.safeParse(facebookUrl);
+    if (!validation.success) {
+      return {
+        success: false,
+        message: 'Validation failed',
+        errors: { facebookUrl: validation.error.issues.map((e) => e.message) },
+      };
+    }
+
+    // Normalize for uniqueness check
+    const canonicalUrl = canonicalizeFacebookUrl(validation.data);
+
+    // Execute service operation
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+    const availabilityService = new AvailabilityService(supabase);
+    const result = await availabilityService.checkFacebookUrlAvailability(
+      canonicalUrl
+    );
+
+    return {
+      success: true,
+      message: 'Facebook availability checked',
+      data: result,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : 'Failed to check facebook availability',
     };
   }
 }

@@ -82,5 +82,38 @@ export class AvailabilityService {
         `Username availability check failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
+  /**
+   * Checks if a Facebook Profile URL is already linked to a profile
+   * Queries user_profiles table using canonicalized URL
+   * @param facebookUrl - Facebook URL to check
+   * @returns AvailabilityResult with availability status and message
+   */
+  async checkFacebookUrlAvailability(facebookUrl: string): Promise<AvailabilityResult> {
+    try {
+      const { data: urlExists, error } = await this.supabase.rpc(
+        'check_facebook_url_exists',
+        { lookup_url: facebookUrl }
+      );
+
+      if (error) {
+        throw new Error(`Failed to check facebook identity: ${error.message}`);
+      }
+
+      if (urlExists) {
+        return {
+          available: false,
+          message: 'This identity is already linked to another account',
+        };
+      }
+
+      return {
+        available: true,
+        message: 'Identity is available',
+      };
+    } catch (error) {
+      throw new Error(
+        `Facebook availability check failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+    }
   }
 }

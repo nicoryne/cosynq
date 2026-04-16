@@ -12,6 +12,7 @@ import type {
   AuthUserDTO,
   UserProfileDTO,
 } from '@/lib/types/auth.types';
+import { canonicalizeFacebookUrl } from '@/lib/utils/url.utils';
 import { AvailabilityService } from './availability.service';
 
 /**
@@ -74,7 +75,7 @@ export class AuthService {
           username: data.username,
           display_name: data.displayName || null,
           bio: data.bio || null,
-          facebook_url: (data as any).facebookUrl || null,
+          facebook_url: data.facebookUrl ? canonicalizeFacebookUrl(data.facebookUrl) : null,
           avatar_url: data.avatarUrl || null,
           avatar_public_id: data.avatarPublicId || null,
         })
@@ -601,7 +602,11 @@ export class AuthService {
       if (data.avatarUrl !== undefined) updateData.avatar_url = data.avatarUrl;
       if (data.location !== undefined) updateData.location = data.location;
       if (data.website !== undefined) updateData.website = data.website;
-      if (data.facebookUrl !== undefined) updateData.facebook_url = data.facebookUrl;
+      if (data.facebookUrl !== undefined) {
+        updateData.facebook_url = data.facebookUrl 
+          ? canonicalizeFacebookUrl(data.facebookUrl) 
+          : null;
+      }
 
       // Update the profile
       const { data: updatedProfile, error: updateError } = await this.supabase
