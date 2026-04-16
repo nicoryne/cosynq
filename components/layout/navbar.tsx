@@ -9,6 +9,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -51,7 +53,7 @@ export function Navbar() {
         href="/"
         className="font-heading font-black text-xl tracking-tighter select-none shrink-0 transition-opacity hover:opacity-80"
       >
-        <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent hidden sm:block">cosynq</span>
+        <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent block">cosynq</span>
       </Link>
 
       {/* Divider */}
@@ -100,15 +102,12 @@ export function Navbar() {
             <SheetContent 
               side="right" 
               showCloseButton={false}
-              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden"
+              className="w-full sm:max-w-md glassmorphism border-l border-white/10 p-0 overflow-hidden flex flex-col bg-background/40 backdrop-blur-3xl"
             >
-              <div className={cn(
-                "relative z-10 flex flex-col h-full bg-background/40 backdrop-blur-3xl transition-transform duration-500 ease-out",
-                isOpen ? "translate-x-0" : "translate-x-full"
-              )}>
+              <div className="relative z-10 flex flex-col h-full">
                 {/* Decorative Atmosphere Orbs - Drift & Pulse via CSS */}
-                <div className="absolute top-1/2 -right-20 size-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none animate-float-slow opacity-40" />
-                <div className="absolute -bottom-20 -left-20 size-80 bg-secondary/10 rounded-full blur-[100px] pointer-events-none animate-float-slow opacity-30 [animation-delay:2s]" />
+                <div className="absolute top-1/2 -right-20 size-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none animate-float-slow opacity-40 shadow-glow-primary" />
+                <div className="absolute -bottom-20 -left-20 size-80 bg-secondary/10 rounded-full blur-[100px] pointer-events-none animate-float-slow opacity-30 [animation-delay:2s] shadow-glow-secondary" />
 
                 <div className="p-8 pt-12 flex items-center justify-between">
                   <Link
@@ -130,12 +129,12 @@ export function Navbar() {
                 </div>
 
                 {/* Navigation Links - Orchestrated with CSS Delays */}
-                <div className="px-6 flex flex-col gap-2 flex-1 mt-4">
+                <div className="px-6 flex flex-col flex-1 mt-4">
                   {LANDING_NAV_LINKS.map((link, index) => (
                     <div
                       key={link.href}
                       className={cn(
-                        "transition-all duration-700 ease-out",
+                        "transition-all duration-700 ease-out border-b border-white/5 last:border-none",
                         isOpen 
                           ? "opacity-100 translate-x-0" 
                           : "opacity-0 translate-x-10"
@@ -146,11 +145,11 @@ export function Navbar() {
                         variant="ghost"
                         asChild
                         onClick={() => setIsOpen(false)}
-                        className="text-xl font-black uppercase tracking-widest text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-colors duration-200 flex justify-start w-full"
+                        className="text-lg font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary py-10 rounded-2xl hover:bg-white/5 px-6 transition-colors duration-200 flex justify-start w-full"
                       >
-                        <a href={link.href}>
+                        <Link href={link.href}>
                           {link.label}
-                        </a>
+                        </Link>
                       </Button>
                     </div>
                   ))}

@@ -37,13 +37,11 @@ export function NavbarClock() {
   )
 
   return (
-    <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-widest whitespace-nowrap opacity-80">
-      <span className="relative flex h-1.5 w-1.5 shrink-0">
-        {/* Pulsing indicator - Cyan for dark, Seraph Blue for light */}
-        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isDark ? 'bg-cyan-400' : 'bg-blue-400'}`}></span>
-        <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${isDark ? 'bg-cyan-500' : 'bg-blue-500'}`}></span>
-      </span>
-      {formattedTime}
+    <div className="flex items-center gap-3">
+      <div className="size-1.5 rounded-full bg-secondary animate-pulse shadow-[0_0_8px_hsl(var(--secondary))]" />
+      <time className="tabular-nums font-black text-[12px] tracking-widest text-foreground/80 lowercase">
+        {formattedTime}
+      </time>
     </div>
   )
 }
