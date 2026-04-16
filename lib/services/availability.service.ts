@@ -82,6 +82,8 @@ export class AvailabilityService {
         `Username availability check failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
+  }
+
   /**
    * Checks if a Facebook Profile URL is already linked to a profile
    * Queries user_profiles table using canonicalized URL

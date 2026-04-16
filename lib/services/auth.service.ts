@@ -75,7 +75,7 @@ export class AuthService {
           username: data.username,
           display_name: data.displayName || null,
           bio: data.bio || null,
-          facebook_url: data.facebookUrl ? canonicalizeFacebookUrl(data.facebookUrl) : null,
+          facebook_url: data.facebookUrl ? canonicalizeFacebookUrl(data.facebookUrl) : '',
           avatar_url: data.avatarUrl || null,
           avatar_public_id: data.avatarPublicId || null,
         })
@@ -592,7 +592,7 @@ export class AuthService {
         avatar_url?: string | null;
         location?: string | null;
         website?: string | null;
-        facebook_url?: string | null;
+        facebook_url?: string;
       } = {};
 
       if (data.username !== undefined) updateData.username = data.username;
@@ -605,7 +605,7 @@ export class AuthService {
       if (data.facebookUrl !== undefined) {
         updateData.facebook_url = data.facebookUrl 
           ? canonicalizeFacebookUrl(data.facebookUrl) 
-          : null;
+          : '';
       }
 
       // Update the profile
