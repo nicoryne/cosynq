@@ -34,6 +34,10 @@ const faqs = [
     question: "Is my data secure?",
     answer: "Yes. We use industry-standard encryption and strict Row Level Security (RLS) policies. Your cosplay plans, budgets, and personal info are protected. We follow GDPR and Philippine Data Privacy Act standards.",
   },
+  {
+    question: "Someone claimed my Facebook profile, how do I fix this?",
+    answer: "Identity integrity is vital to cosynq. If your Facebook profile has been claimed by another user, you can manually dispute it even if you don't have an account. Simply use the 'Contact Us' form or email us directly to start the rebuttal process. We'll verify your ownership and restore your identity on the platform.",
+  },
 ]
 
 export function FAQSection() {

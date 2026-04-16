@@ -51,6 +51,10 @@ export default function PrivacyPage() {
                   <p>Materials you voluntarily provide, including cosplay project details, budget tracking, character references, and group recruitment information.</p>
                 </div>
                 <div>
+                  <h3 className="text-lg font-bold text-foreground/80 mb-2">Social Identity</h3>
+                  <p>To prevent identity theft and "catfishing," we collect and store your unique Facebook Profile URL if you choose to link it. This data is used to verify your identity within the community.</p>
+                </div>
+                <div>
                   <h3 className="text-lg font-bold text-foreground/80 mb-2">Technical Data</h3>
                   <p>Log data such as your IP address, browser type, and interaction with our secure cloud storage or database features.</p>
                 </div>

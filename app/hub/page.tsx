@@ -10,7 +10,11 @@ import { HubCalendarNode } from "@/components/hub/nodes/hub-calendar-node"
 import { HubBudgetNode } from "@/components/hub/nodes/hub-budget-node"
 import { HubProgressOverview } from "@/components/hub/nodes/hub-progress-overview"
 import { Card } from "@/components/ui/card"
-import { Sparkles, TrendingUp, Users } from "lucide-react"
+import { Sparkles, TrendingUp, Users, Rocket, Plus } from "lucide-react"
+import { CosplanService } from "@/lib/services/cosplan.service"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { CreateCosplanDialog } from "@/components/hub/create-cosplan-dialog"
 
 export default async function HubPage() {
   const cookieStore = await cookies()
@@ -25,6 +29,11 @@ export default async function HubPage() {
   const displayName = user.profile.displayName || user.profile.username
   const username = user.profile.username
   const initials = displayName.slice(0, 2).toUpperCase()
+
+  // 1. Fetch the user's primary manifestation (latest cosplan)
+  const cosplanService = new CosplanService(supabase)
+  const cosplans = await cosplanService.getCosplans(user.id, 1)
+  const latestCosplan = cosplans.length > 0 ? await cosplanService.getCosplanDetail(cosplans[0].id) : null
 
   // High-fidelity mock signals for the sanctuary feed
   const mockSignals = [
@@ -87,10 +96,31 @@ export default async function HubPage() {
             <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 italic">
               Personal Directives
             </h3>
-            <Card className="border-white/5 bg-white/[0.01] backdrop-blur-3xl rounded-sm p-8 space-y-8 shadow-2xl overflow-hidden border-x-0 sm:border-x">
-              <HubProgressOverview />
-              <div className="h-px bg-white/5 w-full" />
-              <HubBudgetNode />
+            <Card className="border-white/5 bg-white/[0.01] backdrop-blur-3xl rounded-sm p-8 space-y-8 shadow-2xl overflow-hidden border-x-0 sm:border-x min-h-[400px]">
+              {latestCosplan ? (
+                <>
+                  <HubProgressOverview cosplan={latestCosplan} />
+                  <div className="h-px bg-white/5 w-full" />
+                  <HubBudgetNode cosplan={latestCosplan} />
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-10 text-center space-y-6">
+                  <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                    <Rocket className="size-8" />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-black uppercase tracking-widest">No Active Directives</h4>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed max-w-[200px] mx-auto">
+                      Your current sector is quiet. Manifest your first project to begin tracking progress.
+                    </p>
+                  </div>
+                  <CreateCosplanDialog>
+                    <Button variant="celestial" className="rounded-xl h-10 px-6 font-black uppercase tracking-widest text-[10px] gap-2">
+                      New Cosplan <Plus className="size-3" />
+                    </Button>
+                  </CreateCosplanDialog>
+                </div>
+              )}
             </Card>
           </section>
 

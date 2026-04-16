@@ -47,6 +47,7 @@ export interface UserProfileDTO {
   avatarUrl: string | null;
   location: string | null;
   website: string | null;
+  facebookUrl: string | null;
   usernameLastChangedAt: string | null; // ISO format
   deactivatedAt: string | null; // ISO format
   createdAt: string; // ISO format
@@ -72,4 +73,15 @@ export interface AuthOperationResult {
 export interface AvailabilityResult {
   available: boolean;
   message: string;
+}
+
+/**
+ * Standardized response format for all Server Actions
+ */
+export interface ActionResponse<T = void> {
+  success: boolean;
+  message: string;
+  data?: T;
+  errors?: Record<string, string[]>;
+  requiresVerification?: boolean;
 }

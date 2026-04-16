@@ -24,9 +24,9 @@ import type {
   SignUpFormData,
   SignInFormData,
   AuthUserDTO,
+  ActionResponse,
 } from '@/lib/types/auth.types';
 import type { ResetPasswordInput } from '@/lib/validations/auth.validation';
-import type { ActionResponse } from '@/lib/actions/auth.actions';
 
 // =====================================================================
 // Sign Up Hook

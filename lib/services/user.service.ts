@@ -120,6 +120,7 @@ export class UserService {
       avatarUrl: finalProfile.avatar_url,
       location: finalProfile.location,
       website: finalProfile.website,
+      facebookUrl: finalProfile.facebook_url,
       createdAt: finalProfile.created_at,
       usernameLastChangedAt: finalTelemetry?.username_last_changed_at || null,
       deactivatedAt: finalTelemetry?.deactivated_at || null,

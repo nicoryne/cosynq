@@ -85,7 +85,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
     formData: {
       step1: { email: '', username: '', agreedToTerms: false },
       step2: { password: '', confirmPassword: '' },
-      step3: { displayName: '', bio: '' },
+      step3: { displayName: '', bio: '', facebookUrl: '' },
       step4: { avatarUrl: undefined, avatarPublicId: undefined, turnstileToken: '' },
     },
     errors: {},
@@ -202,7 +202,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
     return true;
   };
 
-  const handleStep3Change = (field: 'displayName' | 'bio', value: string) => {
+  const handleStep3Change = (field: 'displayName' | 'bio' | 'facebookUrl', value: string) => {
     setState((prev) => ({
       ...prev,
       formData: {
@@ -323,6 +323,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
         confirmPassword: state.formData.step2.confirmPassword,
         displayName: state.formData.step3.displayName,
         bio: state.formData.step3.bio,
+        facebookUrl: state.formData.step3.facebookUrl,
         agreedToTerms: state.formData.step1.agreedToTerms,
         avatarUrl,
         avatarPublicId,
@@ -349,7 +350,7 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
               setState(prev => ({ ...prev, currentStep: 1, errors: newErrors }));
             } else if (newErrors.password || newErrors.confirmPassword) {
               setState(prev => ({ ...prev, currentStep: 2, errors: newErrors }));
-            } else if (newErrors.displayName || newErrors.bio) {
+            } else if (newErrors.displayName || newErrors.bio || newErrors.facebookUrl) {
               setState(prev => ({ ...prev, currentStep: 3, errors: newErrors }));
             } else {
               setState(prev => ({ ...prev, errors: newErrors }));
@@ -485,10 +486,12 @@ export function SignUpWizard({ className }: SignUpWizardProps) {
             <SignUpStepIdentity
               displayName={state.formData.step3.displayName || ''}
               bio={state.formData.step3.bio || ''}
+              facebookUrl={state.formData.step3.facebookUrl || ''}
               onChange={handleStep3Change}
               errors={{
                 displayName: state.errors.displayName,
                 bio: state.errors.bio,
+                facebookUrl: state.errors.facebookUrl,
               }}
             />
           )}

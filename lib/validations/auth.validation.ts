@@ -76,6 +76,20 @@ export const bioSchema = z
   .max(500, 'Bio must be less than 500 characters')
   .optional();
 
+/**
+ * Validates Facebook Profile URL
+ * Ensures the URL is from facebook.com or fb.com
+ */
+export const facebookUrlSchema = z
+  .string()
+  .url('Invalid URL format')
+  .regex(
+    /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.com)\/.+$/,
+    'Must be a valid Facebook profile link'
+  )
+  .optional()
+  .or(z.literal(''));
+
 // =====================================================================
 // Form Validation Schemas
 // =====================================================================
@@ -93,6 +107,7 @@ export const signUpSchema = z
     confirmPassword: z.string().min(1, 'Please confirm your password'),
     displayName: displayNameSchema,
     bio: bioSchema,
+    facebookUrl: facebookUrlSchema,
     avatarUrl: z.string().url().optional(),
     avatarPublicId: z.string().optional(),
     agreedToTerms: z.boolean().refine((val) => val === true, {
@@ -156,6 +171,7 @@ export const step2Schema = z
 export const step3Schema = z.object({
   displayName: displayNameSchema,
   bio: bioSchema,
+  facebookUrl: facebookUrlSchema,
 });
 
 /**

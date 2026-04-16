@@ -27,25 +27,11 @@ import type {
   AuthUserDTO,
   UserProfileDTO,
   SignInFormData,
+  ActionResponse,
 } from '@/lib/types/auth.types';
 import { SecurityLogger } from '@/lib/utils/security-logger';
 import { TurnstileService } from '@/lib/services/turnstile.service';
 import { type EmailOtpType } from '@supabase/supabase-js';
-
-// =====================================================================
-// Action Response Type
-// =====================================================================
-
-/**
- * Standardized response format for all actions
- */
-export interface ActionResponse<T = void> {
-  success: boolean;
-  message: string;
-  data?: T;
-  errors?: Record<string, string[]>;
-  requiresVerification?: boolean;
-}
 
 // =====================================================================
 // Rate Limiting Implementation

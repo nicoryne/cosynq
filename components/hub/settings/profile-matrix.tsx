@@ -30,6 +30,7 @@ export function ProfileMatrix({ initialData }: ProfileMatrixProps) {
     bio: initialData.bio || '',
     location: initialData.location || '',
     website: initialData.website || '',
+    facebookUrl: initialData.facebookUrl || '',
     avatarUrl: initialData.avatarUrl || '',
   });
 
@@ -150,6 +151,19 @@ export function ProfileMatrix({ initialData }: ProfileMatrixProps) {
             </div>
 
             <div className="space-y-2.5">
+              <Label htmlFor="facebookUrl" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">Facebook Identity</Label>
+              <div className="relative">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 flex items-center justify-center text-muted-foreground/40">
+                  <svg viewBox="0 0 24 24" className="size-full" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </div>
+                <Input id="facebookUrl" name="facebookUrl" type="url" value={formData.facebookUrl} onChange={handleChange} placeholder="https://facebook.com/yourprofile" className="h-12 bg-white/[0.02] pl-11" />
+              </div>
+              <p className="text-[9px] font-bold text-muted-foreground/30 ml-1 italic uppercase tracking-wider">Unique social link used for community verification</p>
+            </div>
+
+            <div className="space-y-2.5">
               <Label htmlFor="website" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">Website</Label>
               <div className="relative">
                 <Globe className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/40" />
@@ -166,7 +180,7 @@ export function ProfileMatrix({ initialData }: ProfileMatrixProps) {
             </div>
 
             <div className="flex justify-end pt-2">
-              <Button type="submit" disabled={isPending || isUploading} className="rounded-none sm:rounded-xl px-8 h-12 font-black uppercase tracking-widest text-xs gap-2" variant="celestial">
+              <Button type="submit" disabled={isPending || isUploading} className="rounded-sm sm:rounded-xl px-8 h-12 font-black uppercase tracking-widest text-xs gap-2" variant="celestial">
                 {isPending ? <>Saving... <Save className="size-4 animate-pulse" /></> : <>Save Profile <Save className="size-4" /></>}
               </Button>
             </div>

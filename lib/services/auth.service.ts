@@ -74,6 +74,7 @@ export class AuthService {
           username: data.username,
           display_name: data.displayName || null,
           bio: data.bio || null,
+          facebook_url: (data as any).facebookUrl || null,
           avatar_url: data.avatarUrl || null,
           avatar_public_id: data.avatarPublicId || null,
         })
@@ -111,6 +112,7 @@ export class AuthService {
               displayName: data.displayName || null,
               bio: data.bio || null,
               avatarUrl: data.avatarUrl || null,
+              facebookUrl: (data as any).facebookUrl || null,
               location: null,
               website: null,
               usernameLastChangedAt: null,
@@ -135,6 +137,7 @@ export class AuthService {
           avatarUrl: profileData.avatar_url,
           location: profileData.location,
           website: profileData.website,
+          facebookUrl: profileData.facebook_url,
           usernameLastChangedAt: null,
           deactivatedAt: null,
           createdAt: profileData.created_at,
@@ -306,6 +309,7 @@ export class AuthService {
               avatarUrl: null,
               location: null,
               website: null,
+              facebookUrl: null,
               usernameLastChangedAt: null,
               deactivatedAt: null,
               createdAt: authData.user.created_at,
@@ -342,6 +346,7 @@ export class AuthService {
           avatarUrl: profileData.avatar_url,
           location: profileData.location,
           website: profileData.website,
+          facebookUrl: profileData.facebook_url,
           createdAt: profileData.created_at,
           usernameLastChangedAt: telemetryData?.username_last_changed_at || null,
           deactivatedAt: telemetryData?.deactivated_at || null,
@@ -523,6 +528,7 @@ export class AuthService {
             avatarUrl: null,
             location: null,
             website: null,
+            facebookUrl: null,
             usernameLastChangedAt: null,
             deactivatedAt: null,
             createdAt: user.created_at,
@@ -552,6 +558,7 @@ export class AuthService {
           avatarUrl: profileData.avatar_url,
           location: profileData.location,
           website: profileData.website,
+          facebookUrl: profileData.facebook_url,
           usernameLastChangedAt: telemetryData?.username_last_changed_at || null,
           deactivatedAt: telemetryData?.deactivated_at || null,
           createdAt: profileData.created_at,
@@ -584,6 +591,7 @@ export class AuthService {
         avatar_url?: string | null;
         location?: string | null;
         website?: string | null;
+        facebook_url?: string | null;
       } = {};
 
       if (data.username !== undefined) updateData.username = data.username;
@@ -593,6 +601,7 @@ export class AuthService {
       if (data.avatarUrl !== undefined) updateData.avatar_url = data.avatarUrl;
       if (data.location !== undefined) updateData.location = data.location;
       if (data.website !== undefined) updateData.website = data.website;
+      if (data.facebookUrl !== undefined) updateData.facebook_url = data.facebookUrl;
 
       // Update the profile
       const { data: updatedProfile, error: updateError } = await this.supabase
@@ -649,6 +658,7 @@ export class AuthService {
         avatarUrl: profileData.avatar_url,
         location: profileData.location,
         website: profileData.website,
+        facebookUrl: profileData.facebook_url,
         usernameLastChangedAt: telemetryData?.username_last_changed_at || null,
         deactivatedAt: telemetryData?.deactivated_at || null,
         createdAt: profileData.created_at,

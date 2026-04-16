@@ -57,7 +57,18 @@ export default function TermsPage() {
                 <li>Posting content that is obscene, hateful, or violates third-party intellectual property.</li>
                 <li>Spamming group recruitment or marketing materials.</li>
                 <li>Attempting to circumvent the security features of the platform (RLS policies).</li>
+                <li><strong>Identity Theft</strong>: Claiming a Facebook profile or social identity that does not belong to you is strictly prohibited and may result in permanent account suspension.</li>
               </ul>
+            </section>
+
+            <section className="space-y-4">
+              <h2 className="text-2xl font-black tracking-tight text-foreground">4. Identity Disputes & Rebuttals</h2>
+              <p>
+                If you believe another user has wrongly claimed your Facebook profile or social identity on cosynq, you may file a manual rebuttal.
+              </p>
+              <p>
+                To manually dispute an identity claim without having a profile, please email us directly through our <strong>Contact Us</strong> form or at the email address provided in our contact section. We will require proof of ownership of the social profile in question to resolve the dispute.
+              </p>
             </section>
 
             <section className="space-y-4">
