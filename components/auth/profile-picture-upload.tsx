@@ -66,10 +66,6 @@ export function ProfilePictureUpload({
     return null;
   };
 
-  /**
-   * Handles file selection and preview
-   * Requirements: 17.6, 17.7
-   */
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -80,31 +76,36 @@ export function ProfilePictureUpload({
       return;
     }
 
-    onFileSelect(file);
-
-    // Create preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  /**
-   * Handles removing/replacing the selected image
-   * Requirements: 17.12
-   */
-  const handleRemove = () => {
-    setPreview(null);
-    onFileSelect(null);
+    // Intercept with Cropper Modal
+    const objectUrl = URL.createObjectURL(file);
+    setCropperSrc(objectUrl);
+    setIsCropperOpen(true);
+    
+    // Clear input so selecting same file works again
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
-  /**
-   * Triggers file input click
-   */
+  const handleCropConfirm = (croppedFile: File) => {
+    onFileSelect(croppedFile);
+
+    // Create preview for display
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+    };
+    reader.readAsDataURL(croppedFile);
+    
+    setIsCropperOpen(false);
+    setCropperSrc(null);
+  };
+
+  const handleRemove = () => {
+    setPreview(null);
+    onFileSelect(null);
+  };
+
   const handleSelectClick = () => {
     fileInputRef.current?.click();
   };
@@ -121,22 +122,39 @@ export function ProfilePictureUpload({
         aria-label="Select profile picture"
       />
 
+      {/* Image Cropper Modal */}
+      <ImageCropperDialog
+        imageSrc={cropperSrc}
+        isOpen={isCropperOpen}
+        onClose={() => {
+          setIsCropperOpen(false);
+          setCropperSrc(null);
+        }}
+        onConfirm={handleCropConfirm}
+      />
+
       {/* Preview or upload area */}
       <div className="flex flex-col items-center gap-4">
         {preview ? (
-          <div className="relative">
-            <div className="relative size-32 overflow-hidden rounded-full border-2 border-border shadow-glow-primary/20">
+          <div className="relative group/preview">
+            <div className="relative size-32 overflow-hidden rounded-full border-2 border-primary/20 shadow-glow-primary/10 group-hover/preview:shadow-glow-primary/30 transition-shadow">
               <Image
                 src={preview}
                 alt="Profile picture preview"
                 fill
                 className="object-cover"
               />
+              <div 
+                className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-opacity cursor-pointer"
+                onClick={handleSelectClick}
+              >
+                <Scissors className="size-6 text-white" />
+              </div>
             </div>
             <button
               type="button"
               onClick={handleRemove}
-              className="absolute -right-2 -top-2 rounded-full bg-destructive p-1.5 text-destructive-foreground shadow-md hover:bg-destructive/90 transition-transform hover:scale-110 active:scale-95"
+              className="absolute -right-2 -top-2 rounded-full bg-destructive/90 p-1.5 text-destructive-foreground shadow-md hover:bg-destructive transition-transform hover:scale-110 active:scale-95 z-20"
               aria-label="Remove profile picture"
             >
               <X className="size-4" />
@@ -157,12 +175,12 @@ export function ProfilePictureUpload({
         {/* Status indicator */}
         <div className="text-center space-y-1">
           {selectedFile ? (
-            <p className="text-xs md:text-sm font-black uppercase tracking-widest text-primary animate-in fade-in slide-in-from-bottom-2">
-              Image Selected
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-in fade-in slide-in-from-bottom-2">
+              Aura Synchronized
             </p>
           ) : (
-            <p className="text-xs md:text-sm font-black uppercase tracking-widest text-muted-foreground/60">
-              No image selected
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+              Orbital Vacancy
             </p>
           )}
         </div>
@@ -175,9 +193,9 @@ export function ProfilePictureUpload({
               variant="outline"
               size="sm"
               onClick={handleSelectClick}
-              className="rounded-full px-6"
+              className="rounded-full px-6 border-white/5 hover:bg-white/5 uppercase font-bold tracking-widest text-[10px]"
             >
-              Change
+              Re-sculpt
             </Button>
           ) : (
             <Button
@@ -185,14 +203,14 @@ export function ProfilePictureUpload({
               variant="celestial"
               size="sm"
               onClick={handleSelectClick}
-              className="rounded-full px-8 shadow-glow-primary"
+              className="rounded-full px-8 shadow-glow-primary uppercase font-black tracking-widest text-[10px]"
             >
-              Select Image
+              Begin Sculpting
             </Button>
           )}
         </div>
 
-        <p className="text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 italic">
+        <p className="text-center text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40 italic">
           JPEG, PNG, or WEBP • Max {IMAGE_MAX_SIZE / (1024 * 1024)}MB
         </p>
       </div>
