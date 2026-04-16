@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Upload, X, Loader2, AlertCircle } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Upload, X, Scissors } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useCloudinaryUpload } from '@/lib/hooks/use-cloudinary-upload';
 import { IMAGE_MAX_SIZE, ACCEPTED_IMAGE_MIME_TYPES } from '@/lib/constants/file-size';
+import { ImageCropperDialog } from './image-cropper-dialog';
 
 // =====================================================================
 // Profile Picture Upload Component
 // =====================================================================
-// Handles optional avatar upload during sign-up using Cloudinary
+// Handles optional avatar upload during sign-up with interactive cropping
 // Requirements: 17.2, 17.3, 17.4, 17.5, 17.6, 17.7, 17.8, 17.9, 17.10, 17.11, 17.12, 17.13, 17.14
 
 interface ProfilePictureUploadProps {
@@ -26,12 +26,34 @@ export function ProfilePictureUpload({
   className,
 }: ProfilePictureUploadProps) {
   const [preview, setPreview] = useState<string | null>(null);
+  const [cropperSrc, setCropperSrc] = useState<string | null>(null);
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /**
-   * Validates file type and size
-   * Requirements: 17.4, 17.5
+   * Sync preview with selectedFile if it exists (e.g. after full page reload or step back)
    */
+  useEffect(() => {
+    if (selectedFile && !preview) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  }, [selectedFile, preview]);
+
+  /**
+   * Cleanup cropper source to prevent memory leaks
+   */
+  useEffect(() => {
+    return () => {
+      if (cropperSrc) {
+        URL.revokeObjectURL(cropperSrc);
+      }
+    };
+  }, [cropperSrc]);
+
   const validateFile = (file: File): string | null => {
     if (!ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)) {
       return 'Invalid file type. Only JPEG, PNG, and WEBP are allowed.';

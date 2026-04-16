@@ -213,7 +213,7 @@ export function SignInForm({ className, redirectTo }: SignInFormProps) {
             disabled={isPending || isRedirecting}
             className="w-full h-14 md:h-16"
             size="xl"
-            variant="celestial"
+            variant="default"
           >
             {isPending ? (
               <>

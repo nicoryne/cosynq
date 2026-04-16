@@ -368,5 +368,27 @@ export function useForgotPassword() {
   });
 }
 
+/**
+ * Hook: Poll for email verification status
+ * Periodically checks the current user's verification status
+ * Requirements: 20.28
+ */
+export function useVerificationPolling() {
+  return useQuery<AuthUserDTO | null, Error>({
+    queryKey: ['verification-status'],
+    queryFn: async () => {
+      const response = await getCurrentUserAction();
+      if (!response.success) {
+        return null;
+      }
+      return response.data || null;
+    },
+    refetchInterval: 4000, // Poll every 4 seconds
+    refetchIntervalInBackground: true, // Keep polling if they switch tabs
+    staleTime: 0, // Always fetch fresh
+    retry: true,
+  });
+}
+
 // Import React for useState
 import React from 'react';

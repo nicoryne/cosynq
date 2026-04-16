@@ -145,7 +145,7 @@ export function SignUpStepCredentials({
             <Label
               htmlFor="terms"
               className={cn(
-                "text-xs leading-relaxed cursor-pointer select-none transition-colors",
+                "text-xs leading-relaxed cursor-pointer select-none transition-colors normal-case tracking-normal",
                 errors.agreedToTerms ? "text-destructive" : "text-muted-foreground group-hover:text-foreground"
               )}
             >
