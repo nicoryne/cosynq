@@ -94,7 +94,7 @@ export default function PrivacyPage() {
               <p>
                 If you have any questions about this Privacy Policy or our data practices, please reach out to our Data Protection Officer at:
               </p>
-              <p className="font-black text-primary">data@cosynq.com</p>
+              <p className="font-black text-primary">hello@cosynq.ryne.dev</p>
             </section>
           </div>
         </div>

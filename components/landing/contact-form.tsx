@@ -1,108 +1,177 @@
 "use client"
 
-import { useState } from "react"
-import { Send, CheckCircle2, Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Send, CheckCircle2, Loader2, RotateCcw, User, Mail, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { contactSchema, ContactFormData } from "@/lib/validations/contact.schema"
+import { useContactMutation } from "@/lib/hooks/use-contact"
 
 export function ContactForm() {
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { mutate: sendSignal, isPending, isSuccess, reset: resetMutation } = useContactMutation()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+  const {
+    register,
+    handleSubmit,
+    reset: resetForm,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  })
+
+  const onSubmit = (data: ContactFormData) => {
+    sendSignal(data)
   }
 
-  if (isSubmitted) {
+  const handleReset = () => {
+    resetForm()
+    resetMutation()
+  }
+
+  if (isSuccess) {
     return (
-      <div className="flex flex-col items-center text-center justify-center py-12 space-y-6 animate-in fade-in zoom-in duration-500">
-        <div className="size-20 rounded-full bg-primary/10 flex items-center justify-center text-primary shadow-glow-primary">
-          <CheckCircle2 className="size-10" />
+      <div className="flex flex-col items-center text-center justify-center py-16 space-y-8 animate-in fade-in zoom-in-95 duration-700">
+        <div className="size-24 rounded-full bg-primary/10 flex items-center justify-center text-primary shadow-glow-primary/40 relative">
+          <CheckCircle2 className="size-12 relative z-10" />
+          <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-20" />
         </div>
-        <div className="space-y-2">
-          <h3 className="text-2xl font-black tracking-tight">Transmission Received</h3>
-          <p className="text-muted-foreground max-w-xs mx-auto">
-            Your signal has been successfully synced with our command center. We'll reach out shortly.
+        <div className="space-y-4">
+          <h3 className="text-3xl font-black tracking-tighter">Transmission Synchronized</h3>
+          <p className="text-muted-foreground/80 max-w-xs mx-auto leading-relaxed uppercase tracking-wider text-[10px] font-bold">
+            Your signal has been successfully beamed to the command center. Check your orbit for a confirmation echo.
           </p>
         </div>
         <Button 
           variant="outline" 
-          onClick={() => setIsSubmitted(false)}
-          className="rounded-xl"
+          onClick={handleReset}
+          className="rounded-full px-8 h-12 uppercase font-black tracking-widest text-[10px] border-white/5 hover:bg-white/5"
         >
-          Send another message
+          <RotateCcw className="size-3 mr-2" />
+          Send New Broadcast
         </Button>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-1">Commander Name</label>
-          <Input 
-            required 
-            placeholder="Keqing Fan" 
-            className="rounded-2xl bg-white/5 border-white/10 focus:border-primary/50 focus:ring-primary/20 h-12"
-          />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-2xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div className="flex flex-col gap-3">
+          <Label htmlFor="name" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            Commander Name
+          </Label>
+          <div className="relative">
+            <Input 
+              id="name"
+              {...register("name")}
+              placeholder="Aether Sculptor" 
+              className={cn(
+                "pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50 h-14",
+                errors.name && "border-destructive/50 focus-visible:ring-destructive/20"
+              )}
+            />
+            <User className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+          </div>
+          {errors.name && (
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+              {errors.name.message}
+            </p>
+          )}
         </div>
-        <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-1">Orbit Email</label>
-          <Input 
-            required 
-            type="email" 
-            placeholder="keqing@yuheng.com" 
-            className="rounded-2xl bg-white/5 border-white/10 focus:border-primary/50 focus:ring-primary/20 h-12"
-          />
+        <div className="flex flex-col gap-3">
+          <Label htmlFor="email" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            Orbit Email
+          </Label>
+          <div className="relative">
+            <Input 
+              id="email"
+              type="email"
+              {...register("email")}
+              placeholder="aether@cosynq.ryne.dev" 
+              className={cn(
+                "pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50 h-14",
+                errors.email && "border-destructive/50 focus-visible:ring-destructive/20"
+              )}
+            />
+            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+          </div>
+          {errors.email && (
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+              {errors.email.message}
+            </p>
+          )}
         </div>
       </div>
       
-      <div className="space-y-2">
-        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-1">Subject</label>
-        <Input 
-          required 
-          placeholder="Group Recruitment Inquiry" 
-          className="rounded-2xl bg-white/5 border-white/10 focus:border-primary/50 focus:ring-primary/20 h-12"
-        />
+      <div className="flex flex-col gap-3">
+        <Label htmlFor="subject" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          Subject Frequency
+        </Label>
+        <div className="relative">
+          <Input 
+            id="subject"
+            {...register("subject")}
+            placeholder="Orbital recruitment inquiry" 
+            className={cn(
+              "pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50 h-14",
+              errors.subject && "border-destructive/50 focus-visible:ring-destructive/20"
+            )}
+          />
+          <MessageSquare className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+        </div>
+        {errors.subject && (
+          <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+            {errors.subject.message}
+          </p>
+        )}
       </div>
 
-      <div className="space-y-2">
-        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-1">Your Signal</label>
+      <div className="flex flex-col gap-3">
+        <Label htmlFor="message" className="ml-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          Your Signal
+        </Label>
         <Textarea 
-          required 
-          placeholder="How can we help your craft thrive?" 
-          className="rounded-[1.5rem] bg-white/5 border-white/10 focus:border-primary/50 focus:ring-primary/20 min-h-[150px] resize-none"
+          id="message"
+          {...register("message")}
+          placeholder="How can we help your craft thrive in the hub?" 
+          className={cn(
+            "rounded-[2rem] border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50 min-h-[180px] resize-none p-8 text-base",
+            errors.message && "border-destructive/50 focus-visible:ring-destructive/20"
+          )}
         />
+        {errors.message && (
+          <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+            {errors.message.message}
+          </p>
+        )}
       </div>
 
       <Button 
         type="submit" 
-        disabled={isSubmitting}
-        className={cn(
-          "w-full h-14 rounded-2xl text-base font-black uppercase tracking-widest shadow-glow-primary transition-all active:scale-95",
-          isSubmitting ? "opacity-70" : ""
-        )}
+        size="xl"
+        disabled={isPending}
+        className="w-full h-16 rounded-full shadow-glow-primary active:scale-[0.98] transition-all font-black uppercase tracking-[0.2em]"
       >
-        {isSubmitting ? (
-          <span className="flex items-center gap-2">
-            Sending Signal...
-            <Loader2 className="size-5 animate-spin" />
-          </span>
+        {isPending ? (
+          <>
+            <Loader2 className="size-5 animate-spin mr-3" />
+            Broadcasting...
+          </>
         ) : (
-          <span className="flex items-center gap-2">
+          <>
             Dispatch Transmission
-            <Send className="size-5" />
-          </span>
+            <Send className="size-5 ml-3" />
+          </>
         )}
       </Button>
     </form>

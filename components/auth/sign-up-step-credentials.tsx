@@ -71,7 +71,7 @@ export function SignUpStepCredentials({
                 'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
                 errors.email && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
-              placeholder="you@example.com"
+              placeholder="commander@cosynq.ryne.dev"
               autoComplete="email"
             />
             <Mail className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
