@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, Check, Mail } from 'lucide-react';
+import { Loader2, Check, Mail, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -63,28 +63,37 @@ export function SignUpStepCredentials({
               value={email}
               onChange={(e) => onChange('email', e.target.value)}
               className={cn(
-                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
-                errors.email && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
+                'pl-[4.5rem] md:pl-[4.5rem] pr-12 md:pr-12 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                (errors.email || (debouncedEmail === email && emailAvailability?.available === false)) && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="commander@cosynq.ryne.dev"
               autoComplete="email"
             />
             <Mail className="absolute left-6 top-1/2 -translate-y-1/2 size-5 text-muted-foreground/40 z-10 pointer-events-none" />
+            
+            {/* Availability Indicators */}
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-2">
+              {isCheckingEmail && <Loader2 className="size-4 animate-spin text-primary" />}
+              {!isCheckingEmail && showEmailAvailability && (
+                <>
+                  {emailAvailability.available ? (
+                    <div className="rounded-full bg-primary/20 p-1 animate-in zoom-in duration-300">
+                      <Check className="size-3 text-primary stroke-[3px]" />
+                    </div>
+                  ) : (
+                    <div className="rounded-full bg-destructive/20 p-1 animate-in zoom-in duration-300">
+                      <AlertCircle className="size-3 text-destructive stroke-[3px]" />
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-          {isCheckingEmail && (
-            <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-4 animate-pulse">
-              <Loader2 className="size-3 animate-spin" />
-              Scanning frequency...
+          
+          {(errors.email || (debouncedEmail === email && emailAvailability?.available === false)) && (
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+              {errors.email || emailAvailability?.message}
             </p>
-          )}
-          {showEmailAvailability && (
-            <p className={cn('flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ml-4', emailAvailability.available ? 'text-green-500' : 'text-destructive')}>
-              {emailAvailability.available ? <Check className="size-3" /> : null}
-              {emailAvailability.message}
-            </p>
-          )}
-          {errors.email && (
-            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">{errors.email}</p>
           )}
         </div>
 
@@ -104,27 +113,36 @@ export function SignUpStepCredentials({
               value={username}
               onChange={(e) => onChange('username', e.target.value)}
               className={cn(
-                'pl-[4.5rem] md:pl-[4.5rem] pr-8 md:pr-8 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
-                errors.username && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
+                'pl-[4.5rem] md:pl-[4.5rem] pr-12 md:pr-12 rounded-full border-foreground/10 bg-foreground/5 shadow-inner transition-all focus-visible:ring-primary/50',
+                (errors.username || (debouncedUsername === username && usernameAvailability?.available === false)) && 'border-destructive/50 bg-destructive/5 text-destructive placeholder:text-destructive/40 focus-visible:ring-destructive/50'
               )}
               placeholder="cosplayer123"
               autoComplete="username"
             />
+
+            {/* Availability Indicators */}
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-2">
+              {isCheckingUsername && <Loader2 className="size-4 animate-spin text-primary" />}
+              {!isCheckingUsername && showUsernameAvailability && (
+                <>
+                  {usernameAvailability.available ? (
+                    <div className="rounded-full bg-primary/20 p-1 animate-in zoom-in duration-300">
+                      <Check className="size-3 text-primary stroke-[3px]" />
+                    </div>
+                  ) : (
+                    <div className="rounded-full bg-destructive/20 p-1 animate-in zoom-in duration-300">
+                      <AlertCircle className="size-3 text-destructive stroke-[3px]" />
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-          {isCheckingUsername && (
-            <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-4 animate-pulse">
-              <Loader2 className="size-3 animate-spin" />
-              Checking signal availability...
+          
+          {(errors.username || (debouncedUsername === username && usernameAvailability?.available === false)) && (
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">
+              {errors.username || usernameAvailability?.message}
             </p>
-          )}
-          {showUsernameAvailability && (
-            <p className={cn('flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ml-4', usernameAvailability.available ? 'text-green-500' : 'text-destructive')}>
-              {usernameAvailability.available ? <Check className="size-3" /> : null}
-              {usernameAvailability.message}
-            </p>
-          )}
-          {errors.username && (
-            <p className="text-[10px] font-black uppercase tracking-widest text-destructive ml-4 animate-in fade-in slide-in-from-left-2">{errors.username}</p>
           )}
         </div>
 

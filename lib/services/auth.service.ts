@@ -71,15 +71,15 @@ export class AuthService {
       
       const { error: profileError } = await persistenceClient
         .from('user_profiles')
-        .update({
+        .upsert({
+          id: authData.user.id,
           username: data.username,
           display_name: data.displayName || null,
           bio: data.bio || null,
           facebook_url: data.facebookUrl ? canonicalizeFacebookUrl(data.facebookUrl) : '',
           avatar_url: data.avatarUrl || null,
           avatar_public_id: data.avatarPublicId || null,
-        })
-        .eq('id', authData.user.id);
+        }, { onConflict: 'id' });
 
       if (profileError) {
         console.error('Failed to update user profile:', profileError);
